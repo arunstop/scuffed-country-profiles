@@ -8,13 +8,13 @@ export interface Country {
   independent: boolean;
   status: string;
   unMember: boolean;
-  currencies: Currencies;
+  currencies: { [key: string]: Currencies };
   idd: Idd;
   capital: string[];
   altSpellings: string[];
   region: string;
   subregion: string;
-  languages: Languages;
+  languages: { [key: string]: string };
   translations: { [key: string]: Translation };
   latlng: number[];
   landlocked: boolean;
@@ -51,10 +51,6 @@ export interface CoatOfArms {
 }
 
 export interface Currencies {
-  UYU: Uyu;
-}
-
-export interface Uyu {
   name: string;
   symbol: string;
 }
@@ -78,9 +74,9 @@ export interface Idd {
   suffixes: string[];
 }
 
-export interface Languages {
-  spa: string;
-}
+// export interface Languages {
+//   spa: string;
+// }
 
 export interface Maps {
   googleMaps: string;
@@ -90,7 +86,7 @@ export interface Maps {
 export interface Name {
   common: string;
   official: string;
-  nativeName: NativeName;
+  nativeName: { [key: string]: NativeName };
 }
 
 export interface NativeName {
