@@ -4,7 +4,7 @@ import React from "react";
 function HeroSection() {
   return (
     <section
-      className="flex h-screen w-full justify-center bg-fixed"
+      className="flex h-screen w-full justify-center bg-fixed bg-neutral"
       style={{
         backgroundImage: "url(/terazzo-globe.svg)",
       }}

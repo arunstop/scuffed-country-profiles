@@ -24,12 +24,15 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
     toggleDarkMode: (darkMode: boolean) => {
       // change state
       uiDispatch({ type: "TOGGLE_DARK_MODE", payload: { darkMode } });
+      const htmlTag = document.documentElement;
       // change the ui
-      if (darkMode === true) {
-        document.documentElement.classList.add("dark");
+      if (darkMode === false) {
+        htmlTag.classList.remove("dark");
+        htmlTag.setAttribute("data-theme", "pastel");
         storageSave(KEY_DARK_MODE, JSON.stringify(darkMode));
       } else {
-        document.documentElement.classList.remove("dark");
+        htmlTag.classList.add("dark");
+        htmlTag.setAttribute("data-theme", "night");
         storageSave(KEY_DARK_MODE, JSON.stringify(darkMode));
       }
     },

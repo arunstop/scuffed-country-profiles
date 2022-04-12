@@ -8,14 +8,14 @@ export interface Country {
   independent: boolean;
   status: string;
   unMember: boolean;
-  currencies: { [key: string]: Currencies };
+  currencies: Currency[];
   idd: Idd;
   capital: string[];
   altSpellings: string[];
   region: string;
   subregion: string;
-  languages: { [key: string]: string };
-  translations: { [key: string]: Translation };
+  languages: Language[];
+  translations: Translation[];
   latlng: number[];
   landlocked: boolean;
   borders: string[];
@@ -36,6 +36,11 @@ export interface Country {
   postalCode: PostalCode;
 }
 
+export interface Language {
+  code: string;
+  name: string;
+}
+
 export interface CapitalInfo {
   latlng: number[];
 }
@@ -50,7 +55,8 @@ export interface CoatOfArms {
   svg: string;
 }
 
-export interface Currencies {
+export interface Currency {
+  code: string;
   name: string;
   symbol: string;
 }
@@ -86,14 +92,15 @@ export interface Maps {
 export interface Name {
   common: string;
   official: string;
-  nativeName: { [key: string]: NativeName };
+  nativeName: Translation[];
 }
 
-export interface NativeName {
-  spa: Translation;
-}
+// export interface NativeName {
+//   spa: Translation;
+// }
 
 export interface Translation {
+  code: string;
   official: string;
   common: string;
 }
