@@ -14,8 +14,9 @@ function CountryItem({ country }: { country: Country }) {
     }}
   ></div> */}
           <img
-            className="mb-1 rounded-lg  shadow-sm ring-2 ring-slate-600/20 transition-all 
-    "
+            className="mb-1 rounded-lg  shadow-sm ring-2 ring-slate-600/20 transition-all
+            group-hover:z-[2] group-hover:scale-[1.1] group-hover:shadow-lg 
+            group-hover:shadow-gray-500/30 group-hover:ring-blue-600/60"
             src={country.flags.png}
             alt={country.name.common}
           />

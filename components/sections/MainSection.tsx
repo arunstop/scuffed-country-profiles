@@ -1,5 +1,5 @@
-import React from "react";
-import countryListRaw from "../../public/CountryProfileList.json";
+import React, { useEffect, useState } from "react";
+// import countryListRaw from "../../public/CountryProfileList.json";
 import {
   Country,
   // Translation,
@@ -15,23 +15,34 @@ import {
   toLanguageList,
   toTranslationList,
 } from "../../utils/helpers/Casters";
+import { countryListRaw } from "../../utils/helpers/Constants";
 
 export default function MainSection() {
   // const countryListRaw: any[] = [];
+  const [countryList, setCountryList] = useState<Country[]>([]);
 
-  const countryList = countryListRaw.map(
-    (country) =>
-      ({
-        ...country,
-        name: {
-          ...country.name,
-          nativeName: toTranslationList(country.name.nativeName || {}),
-        },
-        languages: toLanguageList(country.languages || {}),
-        translations: toTranslationList(country.translations || {}),
-        currencies: toCurrencyList(country.currencies || {}),
-      } as unknown as Country),
-  );
+  useEffect(() => {
+    if (countryList.length === 0) {
+      getCountryList();
+    }
+  }, []);
+
+  const getCountryList = async () => {
+    const countryList = (await countryListRaw()).map(
+      (country) =>
+        ({
+          ...country,
+          name: {
+            ...country.name,
+            nativeName: toTranslationList(country.name.nativeName || {}),
+          },
+          languages: toLanguageList(country.languages || {}),
+          translations: toTranslationList(country.translations || {}),
+          currencies: toCurrencyList(country.currencies || {}),
+        } as unknown as Country),
+    );
+    setCountryList(countryList);
+  };
 
   const sortedCountryList = _.orderBy(
     countryList,
