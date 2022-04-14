@@ -3,7 +3,11 @@ import { useContext } from "react";
 import _ from "lodash";
 
 export const useCountryContext = () => {
-  const { state, action } = useContext(CountryContext);
+  const {
+    state: { searchKeyword: keyword },
+    state,
+    action,
+  } = useContext(CountryContext);
   const sortedList = _.orderBy(
     state.list,
     // sort by property :
@@ -11,11 +15,16 @@ export const useCountryContext = () => {
     // order
     ["asc"],
   );
+  const searchedList = sortedList.filter(
+    (country) =>
+      country.name.common.toLowerCase().includes(keyword) ||
+      country.altSpellings.map((e) => e.toLowerCase()).includes(keyword),
+  );
   return {
     state,
     action,
     getters: {
-      sortedList: sortedList,
+      searchedList: searchedList,
     },
   };
 };

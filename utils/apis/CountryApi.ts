@@ -11,7 +11,7 @@ export const getCountryList = async (): Promise<Country[]> => {
 
 export const getCountry = async (cca2: string): Promise<string> => {
   const data = await apiFetch<string>(
-    //   This endpoint returns an array now
+    // This endpoint returns an array now
     `https://restcountries.com/v3.1/alpha/${cca2}`,
   ).then((data) => {
     // console.log(data[0].name.nativeName);
