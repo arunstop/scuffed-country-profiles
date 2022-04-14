@@ -1,17 +1,12 @@
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import React from "react";
-import { Country } from "../../utils/data/models/Country";
-import {
-  toCurrencyList,
-  toLanguageList,
-  toTranslationList,
-} from "../../utils/helpers/Casters";
 import Header from "../../components/Header";
-import { countryListRaw } from "../../utils/helpers/Constants";
+import { getCountry } from "../../utils/apis/CountryApi";
+import { toCountry } from "../../utils/helpers/Casters";
 
 interface CountryDetailsProps {
-  country: Country;
+  countryStr: string;
 }
 
 export const getServerSideProps: GetServerSideProps<
@@ -24,34 +19,25 @@ export const getServerSideProps: GetServerSideProps<
   // );
   // console.log(await countryListRaw());
 
-  const target = (await countryListRaw()).find(
-    (country) =>
-      country.cca2.toLowerCase() ===
-      (context.query.details as string).toLowerCase(),
+  const target = JSON.stringify(
+    await getCountry((context.query.details + "").toLowerCase()),
   );
-  const countryTarget: Country = {
-    ...target,
-    name: {
-      ...target?.name,
-      nativeName: toTranslationList(target?.name.nativeName || {}),
-    },
-    languages: toLanguageList(target?.languages || {}),
-    translations: toTranslationList(target?.translations || {}),
-    currencies: toCurrencyList(target?.currencies || {}),
-  } as unknown as Country;
+  // const countryTarget: Country = toCountry(target);
   // console.log(countryTarget);
 
   return {
-    props: { country: countryTarget },
-    notFound: !!target === false,
+    props: { countryStr: target },
+    notFound: !target,
   };
 };
 
-function Details({ country }: CountryDetailsProps) {
+function Details({ countryStr }: CountryDetailsProps) {
   //   const router = useRouter();
   //   const { country } = router.query;
-
+  // console.log(country.name.nativeName);
+  // console.log(country.languages);
   // getting name list
+  const country = toCountry(JSON.parse(countryStr)[0]);
   const countryName = country.name;
   const nameList = countryName.nativeName.filter(
     (nameItem) => nameItem.official !== countryName.official,
@@ -61,19 +47,21 @@ function Details({ country }: CountryDetailsProps) {
   const RENDER_FLAG = () => (
     <div className="self-center sm:self-start">
       <img
-        className="shadow-lg ring-4 ring-slate-600/30 rounded-lg"
+        className="rounded-lg shadow-lg ring-4 ring-slate-600/30"
         src={country.flags.png}
       />
     </div>
   );
 
   const RENDER_NAME = () => (
-    <h1 className="text-5xl font-black">{countryName.common}</h1>
+    <h1 className="text-5xl font-black">
+      {countryName.common} {country.flag}
+    </h1>
   );
   const RENDER_OTHER_NAMES = () => (
-    <div className="flex gap-2 flex-wrap">
+    <div className="flex flex-wrap gap-2">
       <span className="font-bold">Also known as :</span>
-      <div className="flex-wrap flex gap-x-1">
+      <div className="flex flex-wrap gap-x-1">
         <h2 className="">{countryName.official}</h2>
         {nameList.map((nameItem) => (
           <>
@@ -87,23 +75,24 @@ function Details({ country }: CountryDetailsProps) {
     </div>
   );
 
-  const RENDER_CAPITALS = () => (
-    <div className="flex flex-wrap gap-2">
-      <span className="font-bold">
-        Capital{country.capital.length > 1 ? "s" : ""} :
-      </span>
-      {country.capital.map((capital) => (
-        <>
-          <span key={capital}>{capital}</span>
-          <span className="last:hidden">&mdash;</span>
-        </>
-      ))}
-    </div>
-  );
+  const RENDER_CAPITALS = () =>
+    country.capital && (
+      <div className="flex flex-wrap gap-2">
+        <span className="font-bold">
+          Capital{country.capital.length > 1 ? "s" : ""} :
+        </span>
+        {country.capital.map((capital) => (
+          <>
+            <span key={capital}>{capital}</span>
+            <span className="last:hidden">&mdash;</span>
+          </>
+        ))}
+      </div>
+    );
 
   const RENDER_LANGUAGES = () => (
     <div className="flex flex-wrap">
-      <span className="font-bold mr-2">
+      <span className="mr-2 font-bold">
         Language{country.languages.length > 1 ? "s" : ""} spoken :
       </span>
       <span className="">
@@ -121,9 +110,11 @@ function Details({ country }: CountryDetailsProps) {
       <div>
         <span className="font-bold">Region :</span> {country.region}
       </div>
-      <div>
-        <span className="font-bold">Subregion :</span> {country.subregion}
-      </div>
+      {country.subregion && (
+        <div>
+          <span className="font-bold">Subregion :</span> {country.subregion}
+        </div>
+      )}
     </>
   );
 
@@ -134,6 +125,21 @@ function Details({ country }: CountryDetailsProps) {
     </div>
   );
 
+  const RENDER_CURRENCIES = () =>
+    country.currencies[0] && (
+      <div className="flex flex-wrap">
+        <span className="mr-2 font-bold">
+          Currenc{country.currencies.length > 1 ? "ies" : "y"} :
+        </span>
+        <span className="">
+          {country.currencies.map(
+            (currItem) =>
+              `${currItem.name} (${currItem.code} / ${currItem.symbol})`,
+          )}
+        </span>
+      </div>
+    );
+
   return (
     <>
       <Head>
@@ -143,7 +149,7 @@ function Details({ country }: CountryDetailsProps) {
       </Head>
       <Header />
       <div className="pt-16">
-        <div className="p-8 flex gap-8 flex-col sm:flex-row">
+        <div className="flex flex-col gap-8 p-8 sm:flex-row">
           {RENDER_FLAG()}
           <div className="flex-1">
             <div className="grid gap-4">
@@ -154,6 +160,7 @@ function Details({ country }: CountryDetailsProps) {
               {RENDER_LANGUAGES()}
               {RENDER_REGIONS()}
               {RENDER_AREA()}
+              {RENDER_CURRENCIES()}
             </div>
           </div>
         </div>

@@ -1,2 +1,3 @@
-export const countryListRaw = async () =>
-  Array.from(await import("../../public/CountryProfileList.json"));
+export const countryListRaw = async (): Promise<any[]> =>
+  // Array.from(await import("../../public/CountryProfileList.json"));
+  [];

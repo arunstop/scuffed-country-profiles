@@ -4,8 +4,30 @@ import Header from "../components/Header";
 import HeroSection from "../components/sections/HeroSection";
 import Footer from "../components/Footer";
 import MainSection from "../components/sections/MainSection";
+import { GetServerSideProps } from "next";
+// import { countryListRaw } from "../utils/helpers/Constants";
+// import { toCountry } from "../utils/helpers/Casters";
+import { getCountryList } from "../utils/apis/CountryApi";
+// import { Country } from "../utils/data/models/Country";
+// import { Country } from "../utils/data/models/Country";
 
-function Home() {
+interface CountryIndexProps {
+  countryList: any[];
+}
+
+export const getServerSideProps: GetServerSideProps<CountryIndexProps> = async (
+  context,
+) => {
+  const countryList = await getCountryList();
+
+  // console.log(countryList);
+
+  return {
+    props: { countryList: countryList },
+  };
+};
+
+function Home({ countryList }: CountryIndexProps) {
   return (
     <>
       <Head>
@@ -18,7 +40,7 @@ function Home() {
 
       <main className={"flex flex-col items-center justify-center"}>
         <HeroSection />
-        <MainSection />
+        <MainSection countryList={countryList} />
       </main>
 
       <Footer />

@@ -7,7 +7,7 @@ export default function Header() {
 
   return (
     <header className="fixed z-10 flex h-16 w-full items-center bg-neutral/90 p-4 transition-colors shadow-lg">
-      <Link href={"/"} passHref>
+      <Link href={"/#countries"} passHref>
         <a>Country Profiles</a>
       </Link>
       <div className="inline-flex ml-auto items-center justify-center gap-4 ">
