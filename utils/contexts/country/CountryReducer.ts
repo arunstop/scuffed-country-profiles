@@ -1,15 +1,15 @@
 import { CountryState } from "../../data/types/CountryTypes";
 import { CountryActionTypes } from "../../data/types/CountryTypes";
 
-export const CountryReducer = (
+export const countryReducer = (
   state: CountryState,
   action: CountryActionTypes,
 ): CountryState => {
   const type = action.type;
   switch (type) {
     // change dark mode on state
-    case "SEARCH": {
-      return { ...state, searchKeyword: action.payload.keyword };
+    case "SET_SEARCH_KEYWORD": {
+      return { ...state, searchKeyword: action.payload.keyword.trim() };
     }
     // change list view on state
     case "SET_COUNTRY_LIST": {

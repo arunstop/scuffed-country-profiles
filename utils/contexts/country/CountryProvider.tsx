@@ -6,17 +6,20 @@ import {
 } from "../../data/types/CountryTypes";
 import { CountryContext } from "./CountryContext";
 import { INIT_COUNTRY_STATE } from "./CountryInitializers";
-import { CountryReducer } from "./CountryReducer";
+import { countryReducer } from "./CountryReducer";
 
 export const CountryProvider = ({ children }: { children: ReactNode }) => {
   // reducer
-  const [countryState, countryDispatch] = useReducer(CountryReducer, {
+  const [countryState, countryDispatch] = useReducer(countryReducer, {
     ...INIT_COUNTRY_STATE,
   });
 
   const action: CountryAction = {
-    search: (keyword: string) => {
-      countryDispatch({ type: "SEARCH", payload: { keyword: keyword } });
+    setSearchKeyword: (keyword: string) => {
+      countryDispatch({
+        type: "SET_SEARCH_KEYWORD",
+        payload: { keyword: keyword },
+      });
     },
     setCountryList: (list: Country[]) => {
       countryDispatch({ type: "SET_COUNTRY_LIST", payload: { list: list } });

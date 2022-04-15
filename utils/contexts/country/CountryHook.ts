@@ -4,7 +4,8 @@ import _ from "lodash";
 
 export const useCountryContext = () => {
   const {
-    state: { searchKeyword: keyword },
+    // state: { searchKeyword: keyword },
+    // state: { searchKeyword: keyword },
     state,
     action,
   } = useContext(CountryContext);
@@ -15,11 +16,21 @@ export const useCountryContext = () => {
     // order
     ["asc"],
   );
-  const searchedList = sortedList.filter(
-    (country) =>
-      country.name.common.toLowerCase().includes(keyword) ||
-      country.altSpellings.map((e) => e.toLowerCase()).includes(keyword),
-  );
+  const keyword = state.searchKeyword.toLocaleLowerCase().trim();
+  const searchedList =
+    state.searchKeyword.length < 2
+      ? sortedList
+      : sortedList.filter((country) => {
+          return (
+            country.name.common.toLowerCase().includes(keyword) ||
+            country.name.official.toLowerCase().includes(keyword) ||
+            country.name.nativeName
+              .map((e) => `${e.common} · ${e.official}`.toLowerCase())
+              .join(" — ")
+              .includes(keyword) ||
+            country.altSpellings.join(" — ").toLowerCase().includes(keyword)
+          );
+        });
   return {
     state,
     action,

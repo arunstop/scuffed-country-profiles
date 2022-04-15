@@ -1,13 +1,12 @@
 // import type { NextPage } from "next";
 import Head from "next/head";
+import { useEffect } from "react";
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HeroSection from "../components/sections/HeroSection";
-import Footer from "../components/Footer";
 import MainSection from "../components/sections/MainSection";
-import { GetServerSideProps } from "next";
-// import { countryListRaw } from "../utils/helpers/Constants";
-// import { toCountry } from "../utils/helpers/Casters";
 import { getCountryList } from "../utils/apis/CountryApi";
+import { useCountryContext } from "../utils/contexts/country/CountryHook";
 // import { Country } from "../utils/data/models/Country";
 // import { Country } from "../utils/data/models/Country";
 
@@ -15,19 +14,34 @@ interface CountryIndexProps {
   countryList: any[];
 }
 
-export const getServerSideProps: GetServerSideProps<CountryIndexProps> = async (
-  context,
-) => {
-  const countryList = await getCountryList();
+// export const getServerSideProps: GetServerSideProps<CountryIndexProps> = async (
+//   context,
+// ) => {
+//   const countryList = await getCountryList();
 
-  // console.log(countryList);
+//   // console.log(countryList);
 
-  return {
-    props: { countryList: countryList },
-  };
-};
+//   return {
+//     props: { countryList: countryList },
+//   };
+// };
 
-function Home({ countryList }: CountryIndexProps) {
+// function Home({ countryList }: CountryIndexProps) {
+function Home() {
+  const { state: countryState, action: countryAction } = useCountryContext();
+  useEffect(() => {
+    // async () => {
+    // console.log("123213");
+    // };
+    getCountryList1();
+  }, [countryState.list]);
+
+  async function getCountryList1() {
+    if (countryState.list.length === 0) {
+      countryAction.setCountryList(await getCountryList());
+    }
+  }
+
   return (
     <>
       <Head>
@@ -40,7 +54,7 @@ function Home({ countryList }: CountryIndexProps) {
 
       <main className={"flex flex-col items-center justify-center"}>
         <HeroSection />
-        <MainSection countryList={countryList} />
+        <MainSection />
       </main>
 
       <Footer />

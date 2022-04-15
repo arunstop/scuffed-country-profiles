@@ -8,13 +8,13 @@ export interface CountryState {
 }
 
 export interface CountryAction {
-  search: (keyword: string) => void;
+  setSearchKeyword: (keyword: string) => void;
   setCountryList: (list: Country[]) => void;
 }
 
 export type CountryActionTypes =
   | {
-      type: "SEARCH";
+      type: "SET_SEARCH_KEYWORD";
       payload: { keyword: string };
     }
   | {

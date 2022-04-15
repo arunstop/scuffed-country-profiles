@@ -1,8 +1,9 @@
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../components/Header";
 import { getCountry } from "../../utils/apis/CountryApi";
+import { useCountryContext } from "../../utils/contexts/country/CountryHook";
 import { toCountry } from "../../utils/helpers/Casters";
 
 interface CountryDetailsProps {
@@ -43,6 +44,17 @@ function Details({ countryStr }: CountryDetailsProps) {
     (nameItem) => nameItem.official !== countryName.official,
   );
 
+  // console.log(
+  //   ["US", "USA", "United States of America"]
+  //     .map((e) => e.toLowerCase())
+  //     .includes("US".toLowerCase()),
+  // );
+
+  const { state: countryState, action: countryAction } = useCountryContext();
+  useEffect(() => {
+    countryAction.setSearchKeyword("");
+  }, []);
+
   // render parts
   const RENDER_FLAG = () => (
     <div className="self-center sm:self-start">
@@ -62,15 +74,19 @@ function Details({ countryStr }: CountryDetailsProps) {
     <div className="flex flex-wrap gap-2">
       <span className="font-bold">Also known as :</span>
       <div className="flex flex-wrap gap-x-1">
-        <h2 className="">{countryName.official}</h2>
-        {nameList.map((nameItem) => (
+        {/* <h2 className="">{countryName.official}</h2> */}
+        {/* {nameList.map((nameItem) => (
           <>
             &mdash;
             <h2 key={nameItem.code} className="">
               {nameItem.official}
             </h2>
           </>
-        ))}
+        ))} */}
+        {[
+          countryName.official,
+          ...nameList.map((nameItem) => nameItem.official),
+        ].join(" — ")}
       </div>
     </div>
   );

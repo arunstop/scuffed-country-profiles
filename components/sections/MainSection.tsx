@@ -1,39 +1,34 @@
 import { SearchIcon } from "@heroicons/react/solid";
-import React, { useEffect } from "react";
+import React from "react";
 import { useCountryContext } from "../../utils/contexts/country/CountryHook";
-import { Country } from "../../utils/data/models/Country";
 // import countryListRaw from "../../public/CountryProfileList.json";
 import CountryItem from "../CountryItem";
 
-export default function MainSection({
-  countryList,
-}: {
-  countryList: Country[];
-}) {
+export default function MainSection() {
   const {
     state: countryState,
     action: countryAction,
     getters: { searchedList },
   } = useCountryContext();
 
-  console.log(countryList);
+  // console.log(countryList);
 
-  useEffect(() => {
-    if (countryState.list.length === 0) {
-      countryAction.setCountryList(countryList);
-    }
+  // useEffect(() => {
+  //   if (countryState.list.length === 0) {
+  //     countryAction.setCountryList(countryList);
+  //   }
 
-    // return () => {
-    //   second
-    // }
-  }, []);
+  //   // return () => {
+  //   //   second
+  //   // }
+  // }, []);
 
   return (
     <section
       id="countries"
-      className="flex w-full flex-col items-center justify-center pt-16"
+      className="flex w-full flex-col items-center pt-16 min-h-screen"
     >
-      <div className="form-control w-96">
+      <div className="form-control w-full p-8 sm:p-0 sm:w-96">
         <label className="input-group input-group-lg max-w-lg">
           <span className="">
             <SearchIcon className="text-lg h-8 w-8" />
@@ -41,10 +36,10 @@ export default function MainSection({
           <input
             className="input-bordered input w-full"
             value={countryState.searchKeyword}
-            type="text"
+            type="search"
             placeholder="Search…"
             onChange={(e) => {
-              countryAction.search(e.target.value);
+              countryAction.setSearchKeyword(e.target.value);
             }}
           />
         </label>
