@@ -8,13 +8,13 @@ export default function Header() {
 
   return (
     <header
-      className="fixed z-10 flex h-16 w-full items-center 
-    bg-base-100/90 p-4 transition-colors shadow-lg"
+      className="fixed z-10 flex h-16 w-full items-center
+      bg-base-100/90 p-4 shadow-lg transition-colors"
     >
       <Link href={"/#countries"} passHref>
         <a>Country Profiles</a>
       </Link>
-      <div className="inline-flex ml-auto items-center justify-center gap-4 ">
+      <div className="ml-auto inline-flex items-center justify-center gap-4 ">
         {/* <label>Dark mode :</label> */}
         <label className="swap swap-rotate">
           <input

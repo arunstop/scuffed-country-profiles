@@ -1,18 +1,21 @@
 import React from "react";
 interface MainSectionFilterChip {
-  selected: boolean;
+  value: boolean;
   text: string;
+  onClick?: () => void;
 }
-export const MainSectionFilterChip = ({
-  selected,
+const MainSectionFilterChip = ({
+  value,
   text,
+  onClick = () => {},
 }: MainSectionFilterChip) => {
-  function renderChip(isOn: boolean) {
+  function RENDER_CHIP(isOn: boolean) {
     return (
       <div
         className={`btn normal-case rounded-lg  
         ${isOn ? "swap-on btn-primary" : "swap-off btn-ghost btn-active"}
         `}
+        onClick={() => onClick()}
       >
         {text}
       </div>
@@ -20,9 +23,11 @@ export const MainSectionFilterChip = ({
   }
   return (
     <label className="swap ">
-      <input type={"checkbox"} />
-      {renderChip(true)}
-      {renderChip(false)}
+      <input checked={value} type={"checkbox"} onChange={(e) => {}} />
+      {RENDER_CHIP(true)}
+      {RENDER_CHIP(false)}
     </label>
   );
 };
+
+export default MainSectionFilterChip;

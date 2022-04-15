@@ -1,6 +1,6 @@
 import { toCountry } from "./../helpers/Casters";
 import { Country } from "../data/models/Country";
-import { apiFetch } from "../helpers/Fetcher";
+import { apiFetch } from "../helpers/Fetchers";
 
 export const getCountryList = async (): Promise<Country[]> => {
   const data = await apiFetch<any[]>("https://restcountries.com/v3.1/all").then(

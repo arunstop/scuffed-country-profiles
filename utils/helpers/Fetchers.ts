@@ -18,3 +18,6 @@ export const apiFetch = async <T>(url: string): Promise<T> => {
       throw error;
     });
 };
+
+export const lowerCaseChildrenFetch = (arr: string[]): string[] =>
+  JSON.parse(JSON.stringify(arr).toLowerCase());

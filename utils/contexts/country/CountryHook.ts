@@ -1,12 +1,14 @@
 import { CountryContext } from "./CountryContext";
 import { useContext } from "react";
 import _ from "lodash";
+import { lowerCaseChildrenFetch } from "../../helpers/Fetchers";
 
 export const useCountryContext = () => {
   const {
     // state: { searchKeyword: keyword },
     // state: { searchKeyword: keyword },
     state,
+    state: { filters },
     action,
   } = useContext(CountryContext);
   const sortedList = _.orderBy(
@@ -18,17 +20,55 @@ export const useCountryContext = () => {
   );
   const keyword = state.searchKeyword.toLocaleLowerCase().trim();
   const searchedList =
-    state.searchKeyword.length < 2
+    state.list.length === 0
       ? sortedList
       : sortedList.filter((country) => {
+          // console.log(
+          //   _.intersection(
+          //     lowerCaseChildrenFetch(country["continents"]),
+          //     lowerCaseChildrenFetch(filters.continents),
+          //   ),
+          // );
           return (
-            country.name.common.toLowerCase().includes(keyword) ||
-            country.name.official.toLowerCase().includes(keyword) ||
-            country.name.nativeName
-              .map((e) => `${e.common} · ${e.official}`.toLowerCase())
-              .join(" — ")
-              .includes(keyword) ||
-            country.altSpellings.join(" — ").toLowerCase().includes(keyword)
+            // FILTER WITH GEO properties
+            // Continents
+            (filters.continents.length === 0
+              ? true
+              : _.intersection(
+                  lowerCaseChildrenFetch(country.continents),
+                  lowerCaseChildrenFetch(filters.continents),
+                ).length !== 0) &&
+            // Region
+            (filters.region.length === 0
+              ? true
+              : lowerCaseChildrenFetch(filters.region).includes(
+                  country.region.toLowerCase(),
+                )) &&
+            // Subregion
+            (filters.subregion.length === 0
+              ? true
+              : lowerCaseChildrenFetch(filters.subregion).includes(
+                  country.subregion?.toLowerCase(),
+                )) &&
+            // SEARCH WITH KEYWORD
+            (state.searchKeyword.length < 2
+              ? true
+              : // common name
+                country.name.common.toLowerCase().includes(keyword) ||
+                // official name
+                country.name.official.toLowerCase().includes(keyword) ||
+                // native names
+                country.name.nativeName
+                  .map((e) => `${e.common} · ${e.official}`)
+                  .join(" — ")
+                  .toLowerCase()
+                  .includes(keyword) ||
+                // more names
+                country.altSpellings
+                  .join(" — ")
+                  .toLowerCase()
+                  .includes(keyword))
+            //
           );
         });
   const distinctAndSort = (list: any[], order: "asc" | "desc" = "asc") =>

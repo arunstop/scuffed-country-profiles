@@ -1,11 +1,12 @@
 import { SearchIcon } from "@heroicons/react/solid";
 import React from "react";
 import { useCountryContext } from "../../../utils/contexts/country/CountryHook";
-import { MainSectionFilterChip } from "./MainSectionFilterChip";
+import MainSectionFilterChip from "./MainSectionFilterChip";
 
 function MainSectionFilter() {
   const {
     state: countryState,
+    state: { filters },
     action: countryAction,
     getters: {
       list: {
@@ -38,10 +39,17 @@ function MainSectionFilter() {
         </div>
       </div>
       <div className="grid gap-4 w-full sm:w-fit">
-        <label>By Continent :</label>
+        <label>By Continent : </label>
         <div className="flex w-full flex-wrap gap-2">
           {continentList.map((item, idx) => (
-            <MainSectionFilterChip key={idx} selected={false} text={item} />
+            <MainSectionFilterChip
+              key={idx}
+              text={item}
+              value={filters.continents.includes(item)}
+              onClick={() => {
+                countryAction.addFilter("continents", item);
+              }}
+            />
           ))}
         </div>
       </div>
@@ -49,7 +57,14 @@ function MainSectionFilter() {
         <label>By Region :</label>
         <div className="flex w-full flex-wrap gap-2">
           {regionList.map((item, idx) => (
-            <MainSectionFilterChip key={idx} selected={false} text={item} />
+            <MainSectionFilterChip
+              key={idx}
+              text={item}
+              value={filters.region.includes(item)}
+              onClick={() => {
+                countryAction.addFilter("region", item);
+              }}
+            />
           ))}
         </div>
       </div>
@@ -57,7 +72,14 @@ function MainSectionFilter() {
         <label>By Subregion :</label>
         <div className="flex w-full flex-wrap gap-2">
           {subregionList.map((item, idx) => (
-            <MainSectionFilterChip key={idx} selected={false} text={item} />
+            <MainSectionFilterChip
+              key={idx}
+              text={item}
+              value={filters.subregion.includes(item)}
+              onClick={() => {
+                countryAction.addFilter("subregion", item);
+              }}
+            />
           ))}
         </div>
       </div>

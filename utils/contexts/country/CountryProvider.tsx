@@ -24,6 +24,12 @@ export const CountryProvider = ({ children }: { children: ReactNode }) => {
     setCountryList: (list: Country[]) => {
       countryDispatch({ type: "SET_COUNTRY_LIST", payload: { list: list } });
     },
+    addFilter: (key: string, value: string) => {
+      countryDispatch({
+        type: "SET_FILTER",
+        payload: { key: key, value: value },
+      });
+    },
   };
   const value: CountryContextProps = {
     state: countryState,
