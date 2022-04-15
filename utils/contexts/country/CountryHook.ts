@@ -31,11 +31,35 @@ export const useCountryContext = () => {
             country.altSpellings.join(" — ").toLowerCase().includes(keyword)
           );
         });
+  const distinctAndSort = (list: any[], order: "asc" | "desc" = "asc") =>
+    _.orderBy(_.uniq(list), [(e) => e], [order]).filter((e) => e);
+
+  const continentList = distinctAndSort(
+    _.flatMap(state.list.map((item) => item.continents)),
+  );
+
+  const regionList = distinctAndSort(
+    _.map(state.list.map((item) => item.region)),
+  );
+
+  const subregionList = distinctAndSort(
+    _.map(state.list.map((item) => item.subregion)),
+  );
+
   return {
     state,
     action,
     getters: {
-      searchedList: searchedList,
+      list: {
+        filteredList: searchedList,
+        filterProps: {
+          continentList: continentList,
+          regionList: regionList,
+          subregionList: subregionList,
+        },
+        noResultFound: searchedList.length === 0,
+        noData: state.list.length === 0,
+      },
     },
   };
 };

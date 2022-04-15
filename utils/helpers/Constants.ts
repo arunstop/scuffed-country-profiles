@@ -1,3 +1,1 @@
-export const countryListRaw = async (): Promise<any[]> =>
-  // Array.from(await import("../../public/CountryProfileList.json"));
-  [];
+export const APP_NAME = "Country Profiles";

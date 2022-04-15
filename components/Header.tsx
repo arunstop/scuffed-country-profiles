@@ -1,24 +1,36 @@
 import Link from "next/link";
 import React from "react";
 import { useUiContext } from "../utils/contexts/ui/UiHook";
+import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 
 export default function Header() {
   const { state: uiState, action: uiAction } = useUiContext();
 
   return (
-    <header className="fixed z-10 flex h-16 w-full items-center bg-neutral/90 p-4 transition-colors shadow-lg">
+    <header
+      className="fixed z-10 flex h-16 w-full items-center 
+    bg-base-100/90 p-4 transition-colors shadow-lg"
+    >
       <Link href={"/#countries"} passHref>
         <a>Country Profiles</a>
       </Link>
       <div className="inline-flex ml-auto items-center justify-center gap-4 ">
-        <span>{uiState.darkMode + ""}</span>
-        <label>Dark mode :</label>
-        <input
-          className="toggle"
-          checked={uiState.darkMode}
-          type={"checkbox"}
-          onChange={(event) => uiAction.toggleDarkMode(event.target.checked)}
-        />
+        {/* <label>Dark mode :</label> */}
+        <label className="swap swap-rotate">
+          <input
+            checked={uiState.darkMode}
+            type={"checkbox"}
+            onChange={(event) => uiAction.toggleDarkMode(event.target.checked)}
+          />
+          <MdOutlineLightMode
+            title="Turn on dark mode"
+            className="swap-on text-3xl"
+          />
+          <MdOutlineDarkMode
+            title="Turn of dark mode"
+            className="swap-off text-3xl"
+          />
+        </label>
       </div>
     </header>
   );

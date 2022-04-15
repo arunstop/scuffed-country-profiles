@@ -8,7 +8,7 @@ module.exports = {
   // DAISY UI CONFIG
   daisyui: {
     styled: true,
-    themes: ["pastel", "night"],
+    themes: ["emerald", "night"],
     // themes: true,
     base: true,
     utils: true,

@@ -28,7 +28,7 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
       // change the ui
       if (darkMode === false) {
         htmlTag.classList.remove("dark");
-        htmlTag.setAttribute("data-theme", "pastel");
+        htmlTag.setAttribute("data-theme", "emerald");
         storageSave(KEY_DARK_MODE, JSON.stringify(darkMode));
       } else {
         htmlTag.classList.add("dark");
