@@ -61,7 +61,14 @@ function MainSectionFilter() {
   return (
     <div className="flex flex-wrap gap-4 p-8">
       <div className="grid gap-4 w-full sm:w-fit">
-        <label>Search :</label>
+        <label>
+          Search :
+          <button
+            className={`btn btn-outline btn-error btn-sm rounded-full invisible`}
+          >
+            Clear
+          </button>
+        </label>
         <div className="form-control w-full sm:w-96">
           <label className="input-group-lg input-group max-w-lg">
             <span className="">

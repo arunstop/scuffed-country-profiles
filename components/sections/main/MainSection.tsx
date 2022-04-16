@@ -1,5 +1,6 @@
 import React from "react";
 import { useCountryContext } from "../../../utils/contexts/country/CountryHook";
+import CircularProgress from "../../CircularProgress";
 // import countryListRaw from "../../public/CountryProfileList.json";
 import CountryItem from "../../CountryItem";
 import NoDataPlaceHolder from "../../placholders/NoDataPlaceHolder";
@@ -11,7 +12,7 @@ export default function MainSection() {
     state: countryState,
     action: countryAction,
     getters: {
-      list: { filteredList },
+      list: { filteredList, noData },
       list,
     },
   } = useCountryContext();
@@ -52,13 +53,22 @@ export default function MainSection() {
       id="countries"
       className="flex min-h-screen w-full flex-col items-center pt-16"
     >
-      <MainSectionFilter />
-      <div
-        className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch 
-        p-8 transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
-      >
-        {renderCountryList()}
-      </div>
+      {noData ? (
+        <div className="flex flex-col items-center gap-4">
+          <CircularProgress size={7} />
+          <h2 className="text-2xl">Loading countries...</h2>
+        </div>
+      ) : (
+        <>
+          <MainSectionFilter />
+          <div
+            className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch 
+          p-8 transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+          >
+            {renderCountryList()}
+          </div>
+        </>
+      )}
     </section>
   );
 }
