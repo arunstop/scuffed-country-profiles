@@ -1,11 +1,11 @@
 import React from "react";
 interface MainSectionFilterChip {
-  value: boolean;
+  checked: boolean;
   text: string;
-  onClick?: () => void;
+  onClick?: (status: boolean) => void;
 }
 const MainSectionFilterChip = ({
-  value,
+  checked,
   text,
   onClick = () => {},
 }: MainSectionFilterChip) => {
@@ -15,7 +15,7 @@ const MainSectionFilterChip = ({
         className={`btn normal-case rounded-lg  
         ${isOn ? "swap-on btn-primary" : "swap-off btn-ghost btn-active"}
         `}
-        onClick={() => onClick()}
+        // onClick={() => onClick()}
       >
         {text}
       </div>
@@ -23,7 +23,13 @@ const MainSectionFilterChip = ({
   }
   return (
     <label className="swap ">
-      <input checked={value} type={"checkbox"} onChange={(e) => {}} />
+      <input
+        checked={checked}
+        type={"checkbox"}
+        onChange={(e) => {
+          onClick(e.target.checked);
+        }}
+      />
       {RENDER_CHIP(true)}
       {RENDER_CHIP(false)}
     </label>

@@ -16,31 +16,45 @@ export const countryReducer = (
     case "SET_COUNTRY_LIST": {
       return { ...state, list: action.payload.list };
     }
-    case "SET_FILTER": {
+    case "ADD_FILTER": {
       // get key and value from payload
       const { key, value } = action.payload;
       // get key from the state
+      // ex: state.filters["key"]
       const targetedKey = Array.from((state.filters as any)[key]);
-      let changedKeyValue: any[] = [];
-      // check if value already exists
-      if (targetedKey.includes(value)) {
-        // then delete it
-        changedKeyValue = targetedKey.filter((e) => e !== value);
-      } else {
-        // get the changed key value if doenst exist
-        changedKeyValue = _.uniq([
-          // casting the state filters
-          ...targetedKey,
-          // then add the new value
-          value,
-        ]);
-      }
+      // add new value
+      const changedKeyValue: any[] = _.uniq([
+        // casting the state filters
+        ...targetedKey,
+        // then add the new value
+        value,
+      ]);
       // mixing changed filters with curent filters in state
       const filters = { ...state.filters, [key]: changedKeyValue };
-      // console.log(filters);
       // applies the change to the state
       return { ...state, filters: { ...filters } };
       // return state;
+    }
+    case "REMOVE_FILTER": {
+      // get key and value from payload
+      const { key, value } = action.payload;
+      // get key from the state
+      // ex: state.filters["key"]
+      const targetedKey = Array.from((state.filters as any)[key]);
+      // remove value
+      const changedKeyValue: any[] = targetedKey.filter((e) => e !== value);
+      // mixing changed filters with curent filters in state
+      const filters = { ...state.filters, [key]: changedKeyValue };
+      // applies the change to the state
+      return { ...state, filters: { ...filters } };
+    }
+    case "CLEAR_FILTER":{
+      // get key and value from payload
+      const { key } = action.payload;
+      // mixing changed filters with curent filters in state
+      const filters = { ...state.filters, [key]: [] };
+      // applies the change to the state
+      return { ...state, filters: { ...filters } };
     }
     default:
       return state;

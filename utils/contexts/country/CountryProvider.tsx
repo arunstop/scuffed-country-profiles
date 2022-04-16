@@ -24,11 +24,21 @@ export const CountryProvider = ({ children }: { children: ReactNode }) => {
     setCountryList: (list: Country[]) => {
       countryDispatch({ type: "SET_COUNTRY_LIST", payload: { list: list } });
     },
-    addFilter: (key: string, value: string) => {
-      countryDispatch({
-        type: "SET_FILTER",
-        payload: { key: key, value: value },
-      });
+    setFilter: ({ key, value, add }) => {
+      if (add === true) {
+        countryDispatch({
+          type: "ADD_FILTER",
+          payload: { key: key, value: value },
+        });
+      } else {
+        countryDispatch({
+          type: "REMOVE_FILTER",
+          payload: { key: key, value: value },
+        });
+      }
+    },
+    clearFilter: (key) => {
+      countryDispatch({ type: "CLEAR_FILTER", payload: { key: key } });
     },
   };
   const value: CountryContextProps = {

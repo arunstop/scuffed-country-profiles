@@ -15,7 +15,16 @@ export interface CountryState {
 export interface CountryAction {
   setSearchKeyword: (keyword: string) => void;
   setCountryList: (list: Country[]) => void;
-  addFilter: (key: string, value: string) => void;
+  setFilter: ({
+    key,
+    value,
+    add,
+  }: {
+    key: string;
+    value: string;
+    add: boolean;
+  }) => void;
+  clearFilter: (key: string) => void;
 }
 
 export type CountryActionTypes =
@@ -28,8 +37,16 @@ export type CountryActionTypes =
       payload: { list: Country[] };
     }
   | {
-      type: "SET_FILTER";
+      type: "ADD_FILTER";
       payload: { key: string; value: string };
+    }
+  | {
+      type: "REMOVE_FILTER";
+      payload: { key: string; value: string };
+    }
+  | {
+      type: "CLEAR_FILTER";
+      payload: { key: string };
     };
 
 export type CountryContextProps = {

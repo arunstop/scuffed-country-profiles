@@ -45,9 +45,13 @@ function MainSectionFilter() {
             <MainSectionFilterChip
               key={idx}
               text={item}
-              value={filters.continents.includes(item)}
-              onClick={() => {
-                countryAction.addFilter("continents", item);
+              checked={filters.continents.includes(item)}
+              onClick={(status) => {
+                countryAction.setFilter({
+                  key: "continents",
+                  value: item,
+                  add: status,
+                });
               }}
             />
           ))}
@@ -60,9 +64,13 @@ function MainSectionFilter() {
             <MainSectionFilterChip
               key={idx}
               text={item}
-              value={filters.region.includes(item)}
-              onClick={() => {
-                countryAction.addFilter("region", item);
+              checked={filters.region.includes(item)}
+              onClick={(status) => {
+                countryAction.setFilter({
+                  key: "region",
+                  value: item,
+                  add: status,
+                });
               }}
             />
           ))}
@@ -75,9 +83,13 @@ function MainSectionFilter() {
             <MainSectionFilterChip
               key={idx}
               text={item}
-              value={filters.subregion.includes(item)}
-              onClick={() => {
-                countryAction.addFilter("subregion", item);
+              checked={filters.subregion.includes(item)}
+              onClick={(status) => {
+                countryAction.setFilter({
+                  key: "subregion",
+                  value: item,
+                  add: status,
+                });
               }}
             />
           ))}
