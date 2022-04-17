@@ -23,14 +23,14 @@ export const countryReducer = (
       // ex: state.filters["key"]
       const targetedKey = Array.from((state.filters as any)[key]);
       // add new value
-      const changedKeyValue: any[] = _.uniq([
+      const updatedKeyValue: any[] = _.uniq([
         // casting the state filters
         ...targetedKey,
         // then add the new value
         value,
       ]);
       // mixing changed filters with curent filters in state
-      const filters = { ...state.filters, [key]: changedKeyValue };
+      const filters = { ...state.filters, [key]: updatedKeyValue };
       // applies the change to the state
       return { ...state, filters: { ...filters } };
       // return state;
@@ -42,19 +42,40 @@ export const countryReducer = (
       // ex: state.filters["key"]
       const targetedKey = Array.from((state.filters as any)[key]);
       // remove value
-      const changedKeyValue: any[] = targetedKey.filter((e) => e !== value);
+      const updatedKeyValue: any[] = targetedKey.filter((e) => e !== value);
       // mixing changed filters with curent filters in state
-      const filters = { ...state.filters, [key]: changedKeyValue };
+      const filters = { ...state.filters, [key]: updatedKeyValue };
       // applies the change to the state
       return { ...state, filters: { ...filters } };
     }
-    case "CLEAR_FILTER":{
+    case "CLEAR_FILTER": {
       // get key and value from payload
       const { key } = action.payload;
       // mixing changed filters with curent filters in state
       const filters = { ...state.filters, [key]: [] };
       // applies the change to the state
       return { ...state, filters: { ...filters } };
+    }
+    case "SET_SORTING": {
+      // get sortingItem id and order
+      const { id, order } = action.payload;
+      const stateSorting = state.sorting;
+      let updatedSorting = { ...stateSorting };
+      // only change the order IF
+      // sorting item of payload and state is the same
+      if (id !== stateSorting.indicator) {
+        updatedSorting = { ...stateSorting, indicator: id };
+      }
+      // only change the indicator
+      else if (order !== stateSorting.order) {
+        updatedSorting = { ...stateSorting, order: order };
+      }
+      console.log(updatedSorting);
+      // if not change the indicator and the order
+      return {
+        ...state,
+        sorting: updatedSorting,
+      };
     }
     default:
       return state;

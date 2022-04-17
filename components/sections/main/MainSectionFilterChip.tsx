@@ -12,8 +12,12 @@ const MainSectionFilterChip = ({
   function RENDER_CHIP(isOn: boolean) {
     return (
       <div
-        className={`btn normal-case rounded-lg  
-        ${isOn ? "swap-on btn-primary" : "swap-off btn-ghost btn-active"}
+        className={`btn normal-case rounded-lg border-[3px] group-hover:shadow-lg transition-colors
+        ${
+          isOn
+            ? "swap-on btn-primary group-hover:border-base-content"
+            : "swap-off btn-ghost btn-active group-hover:border-base-content"
+        }
         `}
         // onClick={() => onClick()}
       >
@@ -22,7 +26,7 @@ const MainSectionFilterChip = ({
     );
   }
   return (
-    <label className="swap ">
+    <label className="swap group ">
       <input
         checked={checked}
         type={"checkbox"}

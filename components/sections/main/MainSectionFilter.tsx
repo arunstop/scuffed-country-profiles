@@ -1,7 +1,9 @@
-import { SearchIcon } from "@heroicons/react/solid";
+import { FaSortAmountDown, FaSortAmountDownAlt } from "react-icons/fa";
 import React from "react";
 import { useCountryContext } from "../../../utils/contexts/country/CountryHook";
 import MainSectionFilterChip from "./MainSectionFilterChip";
+import { SortingOrder } from "../../../utils/data/types/CountryTypes";
+import { MdOutlineSearch } from "react-icons/md";
 
 interface RenderFilterProps {
   label: string;
@@ -13,7 +15,7 @@ interface RenderFilterProps {
 function MainSectionFilter() {
   const {
     state: countryState,
-    state: { filters },
+    state: { filters, sorting },
     action: countryAction,
     getters: {
       list: {
@@ -61,18 +63,11 @@ function MainSectionFilter() {
   return (
     <div className="flex flex-wrap gap-4 p-8">
       <div className="grid gap-4 w-full sm:w-fit">
-        <label>
-          Search :
-          <button
-            className={`btn btn-outline btn-error btn-sm rounded-full invisible`}
-          >
-            Clear
-          </button>
-        </label>
+        <label className="flex items-center h-8">Search :</label>
         <div className="form-control w-full sm:w-96">
           <label className="input-group-lg input-group max-w-lg">
             <span className="">
-              <SearchIcon className="h-8 w-8 text-lg" />
+              <MdOutlineSearch className="text-2xl" />
             </span>
             <input
               className="input-bordered input w-full"
@@ -104,6 +99,51 @@ function MainSectionFilter() {
         clearable: filters["subregion"].length !== 0,
         key: "subregion",
       })}
+      <div className="grid gap-4 w-full sm:w-fit">
+        <label className="flex items-center h-8">
+          Sort by :{/* {sorting.indicator} - {sorting.order} */}
+        </label>
+        <div className="form-control w-full sm:w-96">
+          <div className="input-group-lg input-group max-w-lg transition">
+            <label className="btn bg-base-300 text-base-content border-0 hover:text-base-100 swap swap-rotate transition">
+              <input
+                checked={sorting.order === "ASC"}
+                type={"checkbox"}
+                onChange={(e) => {
+                  // if checked is true (meaning it is currently ASC),
+                  // then change the order to DESC
+                  const orderBy: SortingOrder =
+                    sorting.order === "ASC" ? "DESC" : "ASC";
+                  countryAction.setSorting(sorting.indicator, orderBy);
+                }}
+              />
+              {/* asc */}
+              <FaSortAmountDownAlt
+                className="swap-on text-xl !rounded-none"
+                title="Ascending"
+              />
+              {/* desc */}
+              <FaSortAmountDown
+                className="swap-off text-xl !rounded-none"
+                title="Descending"
+              />
+            </label>
+            <select
+              className="select select-bordered"
+              onChange={(e) => {
+                countryAction.setSorting(e.target.value, sorting.order);
+              }}
+            >
+              {sorting.list.map((sortingItem, idx) => (
+                <option key={idx} value={sortingItem.id}>
+                  {sortingItem.label} —{" "}
+                  {(sorting.order + "ending").toUpperCase()}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

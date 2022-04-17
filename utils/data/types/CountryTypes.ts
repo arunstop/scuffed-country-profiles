@@ -10,6 +10,11 @@ export interface CountryState {
     region: string[];
     subregion: string[];
   };
+  sorting: {
+    list: CountryListSortingItem[];
+    indicator: string;
+    order: SortingOrder;
+  };
 }
 
 export interface CountryAction {
@@ -25,6 +30,7 @@ export interface CountryAction {
     add: boolean;
   }) => void;
   clearFilter: (key: string) => void;
+  setSorting: (id: string, order: SortingOrder) => void;
 }
 
 export type CountryActionTypes =
@@ -47,9 +53,20 @@ export type CountryActionTypes =
   | {
       type: "CLEAR_FILTER";
       payload: { key: string };
+    }
+  | {
+      type: "SET_SORTING";
+      payload: { id: string; order: SortingOrder };
     };
 
 export type CountryContextProps = {
   state: CountryState;
   action: CountryAction;
 };
+
+export interface CountryListSortingItem {
+  id: string;
+  label: string;
+}
+
+export type SortingOrder = "ASC" | "DESC";

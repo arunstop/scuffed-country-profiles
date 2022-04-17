@@ -8,17 +8,23 @@ export const useCountryContext = () => {
     // state: { searchKeyword: keyword },
     // state: { searchKeyword: keyword },
     state,
-    state: { filters },
+    state: { filters, sorting },
     action,
   } = useContext(CountryContext);
   const sortedList = _.orderBy(
     state.list,
     // sort by property :
-    [(item) => item.name.common],
+    // [(item) => (item as any)[sorting.indicator]],
+    // casting to string again because without it, the orderBy
+    [sorting.indicator],
     // order
-    ["asc"],
+    // casting sorting order to any first
+    // to avoid type_error
+    [sorting.order.toLowerCase() as any],
   );
+  // trim and lowercase keyword
   const keyword = state.searchKeyword.toLocaleLowerCase().trim();
+  // set searchedList
   const searchedList =
     state.list.length === 0
       ? sortedList

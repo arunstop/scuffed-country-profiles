@@ -16,11 +16,13 @@ function CountryItem({ country }: { country: Country }) {
           <img
             className="mb-1 rounded-lg  shadow-sm ring-2 ring-slate-600/20 transition-all
             group-hover:z-[2] group-hover:scale-[1.1] group-hover:shadow-lg 
-            group-hover:shadow-gray-500/30 group-hover:ring-blue-600/60"
+            group-hover:shadow-gray-500/30 group-hover:ring-base-content"
             src={country.flags.png}
             alt={country.name.common}
           />
-          <div className="my-auto">{country.name.common}</div>
+          <div className="my-auto group-hover:underline decoration-2">
+            {country.name.common}
+          </div>
         </div>
       </a>
     </Link>

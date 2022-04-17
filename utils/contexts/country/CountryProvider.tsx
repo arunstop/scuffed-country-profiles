@@ -40,6 +40,14 @@ export const CountryProvider = ({ children }: { children: ReactNode }) => {
     clearFilter: (key) => {
       countryDispatch({ type: "CLEAR_FILTER", payload: { key: key } });
     },
+    setSorting: (id, order) => {
+      console.log(id);
+      console.log(order);
+      countryDispatch({
+        type: "SET_SORTING",
+        payload: { id: id, order: order },
+      });
+    },
   };
   const value: CountryContextProps = {
     state: countryState,
