@@ -1,13 +1,18 @@
 import React from "react";
 import { useCountryContext } from "../../../utils/contexts/country/CountryHook";
+import { useUiContext } from "../../../utils/contexts/ui/UiHook";
 import CircularProgress from "../../CircularProgress";
 // import countryListRaw from "../../public/CountryProfileList.json";
 import CountryItem from "../../CountryItem";
+import CountryItemList from "../../country_items/CountryItemList";
 import NoDataPlaceHolder from "../../placholders/NoDataPlaceHolder";
 import MainSectionFilter from "./MainSectionFilter";
 // import MainSectionFilter from "../../MainSectionFilter";
 
 export default function MainSection() {
+  const {
+    state: { listView },
+  } = useUiContext();
   const {
     state: countryState,
     action: countryAction,
@@ -44,8 +49,52 @@ export default function MainSection() {
       );
     }
     return filteredList.map((country) => {
-      return <CountryItem key={country.cca2} country={country} />;
+      // LIST
+      if (listView.selected === "LIST") {
+        return <CountryItemList key={country.cca2} country={country} />;
+      }
+      // CARDS
+      else if (listView.selected === "CARDS") {
+        return <CountryItem key={country.cca2} country={country} />;
+      }
+      // TILES
+      else {
+        return <CountryItem key={country.cca2} country={country} />;
+      }
     });
+  }
+
+  function RENDER_VIEW_TEMPLATE() {
+    // LIST
+    if (listView.selected === "LIST") {
+      return (
+        <div className="flex flex-wrap gap-4 p-8 items-stretch justify-around">
+          {renderCountryList()}
+        </div>
+      );
+    }
+    // CARDS
+    else if (listView.selected === "CARDS") {
+      return (
+        <div
+          className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
+          p-8 transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+        >
+          {renderCountryList()}
+        </div>
+      );
+    }
+    // TILES
+    else {
+      return (
+        <div
+          className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
+          p-8 transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+        >
+          {renderCountryList()}
+        </div>
+      );
+    }
   }
 
   return (
@@ -61,12 +110,7 @@ export default function MainSection() {
       ) : (
         <>
           <MainSectionFilter />
-          <div
-            className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch 
-          p-8 transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
-          >
-            {renderCountryList()}
-          </div>
+          {RENDER_VIEW_TEMPLATE()}
         </>
       )}
     </section>

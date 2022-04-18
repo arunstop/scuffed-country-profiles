@@ -31,7 +31,10 @@ function MainSectionFilter() {
     },
   } = useCountryContext();
 
-  const { state: uiState, action: uiAction } = useUiContext();
+  const {
+    state: { listView },
+    action: uiAction,
+  } = useUiContext();
   // console.log(filterProps.filterProps.continentList);
 
   const RENDER_SEARCHBAR = () => (
@@ -168,19 +171,20 @@ function MainSectionFilter() {
       {RENDER_SORTING()}
       <div className="grid w-full gap-4 sm:w-fit">
         <label className="flex h-8 items-center">
-          View : {uiState.listView.selected}
+          View : {listView.selected}
         </label>
         <div className="form-control w-full sm:w-72">
           <div className="dropdown">
-            <label className="btn normal-case" tabIndex={0}>
-              Some View
+            <label className="btn inline-flex gap-2 capitalize" tabIndex={0}>
+              <FaHamburger className="text-xl" />
+              {listView.selected.toLowerCase()}
             </label>
             <ul
               tabIndex={0}
-              className="dropdown-content menu p-2 shadow bg-base-100 
-              rounded-lg w-52 !ring-2 !ring-opacity-30 !ring-base-content"
+              className="dropdown-content menu w-52 rounded-lg bg-base-100 
+              p-2 shadow !ring-2 !ring-base-content !ring-opacity-30"
             >
-              {uiState.listView.typeList.map((viewType, idx) => (
+              {listView.typeList.map((viewType, idx) => (
                 <li
                   className=""
                   key={idx}

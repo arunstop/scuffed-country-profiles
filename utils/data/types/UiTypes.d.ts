@@ -1,9 +1,9 @@
-export type ListViewTypes = "LIST" | "TILES" | "CARDS";
+export type ListViewTypes = "LIST" | "TILES" | "CARDS" | "TABLE";
 
 export interface UiState {
   darkMode: boolean;
   listView: {
-    typeList: string[];
+    typeList: ListViewTypes[];
     selected: string;
   };
 }
