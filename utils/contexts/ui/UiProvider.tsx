@@ -33,6 +33,8 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
       }
     },
     setListView: (listViewType: string) => {
+      // if view type is already selected, do nothing
+      if (listViewType === uiState.listView.selected) return;
       uiDispatch({ type: "SET_LIST_VIEW", payload: { listViewType } });
       storageSave(KEY_LIST_VIEWTYPE, JSON.stringify(listViewType));
     },
