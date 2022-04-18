@@ -1,17 +1,13 @@
 import { ReactNode, useEffect, useReducer } from "react";
-import {
-  ListViewTypes,
-  UiAction,
-  UiContextProps,
-} from "../../data/types/UiTypes";
-import {
-  KEY_DARK_MODE,
-  KEY_LIST_VIEWTYPE,
-} from "../../helpers/localStorage/StorageKeys";
+import { UiAction, UiContextProps } from "../../data/types/UiTypes";
 import {
   storageFind,
   storageSave,
 } from "../../helpers/localStorage/LocalStorage";
+import {
+  KEY_DARK_MODE,
+  KEY_LIST_VIEWTYPE,
+} from "../../helpers/localStorage/StorageKeys";
 import { UiContext } from "./UiContext";
 import { INIT_UI_STATE } from "./UiInitializers";
 import { uiReducer } from "./UiReducer";
@@ -36,7 +32,7 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
         storageSave(KEY_DARK_MODE, JSON.stringify(darkMode));
       }
     },
-    setListView: (listViewType: ListViewTypes) => {
+    setListView: (listViewType: string) => {
       uiDispatch({ type: "SET_LIST_VIEW", payload: { listViewType } });
       storageSave(KEY_LIST_VIEWTYPE, JSON.stringify(listViewType));
     },

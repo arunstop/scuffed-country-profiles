@@ -3,6 +3,7 @@ import { UiActionTypes } from "../../data/types/UiTypes";
 
 export const uiReducer = (state: UiState, action: UiActionTypes): UiState => {
   const type = action.type;
+
   switch (type) {
     // change dark mode on state
     case "TOGGLE_DARK_MODE": {
@@ -10,7 +11,11 @@ export const uiReducer = (state: UiState, action: UiActionTypes): UiState => {
     }
     // change list view on state
     case "SET_LIST_VIEW": {
-      return { ...state, listView: action.payload.listViewType };
+      const { listViewType } = action.payload;
+      return {
+        ...state,
+        listView: { ...state.listView, selected: listViewType },
+      };
     }
     default:
       return state;

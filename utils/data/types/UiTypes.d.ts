@@ -2,12 +2,15 @@ export type ListViewTypes = "LIST" | "TILES" | "CARDS";
 
 export interface UiState {
   darkMode: boolean;
-  listView: ListViewTypes;
+  listView: {
+    typeList: string[];
+    selected: string;
+  };
 }
 
 export interface UiAction {
   toggleDarkMode: (darkMode: boolean) => void;
-  setListView: (listViewType: ListViewTypes) => void;
+  setListView: (listViewType: string) => void;
 }
 
 export type UiActionTypes =
@@ -17,7 +20,7 @@ export type UiActionTypes =
     }
   | {
       type: "SET_LIST_VIEW";
-      payload: { listViewType: ListViewTypes };
+      payload: { listViewType: string };
     };
 
 export type UiContextProps = {

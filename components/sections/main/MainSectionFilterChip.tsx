@@ -12,12 +12,9 @@ const MainSectionFilterChip = ({
   function RENDER_CHIP(isOn: boolean) {
     return (
       <div
-        className={`btn normal-case rounded-lg border-[3px] group-hover:shadow-lg transition-colors
-        ${
-          isOn
-            ? "swap-on btn-primary group-hover:border-base-content"
-            : "swap-off btn-ghost btn-active group-hover:border-base-content"
-        }
+        className={`btn normal-case rounded-lg border-[3px] transition-colors
+        group-hover:shadow-lg group-hover:border-base-content
+        ${isOn ? "swap-on btn-primary" : "swap-off btn-ghost btn-active"}
         `}
         // onClick={() => onClick()}
       >

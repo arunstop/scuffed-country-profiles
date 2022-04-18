@@ -1,9 +1,14 @@
-import { FaSortAmountDown, FaSortAmountDownAlt } from "react-icons/fa";
+import {
+  FaHamburger,
+  FaSortAmountDown,
+  FaSortAmountDownAlt,
+} from "react-icons/fa";
 import React from "react";
 import { useCountryContext } from "../../../utils/contexts/country/CountryHook";
 import MainSectionFilterChip from "./MainSectionFilterChip";
 import { SortingOrder } from "../../../utils/data/types/CountryTypes";
 import { MdOutlineSearch } from "react-icons/md";
+import { useUiContext } from "../../../utils/contexts/ui/UiHook";
 
 interface RenderFilterProps {
   label: string;
@@ -25,12 +30,41 @@ function MainSectionFilter() {
       list,
     },
   } = useCountryContext();
+
+  const { state: uiState, action: uiAction } = useUiContext();
   // console.log(filterProps.filterProps.continentList);
 
-  const renderFilter = ({ label, list, key, clearable }: RenderFilterProps) => {
+  const RENDER_SEARCHBAR = () => (
+    <div className="grid w-full gap-4 sm:w-fit">
+      <label className="flex h-8 items-center">Search :</label>
+      <div className="form-control w-full sm:w-96">
+        <label className="input-group-lg input-group max-w-lg">
+          <span className="">
+            <MdOutlineSearch className="text-2xl" />
+          </span>
+          <input
+            className="input-bordered input w-full"
+            value={countryState.searchKeyword}
+            type="search"
+            placeholder="Search…"
+            onChange={(e) => {
+              countryAction.setSearchKeyword(e.target.value);
+            }}
+          />
+        </label>
+      </div>
+    </div>
+  );
+
+  const RENDER_FILTER = ({
+    label,
+    list,
+    key,
+    clearable,
+  }: RenderFilterProps) => {
     return (
-      <div className="grid gap-4 w-full sm:w-fit">
-        <div className="flex gap-2 items-center">
+      <div className="grid w-full gap-4 sm:w-fit">
+        <div className="flex items-center gap-2">
           {label}
           <button
             className={`btn btn-outline btn-error btn-sm rounded-full
@@ -60,87 +94,108 @@ function MainSectionFilter() {
     );
   };
 
-  return (
-    <div className="flex flex-wrap gap-4 p-8">
-      <div className="grid gap-4 w-full sm:w-fit">
-        <label className="flex items-center h-8">Search :</label>
-        <div className="form-control w-full sm:w-96">
-          <label className="input-group-lg input-group max-w-lg">
-            <span className="">
-              <MdOutlineSearch className="text-2xl" />
-            </span>
+  const RENDER_SORTING = () => (
+    <div className="grid w-full gap-4 sm:w-fit">
+      <label className="flex h-8 items-center">
+        Sort by :{/* {sorting.indicator} - {sorting.order} */}
+      </label>
+      <div className="form-control w-full sm:w-96">
+        <div className="input-group-lg input-group max-w-lg transition">
+          <label
+            className="swap btn swap-rotate border-0 bg-base-300 text-base-content 
+            transition  hover:text-base-100 dark:hover:hover:text-inherit"
+          >
             <input
-              className="input-bordered input w-full"
-              value={countryState.searchKeyword}
-              type="search"
-              placeholder="Search…"
+              checked={sorting.order === "ASC"}
+              type={"checkbox"}
               onChange={(e) => {
-                countryAction.setSearchKeyword(e.target.value);
+                // if checked is true (meaning it is currently ASC),
+                // then change the order to DESC
+                const orderBy: SortingOrder =
+                  sorting.order === "ASC" ? "DESC" : "ASC";
+                countryAction.setSorting(sorting.indicator, orderBy);
               }}
             />
+            {/* asc */}
+            <FaSortAmountDownAlt
+              className="swap-on !rounded-none text-xl"
+              title="Ascending"
+            />
+            {/* desc */}
+            <FaSortAmountDown
+              className="swap-off !rounded-none text-xl"
+              title="Descending"
+            />
           </label>
+          <select
+            className="select-bordered select"
+            onChange={(e) => {
+              countryAction.setSorting(e.target.value, sorting.order);
+            }}
+          >
+            {sorting.list.map((sortingItem, idx) => (
+              <option key={idx} value={sortingItem.id}>
+                {sortingItem.label} — {(sorting.order + "ending").toUpperCase()}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
-      {renderFilter({
+    </div>
+  );
+
+  return (
+    <div className="flex flex-wrap gap-4 p-8">
+      {RENDER_SEARCHBAR()}
+      {RENDER_FILTER({
         label: "By Continents :",
         list: continentList,
         clearable: filters["continents"].length !== 0,
         key: "continents",
       })}
-      {renderFilter({
+      {RENDER_FILTER({
         label: "By Region :",
         list: regionList,
         clearable: filters["region"].length !== 0,
         key: "region",
       })}
-      {renderFilter({
+      {RENDER_FILTER({
         label: "By Subregion :",
         list: subregionList,
         clearable: filters["subregion"].length !== 0,
         key: "subregion",
       })}
-      <div className="grid gap-4 w-full sm:w-fit">
-        <label className="flex items-center h-8">
-          Sort by :{/* {sorting.indicator} - {sorting.order} */}
+      {RENDER_SORTING()}
+      <div className="grid w-full gap-4 sm:w-fit">
+        <label className="flex h-8 items-center">
+          View : {uiState.listView.selected}
         </label>
-        <div className="form-control w-full sm:w-96">
-          <div className="input-group-lg input-group max-w-lg transition">
-            <label className="btn bg-base-300 text-base-content border-0 hover:text-base-100 swap swap-rotate transition">
-              <input
-                checked={sorting.order === "ASC"}
-                type={"checkbox"}
-                onChange={(e) => {
-                  // if checked is true (meaning it is currently ASC),
-                  // then change the order to DESC
-                  const orderBy: SortingOrder =
-                    sorting.order === "ASC" ? "DESC" : "ASC";
-                  countryAction.setSorting(sorting.indicator, orderBy);
-                }}
-              />
-              {/* asc */}
-              <FaSortAmountDownAlt
-                className="swap-on text-xl !rounded-none"
-                title="Ascending"
-              />
-              {/* desc */}
-              <FaSortAmountDown
-                className="swap-off text-xl !rounded-none"
-                title="Descending"
-              />
+        <div className="form-control w-full sm:w-72">
+          <div className="dropdown">
+            <label className="btn normal-case" tabIndex={0}>
+              Some View
             </label>
-            <select
-              className="select select-bordered"
-              onChange={(e) => {
-                countryAction.setSorting(e.target.value, sorting.order);
-              }}
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu p-2 shadow bg-base-100 
+              rounded-lg w-52 !ring-2 !ring-opacity-30 !ring-base-content"
             >
-              {sorting.list.map((sortingItem, idx) => (
-                <option key={idx} value={sortingItem.id}>
-                  {sortingItem.label} —{" "}
-                  {(sorting.order + "ending").toUpperCase()}
-                </option>
+              {uiState.listView.typeList.map((viewType, idx) => (
+                <li
+                  className=""
+                  key={idx}
+                  onClick={(e) => {
+                    uiAction.setListView(viewType);
+                    (document.activeElement as HTMLElement).blur();
+                  }}
+                >
+                  <a className="capitalize">
+                    <FaHamburger className="text-xl" />
+                    {viewType.toLowerCase()}
+                  </a>
+                </li>
               ))}
-            </select>
+            </ul>
           </div>
         </div>
       </div>

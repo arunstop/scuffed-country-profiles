@@ -54,7 +54,7 @@ export default function MainSection() {
       className="flex min-h-screen w-full flex-col items-center pt-16"
     >
       {noData ? (
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-4 mt-20">
           <CircularProgress size={7} />
           <h2 className="text-2xl">Loading countries...</h2>
         </div>
