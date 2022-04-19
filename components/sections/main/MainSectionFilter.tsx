@@ -147,6 +147,48 @@ function MainSectionFilter() {
     </div>
   );
 
+  const RENDER_VIEW_TYPE = () => {
+    return (
+      <div className="grid w-full gap-4 sm:w-fit">
+        <label className="flex h-8 items-center">
+          View : {listView.selected}
+        </label>
+        <div className="form-control w-full sm:w-72">
+          <div className="dropdown">
+            <label
+              className="btn inline-flex gap-2 capitalize btn-active btn-ghost border-[3px] hover:border-base-content"
+              tabIndex={0}
+            >
+              <FaHamburger className="text-xl" />
+              {listView.selected.toLowerCase()}
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu w-52 rounded-lg bg-base-100 
+          p-2 shadow !ring-2 !ring-base-content !ring-opacity-30"
+            >
+              {listView.typeList.map((viewType, idx) => (
+                <li
+                  className=""
+                  key={idx}
+                  onClick={(e) => {
+                    uiAction.setListView(viewType);
+                    (document.activeElement as HTMLElement).blur();
+                  }}
+                >
+                  <a className="capitalize">
+                    <FaHamburger className="text-xl" />
+                    {viewType.toLowerCase()}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-wrap gap-4 p-8">
       {RENDER_SEARCHBAR()}
@@ -169,40 +211,7 @@ function MainSectionFilter() {
         key: "subregion",
       })}
       {RENDER_SORTING()}
-      <div className="grid w-full gap-4 sm:w-fit">
-        <label className="flex h-8 items-center">
-          View : {listView.selected}
-        </label>
-        <div className="form-control w-full sm:w-72">
-          <div className="dropdown">
-            <label className="btn inline-flex gap-2 capitalize" tabIndex={0}>
-              <FaHamburger className="text-xl" />
-              {listView.selected.toLowerCase()}
-            </label>
-            <ul
-              tabIndex={0}
-              className="dropdown-content menu w-52 rounded-lg bg-base-100 
-              p-2 shadow !ring-2 !ring-base-content !ring-opacity-30"
-            >
-              {listView.typeList.map((viewType, idx) => (
-                <li
-                  className=""
-                  key={idx}
-                  onClick={(e) => {
-                    uiAction.setListView(viewType);
-                    (document.activeElement as HTMLElement).blur();
-                  }}
-                >
-                  <a className="capitalize">
-                    <FaHamburger className="text-xl" />
-                    {viewType.toLowerCase()}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
+      {RENDER_VIEW_TYPE()}
     </div>
   );
 }
