@@ -1,4 +1,3 @@
-import { SearchIcon } from "@heroicons/react/solid";
 import React from "react";
 
 function HeroSection() {
@@ -29,7 +28,7 @@ function HeroSection() {
               alert("search click");
             }}
           >
-            <SearchIcon className="m-auto h-8 w-8 rotate-90" />
+            SEARCH
           </button>
         </div>
       </label>

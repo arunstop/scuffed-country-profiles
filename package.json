@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@heroicons/react": "^1.0.6",
     "daisyui": "^2.13.6",
     "lodash": "^4.17.21",
     "next": "12.1.4",

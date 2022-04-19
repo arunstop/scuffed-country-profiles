@@ -7,7 +7,7 @@ import React from "react";
 import { useCountryContext } from "../../../utils/contexts/country/CountryHook";
 import MainSectionFilterChip from "./MainSectionFilterChip";
 import { SortingOrder } from "../../../utils/data/types/CountryTypes";
-import { MdOutlineSearch } from "react-icons/md";
+import { MdClose, MdOutlineSearch } from "react-icons/md";
 import { useUiContext } from "../../../utils/contexts/ui/UiHook";
 
 interface RenderFilterProps {
@@ -41,14 +41,24 @@ function MainSectionFilter() {
     <div className="grid w-full gap-4 sm:w-fit">
       <label className="flex h-8 items-center">Search :</label>
       <div className="form-control w-full sm:w-96">
-        <label className="input-group-lg input-group max-w-lg">
+        <label className="input-group-lg input-group max-w-lg relative">
           <span className="">
             <MdOutlineSearch className="text-2xl" />
           </span>
+          <button
+            className={`btn !btn-circle !btn-sm my-auto mx-2 
+            absolute inset-y-0 right-0 btn-error btn-outline bg-opacity-60
+            ${countryState.searchKeyword.length ? "visiblae" : "hidden"}`}
+            onClick={() => {
+              countryAction.setSearchKeyword("");
+            }}
+          >
+            <MdClose className="text-2xl" />
+          </button>
           <input
-            className="input-bordered input w-full"
+            className="input-bordered input w-full pr-12"
             value={countryState.searchKeyword}
-            type="search"
+            type="text"
             placeholder="Search…"
             onChange={(e) => {
               countryAction.setSearchKeyword(e.target.value);
@@ -156,7 +166,7 @@ function MainSectionFilter() {
         <div className="form-control w-full sm:w-72">
           <div className="dropdown">
             <label
-              className="btn inline-flex gap-2 capitalize btn-active btn-ghost border-[3px] hover:border-base-content"
+              className="btn btn-ghost btn-active inline-flex gap-2 border-[3px] capitalize hover:border-base-content"
               tabIndex={0}
             >
               <FaHamburger className="text-xl" />
