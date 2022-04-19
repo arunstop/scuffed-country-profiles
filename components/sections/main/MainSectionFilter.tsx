@@ -107,6 +107,28 @@ function MainSectionFilter() {
     );
   };
 
+  const RENDER_CONTINENTS = () =>
+    RENDER_FILTER({
+      label: "By Continents :",
+      list: continentList,
+      clearable: filters["continents"].length !== 0,
+      key: "continents",
+    });
+  const RENDER_REGION = () =>
+    RENDER_FILTER({
+      label: "By Region :",
+      list: regionList,
+      clearable: filters["region"].length !== 0,
+      key: "region",
+    });
+  const RENDER_SUBREGION = () =>
+    RENDER_FILTER({
+      label: "By Subregion :",
+      list: subregionList,
+      clearable: filters["subregion"].length !== 0,
+      key: "subregion",
+    });
+
   const RENDER_SORTING = () => (
     <div className="grid w-full gap-4 sm:w-fit">
       <label className="flex h-8 items-center">
@@ -142,6 +164,7 @@ function MainSectionFilter() {
           </label>
           <select
             className="select-bordered select"
+            value={sorting.indicator}
             onChange={(e) => {
               countryAction.setSorting(e.target.value, sorting.order);
             }}
@@ -202,24 +225,9 @@ function MainSectionFilter() {
   return (
     <div className="flex flex-wrap gap-4 p-8">
       {RENDER_SEARCHBAR()}
-      {RENDER_FILTER({
-        label: "By Continents :",
-        list: continentList,
-        clearable: filters["continents"].length !== 0,
-        key: "continents",
-      })}
-      {RENDER_FILTER({
-        label: "By Region :",
-        list: regionList,
-        clearable: filters["region"].length !== 0,
-        key: "region",
-      })}
-      {RENDER_FILTER({
-        label: "By Subregion :",
-        list: subregionList,
-        clearable: filters["subregion"].length !== 0,
-        key: "subregion",
-      })}
+      {RENDER_CONTINENTS()}
+      {RENDER_REGION()}
+      {RENDER_SUBREGION()}
       {RENDER_SORTING()}
       {RENDER_VIEW_TYPE()}
     </div>
