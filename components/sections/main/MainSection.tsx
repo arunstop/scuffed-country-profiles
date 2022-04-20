@@ -11,7 +11,7 @@ import MainSectionFilter from "./MainSectionFilter";
 
 export default function MainSection() {
   const {
-    state: { listView },
+    state: { viewType },
   } = useUiContext();
   const {
     state: countryState,
@@ -50,11 +50,11 @@ export default function MainSection() {
     }
     return filteredList.map((country) => {
       // LIST
-      if (listView.selected === "LIST") {
+      if (viewType.selected === "LIST") {
         return <CountryItemList key={country.cca2} country={country} />;
       }
       // CARDS
-      else if (listView.selected === "CARDS") {
+      else if (viewType.selected === "CARDS") {
         return <CountryItem key={country.cca2} country={country} />;
       }
       // TILES
@@ -66,7 +66,7 @@ export default function MainSection() {
 
   function RENDER_VIEW_TEMPLATE() {
     // LIST
-    if (listView.selected === "LIST") {
+    if (viewType.selected === "LIST") {
       return (
         <div className="flex flex-wrap gap-4 p-8 items-stretch justify-around">
           {renderCountryList()}
@@ -74,7 +74,7 @@ export default function MainSection() {
       );
     }
     // CARDS
-    else if (listView.selected === "CARDS") {
+    else if (viewType.selected === "CARDS") {
       return (
         <div
           className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch

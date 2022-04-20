@@ -1,9 +1,13 @@
-export type ListViewTypes = "LIST" | "TILES" | "CARDS" | "TABLE";
-
+import { ReactNode } from "react";
+export type ViewTypeTypes = "LIST" | "TILES" | "CARDS" | "TABLE";
+export type ViewType = {
+  type: ViewTypeTypes;
+  icon: ReactNode;
+};
 export interface UiState {
   darkMode: boolean;
-  listView: {
-    typeList: ListViewTypes[];
+  viewType: {
+    list: ViewType[];
     selected: string;
   };
 }

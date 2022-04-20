@@ -14,7 +14,7 @@ export const uiReducer = (state: UiState, action: UiActionTypes): UiState => {
       const { listViewType } = action.payload;
       return {
         ...state,
-        listView: { ...state.listView, selected: listViewType },
+        viewType: { ...state.viewType, selected: listViewType },
       };
     }
     default:

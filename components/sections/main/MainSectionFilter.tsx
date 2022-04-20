@@ -1,5 +1,5 @@
 import {
-  FaHamburger,
+  // FaHamburger,
   FaSortAmountDown,
   FaSortAmountDownAlt,
 } from "react-icons/fa";
@@ -32,7 +32,7 @@ function MainSectionFilter() {
   } = useCountryContext();
 
   const {
-    state: { listView },
+    state: { viewType },
     action: uiAction,
   } = useUiContext();
   // console.log(filterProps.filterProps.continentList);
@@ -184,7 +184,7 @@ function MainSectionFilter() {
     return (
       <div className="grid w-full gap-4 sm:w-fit">
         <label className="flex h-8 items-center">
-          View : {listView.selected}
+          View : {viewType.selected}
         </label>
         <div className="form-control w-full sm:w-72">
           <div className="dropdown">
@@ -192,26 +192,28 @@ function MainSectionFilter() {
               className="btn btn-ghost btn-active inline-flex gap-2 border-[3px] capitalize hover:border-base-content"
               tabIndex={0}
             >
-              <FaHamburger className="text-xl" />
-              {listView.selected.toLowerCase()}
+              <span className="text-xl">
+                {viewType.list.find((e) => e.type === viewType.selected)?.icon}
+              </span>
+              {viewType.selected.toLowerCase()}
             </label>
             <ul
               tabIndex={0}
-              className="dropdown-content menu w-52 rounded-lg bg-base-100 
-          p-2 shadow !ring-2 !ring-base-content !ring-opacity-30"
+              className="dropdown-content menu w-52 rounded-lg bg-base-100
+              p-2 shadow !ring-2 !ring-base-content !ring-opacity-30"
             >
-              {listView.typeList.map((viewType, idx) => (
+              {viewType.list.map((viewType, idx) => (
                 <li
                   className=""
                   key={idx}
                   onClick={(e) => {
-                    uiAction.setListView(viewType);
+                    uiAction.setListView(viewType.type);
                     (document.activeElement as HTMLElement).blur();
                   }}
                 >
                   <a className="capitalize">
-                    <FaHamburger className="text-xl" />
-                    {viewType.toLowerCase()}
+                    <span className="text-xl">{viewType.icon}</span>
+                    {viewType.type.toLowerCase()}
                   </a>
                 </li>
               ))}

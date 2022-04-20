@@ -34,7 +34,7 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
     },
     setListView: (listViewType: string) => {
       // if view type is already selected, do nothing
-      if (listViewType === uiState.listView.selected) return;
+      if (listViewType === uiState.viewType.selected) return;
       uiDispatch({ type: "SET_LIST_VIEW", payload: { listViewType } });
       storageSave(KEY_LIST_VIEW_TYPE, JSON.stringify(listViewType));
     },
@@ -50,7 +50,7 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
       action.toggleDarkMode(JSON.parse(userDarkMode));
     }
     const userListViewType = JSON.parse(storageFind(KEY_LIST_VIEW_TYPE)!);
-    if (userListViewType !== uiState.listView.selected) {
+    if (userListViewType !== uiState.viewType.selected) {
       action.setListView(userListViewType);
     }
     // action.toggleDarkMode(JSON.parse());
