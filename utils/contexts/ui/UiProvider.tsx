@@ -38,6 +38,9 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
       uiDispatch({ type: "SET_LIST_VIEW", payload: { listViewType } });
       storageSave(KEY_LIST_VIEW_TYPE, JSON.stringify(listViewType));
     },
+    toggleFilters: (filtersOn: boolean) => {
+      uiDispatch({ type: "TOGGLE_FILTERS", payload: { filtersOn: filtersOn } });
+    },
   };
   const value: UiContextProps = {
     state: uiState,

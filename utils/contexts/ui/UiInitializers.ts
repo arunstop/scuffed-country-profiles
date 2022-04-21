@@ -10,4 +10,5 @@ export const INIT_UI_STATE: UiState = {
     ],
     selected: "LIST",
   },
+  filtersOn: false,
 };

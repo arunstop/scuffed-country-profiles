@@ -64,10 +64,9 @@ function ListCountryItem({ country }: { country: Country }) {
         <div className="z-0">
           <div className="flex flex-wrap justify-end sm:gap-2">
             <a
-              className="btn btn-outline gap-2 normal-case 
+              className="btn gap-2 normal-case 
               rounded-none rounded-t-lg border-b-0
-              sm:rounded-lg sm:border-b-[1px]
-              hover:bg-base-content grow sm:grow-0"
+              sm:rounded-lg sm:border-b-[1px] grow sm:grow-0 group-hover:btn-outline hover:bg-content-base"
               href={country.maps.googleMaps}
               target="_blank"
               rel="noreferrer"
@@ -78,10 +77,9 @@ function ListCountryItem({ country }: { country: Country }) {
               <span>Open in Google Maps</span>
             </a>
             <a
-              className="btn btn-outline gap-2 normal-case 
+              className="btn gap-2 normal-case 
               rounded-none rounded-b-lg
-              sm:rounded-lg sm:border-inherit
-              hover:bg-base-content grow sm:grow-0"
+              sm:rounded-lg grow sm:grow-0 group-hover:btn-outline hover:bg-content-base"
               href={country.maps.openStreetMaps}
               target="_blank"
               rel="noreferrer"

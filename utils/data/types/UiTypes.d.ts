@@ -10,11 +10,13 @@ export interface UiState {
     list: ViewType[];
     selected: string;
   };
+  filtersOn: boolean;
 }
 
 export interface UiAction {
   toggleDarkMode: (darkMode: boolean) => void;
   setListView: (listViewType: string) => void;
+  toggleFilters: (filtersOn: boolean) => void;
 }
 
 export type UiActionTypes =
@@ -25,6 +27,10 @@ export type UiActionTypes =
   | {
       type: "SET_LIST_VIEW";
       payload: { listViewType: string };
+    }
+  | {
+      type: "TOGGLE_FILTERS";
+      payload: { filtersOn: boolean };
     };
 
 export type UiContextProps = {

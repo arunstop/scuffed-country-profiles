@@ -69,7 +69,7 @@ export default function MainSection() {
     // LIST
     if (viewType.selected === "LIST") {
       return (
-        <div className="flex flex-col p-8 divide-y-2 transition-all w-full">
+        <div className="flex w-full flex-col divide-y-2 p-8 transition-all">
           {renderCountryList()}
         </div>
       );
@@ -88,7 +88,7 @@ export default function MainSection() {
     // TILES
     else {
       return (
-        <div className="flex flex-wrap gap-4 p-8 items-stretch justify-around">
+        <div className="flex flex-wrap items-stretch justify-around gap-4 p-8">
           {renderCountryList()}
         </div>
       );
@@ -101,7 +101,7 @@ export default function MainSection() {
       className="flex min-h-screen w-full flex-col items-center pt-16"
     >
       {noData ? (
-        <div className="flex flex-col items-center gap-4 mt-20">
+        <div className="mt-20 flex flex-col items-center gap-4">
           <CircularProgress size={7} />
           <h2 className="text-2xl">Loading countries...</h2>
         </div>

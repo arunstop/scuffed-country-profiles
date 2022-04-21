@@ -32,7 +32,7 @@ function MainSectionFilter() {
   } = useCountryContext();
 
   const {
-    state: { viewType },
+    state: { viewType, filtersOn },
     action: uiAction,
   } = useUiContext();
   // console.log(filterProps.filterProps.continentList);
@@ -45,7 +45,7 @@ function MainSectionFilter() {
           <span className="">
             <MdOutlineSearch className="text-2xl" />
           </span>
-          <button
+          <label
             className={`btn !btn-circle !btn-sm my-auto mx-2 
             absolute inset-y-0 right-0 btn-error btn-outline bg-opacity-60
             ${countryState.searchKeyword.length ? "visiblae" : "hidden"}`}
@@ -54,7 +54,7 @@ function MainSectionFilter() {
             }}
           >
             <MdClose className="text-2xl" />
-          </button>
+          </label>
           <input
             className="input-bordered input w-full pr-12"
             value={countryState.searchKeyword}
@@ -183,9 +183,7 @@ function MainSectionFilter() {
   const RENDER_VIEW_TYPE = () => {
     return (
       <div className="grid w-full gap-4 sm:w-fit">
-        <label className="flex h-8 items-center">
-          View : {viewType.selected}
-        </label>
+        <label className="flex h-8 items-center">View :</label>
         <div className="form-control w-full sm:w-72">
           <div className="dropdown">
             <label
@@ -224,12 +222,32 @@ function MainSectionFilter() {
     );
   };
 
+  const RENDER_FILTER_BUTTON = () => {
+    return (
+      <button
+        className={`btn btn-outline normal-case mt-auto 
+        ${filtersOn ? "btn-error" : ""}`}
+        onClick={() => {
+          uiAction.toggleFilters(!filtersOn);
+        }}
+      >
+        {filtersOn ? "Hide" : "Show"} Filters
+      </button>
+    );
+  };
+
   return (
-    <div className="flex flex-wrap gap-4 p-8">
+    <div className="flex flex-wrap gap-4 p-8 w-full">
       {RENDER_SEARCHBAR()}
-      {RENDER_CONTINENTS()}
-      {RENDER_REGION()}
-      {RENDER_SUBREGION()}
+      {filtersOn && (
+        <>
+          {RENDER_CONTINENTS()}
+          {RENDER_REGION()}
+          {RENDER_SUBREGION()}
+        </>
+      )}
+      {RENDER_FILTER_BUTTON()}
+      <div className="w-full"></div>
       {RENDER_SORTING()}
       {RENDER_VIEW_TYPE()}
     </div>

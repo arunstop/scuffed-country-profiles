@@ -17,6 +17,10 @@ export const uiReducer = (state: UiState, action: UiActionTypes): UiState => {
         viewType: { ...state.viewType, selected: listViewType },
       };
     }
+    case "TOGGLE_FILTERS": {
+      const { filtersOn } = action.payload;
+      return { ...state, filtersOn: filtersOn };
+    }
     default:
       return state;
   }
