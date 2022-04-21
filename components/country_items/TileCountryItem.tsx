@@ -4,7 +4,7 @@ import { MdLandscape, MdPeople, MdPlace, MdTranslate } from "react-icons/md";
 import { SiGooglemaps, SiOpenstreetmap } from "react-icons/si";
 import { Country } from "../../utils/data/models/Country";
 
-function CountryItemList({ country }: { country: Country }) {
+function TileCountryItem({ country }: { country: Country }) {
   return (
     <Link href={`/country/${country.cca2}`}>
       <a
@@ -76,4 +76,4 @@ function CountryItemList({ country }: { country: Country }) {
   );
 }
 
-export default CountryItemList;
+export default TileCountryItem;

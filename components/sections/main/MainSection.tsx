@@ -4,7 +4,8 @@ import { useUiContext } from "../../../utils/contexts/ui/UiHook";
 import CircularProgress from "../../CircularProgress";
 // import countryListRaw from "../../public/CountryProfileList.json";
 import CountryItem from "../../CountryItem";
-import CountryItemList from "../../country_items/CountryItemList";
+import ListCountryItem from "../../country_items/ListCountryItem";
+import TileCountryItem from "../../country_items/TileCountryItem";
 import NoDataPlaceHolder from "../../placholders/NoDataPlaceHolder";
 import MainSectionFilter from "./MainSectionFilter";
 // import MainSectionFilter from "../../MainSectionFilter";
@@ -51,7 +52,7 @@ export default function MainSection() {
     return filteredList.map((country) => {
       // LIST
       if (viewType.selected === "LIST") {
-        return <CountryItemList key={country.cca2} country={country} />;
+        return <ListCountryItem key={country.cca2} country={country} />;
       }
       // CARDS
       else if (viewType.selected === "CARDS") {
@@ -59,7 +60,7 @@ export default function MainSection() {
       }
       // TILES
       else {
-        return <CountryItem key={country.cca2} country={country} />;
+        return <TileCountryItem key={country.cca2} country={country} />;
       }
     });
   }
@@ -68,7 +69,7 @@ export default function MainSection() {
     // LIST
     if (viewType.selected === "LIST") {
       return (
-        <div className="flex flex-wrap gap-4 p-8 items-stretch justify-around">
+        <div className="flex flex-col p-8 divide-y-2 transition-all w-full">
           {renderCountryList()}
         </div>
       );
@@ -87,10 +88,7 @@ export default function MainSection() {
     // TILES
     else {
       return (
-        <div
-          className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-          p-8 transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
-        >
+        <div className="flex flex-wrap gap-4 p-8 items-stretch justify-around">
           {renderCountryList()}
         </div>
       );
