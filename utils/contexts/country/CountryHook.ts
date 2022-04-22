@@ -2,6 +2,7 @@ import { CountryContext } from "./CountryContext";
 import { useContext } from "react";
 import _ from "lodash";
 import { lowerCaseChildrenFetch } from "../../helpers/Fetchers";
+import { Country } from "../../data/models/Country";
 
 export const useCountryContext = () => {
   const {
@@ -25,8 +26,8 @@ export const useCountryContext = () => {
   // trim and lowercase keyword
   const keyword = state.searchKeyword.toLocaleLowerCase().trim();
   // set searchedList
-  const searchedList =
-    state.list.length === 0
+  function searchedList(): Country[] {
+    return state.list.length === 0
       ? sortedList
       : sortedList.filter((country) => {
           // console.log(
@@ -74,23 +75,20 @@ export const useCountryContext = () => {
                   .join(" — ")
                   .toLowerCase()
                   .includes(keyword))
-            //
           );
         });
+  }
   const distinctAndSort = (list: any[], order: "asc" | "desc" = "asc") =>
     _.orderBy(_.uniq(list), [(e) => e], [order]).filter((e) => e);
 
-  const continentList = distinctAndSort(
-    _.flatMap(state.list.map((item) => item.continents)),
-  );
+  const continentList = () =>
+    distinctAndSort(_.flatMap(state.list.map((item) => item.continents)));
 
-  const regionList = distinctAndSort(
-    _.map(state.list.map((item) => item.region)),
-  );
+  const regionList = () =>
+    distinctAndSort(_.map(state.list.map((item) => item.region)));
 
-  const subregionList = distinctAndSort(
-    _.map(state.list.map((item) => item.subregion)),
-  );
+  const subregionList = () =>
+    distinctAndSort(_.map(state.list.map((item) => item.subregion)));
 
   return {
     state,
@@ -99,11 +97,11 @@ export const useCountryContext = () => {
       list: {
         filteredList: searchedList,
         filterProps: {
-          continentList: continentList,
-          regionList: regionList,
-          subregionList: subregionList,
+          continentList: continentList(),
+          regionList: regionList(),
+          subregionList: subregionList(),
         },
-        noResultFound: searchedList.length === 0,
+        noResultFound: searchedList().length === 0,
         noData: state.list.length === 0,
       },
     },

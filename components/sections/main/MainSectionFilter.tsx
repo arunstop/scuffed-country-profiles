@@ -135,7 +135,7 @@ function MainSectionFilter() {
         Sort by :{/* {sorting.indicator} - {sorting.order} */}
       </label>
       <div className="form-control w-full sm:w-96">
-        <div className="input-group-lg input-group max-w-lg transition">
+        <div className="input-group-lg input-group w-full transition">
           <label
             className="swap btn swap-rotate border-0 bg-base-300 text-base-content 
             transition  hover:text-base-100 dark:hover:hover:text-inherit"
@@ -163,7 +163,7 @@ function MainSectionFilter() {
             />
           </label>
           <select
-            className="select-bordered select"
+            className="select-bordered select grow"
             value={sorting.indicator}
             onChange={(e) => {
               countryAction.setSorting(e.target.value, sorting.order);

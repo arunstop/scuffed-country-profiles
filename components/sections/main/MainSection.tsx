@@ -49,7 +49,7 @@ export default function MainSection() {
         </div>
       );
     }
-    return filteredList.map((country) => {
+    return filteredList().map((country) => {
       // LIST
       if (viewType.selected === "LIST") {
         return <ListCountryItem key={country.cca2} country={country} />;
@@ -109,8 +109,8 @@ export default function MainSection() {
         <>
           <MainSectionFilter />
           <div className="mt-4 mx-8 self-start text-2xl">
-            Showing <b className="font-bold">{filteredList.length}</b>{" "}
-            {list.filteredList.length > 1 ? "countries" : "country"}
+            Showing <b className="font-bold">{filteredList().length}</b>{" "}
+            {filteredList().length > 1 ? "countries" : "country"}
           </div>
           {RENDER_VIEW_TEMPLATE()}
         </>
