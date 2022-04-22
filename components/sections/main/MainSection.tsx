@@ -108,6 +108,10 @@ export default function MainSection() {
       ) : (
         <>
           <MainSectionFilter />
+          <div className="mt-4 mx-8 self-start text-2xl">
+            Showing <b className="font-bold">{filteredList.length}</b>{" "}
+            {list.filteredList.length > 1 ? "countries" : "country"}
+          </div>
           {RENDER_VIEW_TEMPLATE()}
         </>
       )}

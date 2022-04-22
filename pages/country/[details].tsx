@@ -58,7 +58,8 @@ function Details({ countryStr }: CountryDetailsProps) {
 
   // render parts
   const RENDER_FLAG = () => (
-    <div className="self-center sm:self-start">
+    <div className="self-center flex flex-col justify-center gap-4">
+      <h1 className="text-4xl font-bold">{country.name.common}</h1>
       <img
         className="rounded-lg shadow-lg ring-4 ring-slate-600/30"
         src={country.flags.png}
@@ -168,18 +169,108 @@ function Details({ countryStr }: CountryDetailsProps) {
       </Head>
       <Header />
       <div className="pt-16">
-        <div className="flex flex-col gap-8 p-8 sm:flex-row">
+        <img
+          className="absolute inset-0 h-[30rem] rounded-br-full rounded-r-3xl
+          opacity-40  blur-lg transition-all group-hover:scale-150 -z-[1]"
+          src={country.flags.png}
+          alt={country.name.common}
+        />
+        <div className="flex flex-col content-evenly justify-evenly gap-8 p-8 sm:flex-row flex-wrap">
           {RENDER_FLAG()}
-          <div className="flex-1">
+          {/* <div className="">
             <div className="grid gap-4">
               {RENDER_NAME()}
-              {/* <h2 className="text-3xl font-bold">{cName.official}</h2> */}
               {RENDER_OTHER_NAMES()}
               {RENDER_CAPITALS()}
               {RENDER_LANGUAGES()}
               {RENDER_REGIONS()}
               {RENDER_AREA()}
               {RENDER_CURRENCIES()}
+            </div>
+          </div> */}
+          <div className="">
+            <div className="flex flex-col gap-4">
+              <h1 className="text-2xl font-bold">Naming</h1>
+              <div className="flex flex-col">
+                <span>Common : {country.name.common} </span>
+                <span>Official : {country.name.official} </span>
+                <span>
+                  Native name :{" "}
+                  {[
+                    countryName.official,
+                    ...nameList.map((nameItem) => nameItem.official),
+                  ].join(" — ")}{" "}
+                </span>
+                <span>
+                  Alternative Spellings: {country.altSpellings.join(", ")}{" "}
+                </span>
+                <span>
+                  Name in other languages : {country.translations.length}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="">
+            <div className="flex flex-col gap-4">
+              <h1 className="text-2xl font-bold">Geographic</h1>
+              <div className="flex flex-col">
+                <span>Continent : {country.continents.join(", ")} </span>
+                <span>Region : {country.region} </span>
+                <span>Subregion : {country.subregion} </span>
+                <span>Land area : {country.area.toLocaleString()} km^2</span>
+                <span>Landlocked : {country.landlocked ? "YES" : "NO"} </span>
+                <span>Borders : {country.borders?.join(", ")}</span>
+                <span>Lat-Long : {country.latlng.join(", ")}</span>
+              </div>
+            </div>
+          </div>
+          <div className="">
+            <div className="flex flex-col gap-4">
+              <h1 className="text-2xl font-bold">Politic</h1>
+              <div className="flex flex-col">
+                <span>Independent : {country.independent ? "YES" : "NO"} </span>
+                <span>Status : {country.status.toUpperCase()} </span>
+                <span>
+                  United Nations member : {country.unMember ? "YES" : "NO"}{" "}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="">
+            <div className="flex flex-col gap-4">
+              <h1 className="text-2xl font-bold">Generic</h1>
+              <div className="flex flex-col">
+                <span>Capital : {country.capital} </span>
+                <span>
+                  Currency :{" "}
+                  {country.currencies
+                    ?.map(
+                      (currItem) =>
+                        `${currItem.name} (${currItem.code} / ${currItem.symbol})`,
+                    )
+                    .join(" — ")}
+                </span>
+                <span>Population : {country.population.toLocaleString()} </span>
+                <span className="capitalize">
+                  Start of the week : {country.startOfWeek}{" "}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="">
+            <div className="flex flex-col gap-4">
+              <h1 className="text-2xl font-bold">Communication</h1>
+              <div className="flex flex-col">
+                <span>
+                  Language(s) :{" "}
+                  {country.languages.map((e) => e.name).join(", ")}
+                </span>
+                <span>
+                  International direct dialing (IDD):{" "}
+                  {`${country.idd.root}${country.idd.suffixes[0]}`}
+                </span>
+                <span>Top level domain : {country.tld.join(" — ")} </span>
+              </div>
             </div>
           </div>
         </div>

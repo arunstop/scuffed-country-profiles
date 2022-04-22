@@ -38,7 +38,7 @@ function ListCountryItem({ country }: { country: Country }) {
             </div>
           </div>
           <div className="flex flex-col">
-            <h1 className="text-2xl font-medium">
+            <h1 className="text-3xl font-medium">
               {country.name.common || "-"}
             </h1>
             <div className="mb-1">{country.name.official || "-"}</div>
@@ -64,9 +64,10 @@ function ListCountryItem({ country }: { country: Country }) {
         <div className="z-0">
           <div className="flex flex-wrap justify-end sm:gap-2">
             <a
-              className="btn gap-2 normal-case 
-              rounded-none rounded-t-lg border-b-0
-              sm:rounded-lg sm:border-b-[1px] grow sm:grow-0 group-hover:btn-outline hover:bg-content-base"
+              className="hover:bg-content-base btn-outline btn 
+              grow gap-2 rounded-none
+              rounded-t-lg border-b-0 normal-case 
+              sm:grow-0 sm:rounded-lg sm:border-b-[1px]"
               href={country.maps.googleMaps}
               target="_blank"
               rel="noreferrer"
@@ -77,9 +78,10 @@ function ListCountryItem({ country }: { country: Country }) {
               <span>Open in Google Maps</span>
             </a>
             <a
-              className="btn gap-2 normal-case 
-              rounded-none rounded-b-lg
-              sm:rounded-lg grow sm:grow-0 group-hover:btn-outline hover:bg-content-base"
+              className="hover:bg-content-base btn-outline btn 
+              grow gap-2
+              rounded-none rounded-b-lg normal-case 
+              sm:grow-0 sm:rounded-lg"
               href={country.maps.openStreetMaps}
               target="_blank"
               rel="noreferrer"
