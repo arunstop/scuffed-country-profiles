@@ -9,11 +9,11 @@ export const useCountryContext = () => {
     // state: { searchKeyword: keyword },
     // state: { searchKeyword: keyword },
     state,
-    state: { filters, sorting },
+    state: { list, filters, sorting },
     action,
   } = useContext(CountryContext);
   const sortedList = _.orderBy(
-    state.list,
+    list,
     // sort by property :
     // [(item) => (item as any)[sorting.indicator]],
     // casting to string again because without it, the orderBy
@@ -27,7 +27,7 @@ export const useCountryContext = () => {
   const keyword = state.searchKeyword.toLocaleLowerCase().trim();
   // set searchedList
   function searchedList(): Country[] {
-    return state.list.length === 0
+    return list.length === 0
       ? sortedList
       : sortedList.filter((country) => {
           // console.log(
@@ -82,13 +82,21 @@ export const useCountryContext = () => {
     _.orderBy(_.uniq(list), [(e) => e], [order]).filter((e) => e);
 
   const continentList = () =>
-    distinctAndSort(_.flatMap(state.list.map((item) => item.continents)));
+    distinctAndSort(_.flatMap(list.map((item) => item.continents)));
 
   const regionList = () =>
-    distinctAndSort(_.map(state.list.map((item) => item.region)));
+    distinctAndSort(_.map(list.map((item) => item.region)));
 
   const subregionList = () =>
-    distinctAndSort(_.map(state.list.map((item) => item.subregion)));
+    distinctAndSort(_.map(list.map((item) => item.subregion)));
+
+  const InSubregionCountryList = (subregion: string): Country[] => {
+    return list.filter((country) => country.subregion === subregion);
+  };
+
+  const borderingCountryList = (borderList: string[]): Country[] => {
+    return list.filter((c64tnry) => borderList.includes(c64tnry.cca3));
+  };
 
   return {
     state,
@@ -97,12 +105,14 @@ export const useCountryContext = () => {
       list: {
         filteredList: searchedList,
         filterProps: {
-          continentList: continentList(),
-          regionList: regionList(),
-          subregionList: subregionList(),
+          getContinentList: continentList,
+          getRegionList: regionList,
+          getSubregionList: subregionList,
+          getBorderingCountryList: borderingCountryList,
+          getInSubregionCountryList: InSubregionCountryList,
         },
         noResultFound: searchedList().length === 0,
-        noData: state.list.length === 0,
+        noData: list.length === 0,
       },
     },
   };

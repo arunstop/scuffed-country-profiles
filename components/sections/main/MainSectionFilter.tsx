@@ -25,7 +25,11 @@ function MainSectionFilter() {
     getters: {
       list: {
         filteredList,
-        filterProps: { continentList, regionList, subregionList },
+        filterProps: {
+          getContinentList: continentList,
+          getRegionList: regionList,
+          getSubregionList: subregionList,
+        },
       },
       list,
     },
@@ -110,21 +114,21 @@ function MainSectionFilter() {
   const RENDER_CONTINENTS = () =>
     RENDER_FILTER({
       label: "By Continents :",
-      list: continentList,
+      list: continentList(),
       clearable: filters["continents"].length !== 0,
       key: "continents",
     });
   const RENDER_REGION = () =>
     RENDER_FILTER({
       label: "By Region :",
-      list: regionList,
+      list: regionList(),
       clearable: filters["region"].length !== 0,
       key: "region",
     });
   const RENDER_SUBREGION = () =>
     RENDER_FILTER({
       label: "By Subregion :",
-      list: subregionList,
+      list: subregionList(),
       clearable: filters["subregion"].length !== 0,
       key: "subregion",
     });

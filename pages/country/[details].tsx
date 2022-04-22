@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import React, { useEffect } from "react";
+import CountryItem from "../../components/CountryItem";
 import Header from "../../components/Header";
 import { getCountry } from "../../utils/apis/CountryApi";
 import { useCountryContext } from "../../utils/contexts/country/CountryHook";
@@ -51,7 +52,15 @@ function Details({ countryStr }: CountryDetailsProps) {
   //     .includes("US".toLowerCase()),
   // );
 
-  const { state: countryState, action: countryAction } = useCountryContext();
+  const {
+    state: countryState,
+    getters: {
+      list: {
+        filterProps: { getBorderingCountryList, getInSubregionCountryList },
+      },
+    },
+    action: countryAction,
+  } = useCountryContext();
   useEffect(() => {
     countryAction.setSearchKeyword("");
   }, []);
@@ -61,11 +70,11 @@ function Details({ countryStr }: CountryDetailsProps) {
   // render parts
   const RENDER_FLAG = () => (
     <div className="flex flex-col justify-center gap-4 self-center">
-      <h1 className="text-4xl font-bold">{country.name.common}</h1>
       <img
         className="rounded-lg shadow-lg ring-4 ring-slate-600/30"
         src={country.flags.png}
       />
+      <h1 className="text-4xl font-bold">{country.name.common}</h1>
     </div>
   );
 
@@ -240,7 +249,7 @@ function Details({ countryStr }: CountryDetailsProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <div className="pt-16">
+      <div className="py-16 flex flex-col gap-8">
         <img
           className="absolute inset-0 -z-[1] h-[30rem] rounded-r-3xl
           rounded-br-full opacity-40 blur-lg transition-all group-hover:scale-150"
@@ -265,6 +274,40 @@ function Details({ countryStr }: CountryDetailsProps) {
           {RENDER_INFO_POLITIC()}
           {RENDER_INFO_GENERIC()}
           {RENDER_INFO_COMMUNICATION()}
+        </div>
+        <div className="flex flex-col w-full px-8 gap-8">
+          <h2 className="text-2xl font-bold">
+            Bordering {country.borders.length > 1 ? "Countries" : "Country"} :
+          </h2>
+          <div
+            className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
+            transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+          >
+            {country.borders.length === 0
+              ? ""
+              : getBorderingCountryList(country.borders).map(
+                  (countryItem, idx) => (
+                    <CountryItem key={idx} country={countryItem} />
+                  ),
+                )}
+          </div>
+        </div>
+        <div className="flex flex-col w-full px-8 gap-8">
+          <h2 className="text-2xl font-bold">
+            {country.subregion} Countries :
+          </h2>
+          <div
+            className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
+            transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+          >
+            {country.borders.length === 0
+              ? ""
+              : getInSubregionCountryList(country.subregion).map(
+                  (countryItem, idx) => (
+                    <CountryItem key={idx} country={countryItem} />
+                  ),
+                )}
+          </div>
         </div>
       </div>
     </>
