@@ -8,7 +8,7 @@ function CircularProgress({ size }: { size: number }) {
         {
           "--value": "60",
           "--size": `${size}rem`,
-          "--thickness": `1rem`,
+          "--thickness": `${size * (15 / 100)}rem`,
         } as CSSProperties
       }
     />

@@ -90,12 +90,12 @@ export const useCountryContext = () => {
   const subregionList = () =>
     distinctAndSort(_.map(list.map((item) => item.subregion)));
 
-  const InSubregionCountryList = (subregion: string): Country[] => {
-    return list.filter((country) => country.subregion === subregion);
+  const borderingCountryList = (borderList: string[]): Country[] => {
+    return list.filter((country) => borderList.includes(country.cca3));
   };
 
-  const borderingCountryList = (borderList: string[]): Country[] => {
-    return list.filter((c64tnry) => borderList.includes(c64tnry.cca3));
+  const SubregionCountryList = (subregion: string): Country[] => {
+    return list.filter((country) => country.subregion === subregion);
   };
 
   return {
@@ -109,7 +109,7 @@ export const useCountryContext = () => {
           getRegionList: regionList,
           getSubregionList: subregionList,
           getBorderingCountryList: borderingCountryList,
-          getInSubregionCountryList: InSubregionCountryList,
+          getSubregionCountryList: SubregionCountryList,
         },
         noResultFound: searchedList().length === 0,
         noData: list.length === 0,

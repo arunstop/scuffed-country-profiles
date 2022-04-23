@@ -1,10 +1,17 @@
+import _ from "lodash";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import CircularProgress from "../../components/CircularProgress";
 import CountryItem from "../../components/CountryItem";
 import Header from "../../components/Header";
-import { getCountry } from "../../utils/apis/CountryApi";
+import {
+  apiGetBorderingCountryList,
+  apiGetMutualSubregionCountryList,
+  getCountry,
+} from "../../utils/apis/CountryApi";
 import { useCountryContext } from "../../utils/contexts/country/CountryHook";
+import { Country } from "../../utils/data/models/Country";
 import { toCountry } from "../../utils/helpers/Casters";
 import { APP_NAME } from "../../utils/helpers/Constants";
 
@@ -56,14 +63,59 @@ function Details({ countryStr }: CountryDetailsProps) {
     state: countryState,
     getters: {
       list: {
-        filterProps: { getBorderingCountryList, getInSubregionCountryList },
+        filterProps: { getBorderingCountryList, getSubregionCountryList },
+        noData,
       },
     },
     action: countryAction,
   } = useCountryContext();
+
+  const [borderingCountryList, setBorderingCountryList] = useState<Country[]>(
+    [],
+  );
+  const [mutualSubregionCountryList, setMutualSubregionCountryList] = useState<
+    Country[]
+  >([]);
+
   useEffect(() => {
+    loadBorderingCountryList();
+    loadMutualSubregionCountryList();
     countryAction.setSearchKeyword("");
-  }, []);
+    return () => {
+      setBorderingCountryList([]);
+      setMutualSubregionCountryList([]);
+    };
+  }, [countryStr]);
+
+  function sortByName(countryList: Country[]): Country[] {
+    return _.orderBy(countryList, ["cca2"], ["asc"]);
+  }
+
+  function excludeCurrentCountry(countryList: Country[]): Country[] {
+    return countryList.filter(
+      (countryItem) => countryItem.cca2 !== country.cca2,
+    );
+  }
+
+  async function loadBorderingCountryList() {
+    // check if countryList exist in state
+    // and load from API if it does not
+    // or simply load it from the sate if it does.
+    const list: Country[] = noData
+      ? await apiGetBorderingCountryList(country.borders)
+      : getBorderingCountryList(country.borders);
+    setBorderingCountryList(sortByName(list));
+  }
+
+  async function loadMutualSubregionCountryList() {
+    // check if countryList exist in state
+    // and load from API if it does not
+    // or simply load it from the sate if it does.
+    const list: Country[] = noData
+      ? await apiGetMutualSubregionCountryList(country.subregion)
+      : getSubregionCountryList(country.subregion);
+    setMutualSubregionCountryList(sortByName(excludeCurrentCountry(list)));
+  }
 
   const YES_OR_NO = (value: boolean): string => (value === true ? "YES" : "NO");
 
@@ -79,9 +131,9 @@ function Details({ countryStr }: CountryDetailsProps) {
   );
 
   const RENDER_INFO_GENERIC = () => (
-    <div className="card grow max-w-[30rem] bg-base-300/50">
+    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="bg-base-300 p-4 text-2xl font-bold border-b-2 border-base-content/50">
+        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold">
           Generic
         </h1>
         <div className="flex flex-col gap-2 p-8 pt-4">
@@ -114,9 +166,9 @@ function Details({ countryStr }: CountryDetailsProps) {
   );
 
   const RENDER_INFO_NAMING = () => (
-    <div className="card grow max-w-[30rem] bg-base-300/50">
+    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="bg-base-300 p-4 text-2xl font-bold border-b-2 border-base-content/50">
+        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold">
           Naming
         </h1>
         <div className="flex flex-col gap-2 p-8 pt-4">
@@ -148,9 +200,9 @@ function Details({ countryStr }: CountryDetailsProps) {
   );
 
   const RENDER_INFO_GEOGRAPHIC = () => (
-    <div className="card grow max-w-[30rem] bg-base-300/50">
+    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="bg-base-300 p-4 text-2xl font-bold border-b-2 border-base-content/50">
+        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold">
           Geographic
         </h1>
         <div className="flex flex-col gap-2 p-8 pt-4">
@@ -190,9 +242,9 @@ function Details({ countryStr }: CountryDetailsProps) {
   );
 
   const RENDER_INFO_POLITIC = () => (
-    <div className="card grow max-w-[30rem] bg-base-300/50">
+    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="bg-base-300 p-4 text-2xl font-bold border-b-2 border-base-content/50">
+        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold">
           Politic
         </h1>
         <div className="flex flex-col gap-2 p-8 pt-4">
@@ -214,9 +266,9 @@ function Details({ countryStr }: CountryDetailsProps) {
   );
 
   const RENDER_INFO_COMMUNICATION = () => (
-    <div className="card grow max-w-[30rem] bg-base-300/50">
+    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="bg-base-300 p-4 text-2xl font-bold border-b-2 border-base-content/50 ">
+        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold ">
           Communication
         </h1>
         <div className="flex flex-col gap-2 p-8 pt-4">
@@ -239,6 +291,55 @@ function Details({ countryStr }: CountryDetailsProps) {
     </div>
   );
 
+  const RENDER_LOADING_PLACEHOLDER = (label: string) => (
+    <div className="flex items-center gap-4 p-8 text-xl font-semibold">
+      <CircularProgress size={4} />
+      {label}
+    </div>
+  );
+
+  const RENDER_BORDERING_COUNTRIES = () =>
+    country.borders &&
+    (!borderingCountryList.length ? (
+      RENDER_LOADING_PLACEHOLDER(
+        `Loading bordering countries of ${country.name.common}...`,
+      )
+    ) : (
+      <div className="flex w-full flex-col gap-8 px-8">
+        <h2 className="text-2xl font-bold">
+          Bordering {country.borders.length > 1 ? "Countries" : "Country"} :
+        </h2>
+        <div
+          className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
+        transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+        >
+          {country.borders.length === 0
+            ? ""
+            : borderingCountryList.map((countryItem, idx) => (
+                <CountryItem key={idx} country={countryItem} />
+              ))}
+        </div>
+      </div>
+    ));
+
+  const RENDER_MUTUAL_SUBREGION_COUNTRIES = () =>
+    mutualSubregionCountryList.length === 0 ? (
+      RENDER_LOADING_PLACEHOLDER(`Loading countries in ${country.subregion}...`)
+    ) : (
+      <div className="flex w-full flex-col gap-8 px-8">
+        <h2 className="text-2xl font-bold">
+          Countries in {country.subregion} :
+        </h2>
+        <div
+          className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
+        transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+        >
+          {mutualSubregionCountryList.map((countryItem, idx) => (
+            <CountryItem key={idx} country={countryItem} />
+          ))}
+        </div>
+      </div>
+    );
   return (
     <>
       <Head>
@@ -249,14 +350,14 @@ function Details({ countryStr }: CountryDetailsProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <div className="py-16 flex flex-col gap-8">
+      <div className="flex flex-col gap-8 py-16">
         <img
           className="absolute inset-0 -z-[1] h-[30rem] rounded-r-3xl
           rounded-br-full opacity-40 blur-lg transition-all group-hover:scale-150"
           src={country.flags.png}
           alt={country.name.common}
         />
-        <div className="flex flex-wrap justify-start items-start gap-8 p-8 sm:flex-row">
+        <div className="flex flex-wrap items-start justify-start gap-8 p-8 sm:flex-row">
           {RENDER_FLAG()}
           {/* <div className="">
             <div className="grid gap-4">
@@ -275,40 +376,8 @@ function Details({ countryStr }: CountryDetailsProps) {
           {RENDER_INFO_GENERIC()}
           {RENDER_INFO_COMMUNICATION()}
         </div>
-        <div className="flex flex-col w-full px-8 gap-8">
-          <h2 className="text-2xl font-bold">
-            Bordering {country.borders.length > 1 ? "Countries" : "Country"} :
-          </h2>
-          <div
-            className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-            transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
-          >
-            {country.borders.length === 0
-              ? ""
-              : getBorderingCountryList(country.borders).map(
-                  (countryItem, idx) => (
-                    <CountryItem key={idx} country={countryItem} />
-                  ),
-                )}
-          </div>
-        </div>
-        <div className="flex flex-col w-full px-8 gap-8">
-          <h2 className="text-2xl font-bold">
-            {country.subregion} Countries :
-          </h2>
-          <div
-            className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-            transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
-          >
-            {country.borders.length === 0
-              ? ""
-              : getInSubregionCountryList(country.subregion).map(
-                  (countryItem, idx) => (
-                    <CountryItem key={idx} country={countryItem} />
-                  ),
-                )}
-          </div>
-        </div>
+        {RENDER_BORDERING_COUNTRIES()}
+        {RENDER_MUTUAL_SUBREGION_COUNTRIES()}
       </div>
     </>
   );
