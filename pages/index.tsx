@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HeroSection from "../components/sections/HeroSection";
 import MainSection from "../components/sections/main/MainSection";
-import { getCountryList } from "../utils/apis/CountryApi";
+import { apiGetCountryList } from "../utils/apis/CountryApi";
 import { useCountryContext } from "../utils/contexts/country/CountryHook";
 import { APP_NAME } from "../utils/helpers/Constants";
 // import { Country } from "../utils/data/models/Country";
@@ -39,7 +39,7 @@ function Home() {
 
   async function loadCountryList() {
     if (countryState.list.length === 0) {
-      countryAction.setCountryList(await getCountryList());
+      countryAction.setCountryList(await apiGetCountryList());
     }
   }
 

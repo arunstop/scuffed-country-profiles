@@ -3,6 +3,7 @@ import { useContext } from "react";
 import _ from "lodash";
 import { lowerCaseChildrenFetch } from "../../helpers/Fetchers";
 import { Country } from "../../data/models/Country";
+import { GroupedCountry } from "../../data/types/CountryTypes";
 
 export const useCountryContext = () => {
   const {
@@ -81,21 +82,35 @@ export const useCountryContext = () => {
   const distinctAndSort = (list: any[], order: "asc" | "desc" = "asc") =>
     _.orderBy(_.uniq(list), [(e) => e], [order]).filter((e) => e);
 
-  const continentList = () =>
+  const continentList = (filtered = false) =>
     distinctAndSort(_.flatMap(list.map((item) => item.continents)));
 
-  const regionList = () =>
+  const regionList = (filtered = false) =>
     distinctAndSort(_.map(list.map((item) => item.region)));
 
-  const subregionList = () =>
+  const subregionList = (filtered = false) =>
     distinctAndSort(_.map(list.map((item) => item.subregion)));
 
   const borderingCountryList = (borderList: string[]): Country[] => {
     return list.filter((country) => borderList.includes(country.cca3));
   };
 
-  const SubregionCountryList = (subregion: string): Country[] => {
+  const mutualSubregionCountryList = (subregion: string): Country[] => {
     return list.filter((country) => country.subregion === subregion);
+  };
+
+  const groupedList = (id: "region" | "subregion"): GroupedCountry[] => {
+    // const groupedList = () => {
+    const groupedResult = _.groupBy(searchedList(), (e) => (e as any)[id]);
+    const groupedList = Object.keys(groupedResult).map(
+      (e) =>
+        ({
+          id: e,
+          list: groupedResult[e],
+        } as GroupedCountry),
+    );
+    // console.log(groupedList);
+    return _.orderBy(groupedList, ["id"], ["asc"]);
   };
 
   return {
@@ -109,8 +124,9 @@ export const useCountryContext = () => {
           getRegionList: regionList,
           getSubregionList: subregionList,
           getBorderingCountryList: borderingCountryList,
-          getSubregionCountryList: SubregionCountryList,
+          getSubregionCountryList: mutualSubregionCountryList,
         },
+        groupedList: groupedList,
         noResultFound: searchedList().length === 0,
         noData: list.length === 0,
       },

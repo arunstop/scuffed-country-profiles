@@ -29,15 +29,16 @@ export const getServerSideProps: GetServerSideProps<
   // );
   // console.log(await countryListRaw());
 
-  const target = JSON.stringify(
-    await getCountry((context.query.details + "").toLowerCase()),
+  const countryTarget = await getCountry(
+    (context.query.details + "").toLowerCase(),
   );
+  const countryStr = JSON.stringify(countryTarget);
   // const countryTarget: Country = toCountry(target);
   // console.log(countryTarget);
 
   return {
-    props: { countryStr: target },
-    notFound: !target,
+    props: { countryStr: countryStr },
+    notFound: !countryTarget,
   };
 };
 
@@ -88,7 +89,7 @@ function Details({ countryStr }: CountryDetailsProps) {
   }, [countryStr]);
 
   function sortByName(countryList: Country[]): Country[] {
-    return _.orderBy(countryList, ["cca2"], ["asc"]);
+    return _.orderBy(countryList, ["name.common"], ["asc"]);
   }
 
   function excludeCurrentCountry(countryList: Country[]): Country[] {
@@ -359,17 +360,6 @@ function Details({ countryStr }: CountryDetailsProps) {
         />
         <div className="flex flex-wrap items-start justify-start gap-8 p-8 sm:flex-row">
           {RENDER_FLAG()}
-          {/* <div className="">
-            <div className="grid gap-4">
-              {RENDER_NAME()}
-              {RENDER_OTHER_NAMES()}
-              {RENDER_CAPITALS()}
-              {RENDER_LANGUAGES()}
-              {RENDER_REGIONS()}
-              {RENDER_AREA()}
-              {RENDER_CURRENCIES()}
-            </div>
-          </div> */}
           {RENDER_INFO_NAMING()}
           {RENDER_INFO_GEOGRAPHIC()}
           {RENDER_INFO_POLITIC()}

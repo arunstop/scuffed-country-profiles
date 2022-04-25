@@ -70,3 +70,8 @@ export interface CountryListSortingItem {
 }
 
 export type SortingOrder = "ASC" | "DESC";
+
+export type GroupedCountry = {
+  id: string;
+  list: Country[];
+};

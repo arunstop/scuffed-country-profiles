@@ -241,7 +241,7 @@ function MainSectionFilter() {
   };
 
   return (
-    <div className="flex flex-wrap gap-4 p-8 w-full">
+    <div className="flex flex-wrap gap-4 w-full">
       {RENDER_SEARCHBAR()}
       {filtersOn && (
         <>
