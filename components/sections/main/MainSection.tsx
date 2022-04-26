@@ -22,7 +22,6 @@ export default function MainSection() {
     getters: {
       list: {
         filteredList,
-        groupedList,
         filterProps: { getRegionList },
         noData,
       },
@@ -31,6 +30,8 @@ export default function MainSection() {
   } = useCountryContext();
 
   const [activeGroupList, setActiveGroupList] = useState<string[]>([]);
+
+  const groupedList = list.groupedList("region");
 
   function removeActiveGroupList(id: string) {
     // set active group list by updating the current list
@@ -45,7 +46,7 @@ export default function MainSection() {
   }
 
   function expandAllActiveGroupList() {
-    setActiveGroupList(groupedList("region").map((e) => e.id));
+    setActiveGroupList(groupedList.map((e) => e.id));
   }
   function collapseAllActiveGroupList() {
     setActiveGroupList([]);
@@ -149,7 +150,8 @@ export default function MainSection() {
   function RENDER_CONTENT() {
     const grouped = true;
     if (grouped === true) {
-      return groupedList("region").map((groupedItem, idx) => {
+      return groupedList.map((groupedItem, idx) => {
+        const countryCount = groupedItem.list.length;
         return (
           <div
             key={idx}
@@ -175,7 +177,11 @@ export default function MainSection() {
               flex justify-between py-4 px-8 text-2xl peer-checked:invisible 
               peer-checked:bg-base-content/30 peer-hover:bg-base-content/50"
             >
-              <span>{groupedItem.id}</span>
+              <span>
+                {`${groupedItem.id} - ${countryCount} ${
+                  countryCount < 2 ? "Country" : "Countries"
+                }`}{" "}
+              </span>
               {/* Arrow DOWN */}
               <span className="opacity-60">&#x25BC;</span>
             </div>
@@ -227,7 +233,10 @@ export default function MainSection() {
             <label className="swap swap-flip">
               <input
                 type={"checkbox"}
-                checked={activeGroupList.length < 2}
+                checked={
+                  groupedList.length !== activeGroupList.length &&
+                  activeGroupList.length < 2
+                }
                 onChange={(e) => {
                   console.log(e.target.checked);
                   if (e.target.checked === false) {
