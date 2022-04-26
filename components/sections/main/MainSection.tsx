@@ -177,11 +177,12 @@ export default function MainSection() {
               flex justify-between py-4 px-8 text-2xl peer-checked:invisible 
               peer-checked:bg-base-content/30 peer-hover:bg-base-content/50"
             >
-              <span>
-                {`${groupedItem.id} - ${countryCount} ${
+              <p>
+                <span className="font-bold">{`${groupedItem.id} - `}</span>
+                <span className="text-lg">{`${countryCount} ${
                   countryCount < 2 ? "Country" : "Countries"
-                }`}{" "}
-              </span>
+                }`}</span>
+              </p>
               {/* Arrow DOWN */}
               <span className="opacity-60">&#x25BC;</span>
             </div>
@@ -191,7 +192,12 @@ export default function MainSection() {
               invisible flex justify-between py-4 px-8  text-2xl peer-checked:!visible 
               peer-checked:bg-base-content/30 peer-hover:bg-base-content/50"
             >
-              <span>{groupedItem.id}</span>
+              <p>
+                <span className="font-bold">{`${groupedItem.id} - `}</span>
+                <span className="text-lg">{`${countryCount} ${
+                  countryCount < 2 ? "Country" : "Countries"
+                }`}</span>
+              </p>
               {/* Arrow UP */}
               <span className="opacity-60">&#x25B2;</span>
             </div>
@@ -223,7 +229,7 @@ export default function MainSection() {
       ) : (
         <>
           <MainSectionFilter />
-          {RENDER_GROUPING()}
+          {/* {RENDER_GROUPING()} */}
           <div className="flex w-full flex-wrap items-center justify-between gap-4 self-start">
             <p className="text-2xl">
               Showing <b className="font-bold">{filteredList().length}</b>{" "}

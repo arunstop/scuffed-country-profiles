@@ -1,5 +1,9 @@
 import _ from "lodash";
+import { BiWorld } from "react-icons/bi";
+import { ImFontSize, ImHammer2 } from "react-icons/im";
 import { GetServerSideProps } from "next";
+import { BsFileText } from "react-icons/bs";
+import { MdPhoneInTalk } from "react-icons/md";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import CircularProgress from "../../components/CircularProgress";
@@ -131,45 +135,11 @@ function Details({ countryStr }: CountryDetailsProps) {
     </div>
   );
 
-  const RENDER_INFO_GENERIC = () => (
-    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
-      <div className="flex flex-col">
-        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold">
-          Generic
-        </h1>
-        <div className="flex flex-col gap-2 p-8 pt-4">
-          <p>
-            {" "}
-            <span className="font-bold">Capital :</span> {country.capital}{" "}
-          </p>
-          <p>
-            {" "}
-            <span className="font-bold">Currency :</span>{" "}
-            {country.currencies
-              ?.map(
-                (currItem) =>
-                  `${currItem.name} (${currItem.code} / ${currItem.symbol})`,
-              )
-              .join(" — ")}
-          </p>
-          <p>
-            {" "}
-            <span className="font-bold">Population :</span>{" "}
-            {country.population.toLocaleString()}{" "}
-          </p>
-          <p>
-            <span className="font-bold">Start of the week : </span>
-            <span className="capitalize">{country.startOfWeek}</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-
   const RENDER_INFO_NAMING = () => (
     <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold">
+        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold flex gap-2 items-center">
+          <ImFontSize />
           Naming
         </h1>
         <div className="flex flex-col gap-2 p-8 pt-4">
@@ -203,7 +173,8 @@ function Details({ countryStr }: CountryDetailsProps) {
   const RENDER_INFO_GEOGRAPHIC = () => (
     <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold">
+        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold flex gap-2 items-center">
+          <BiWorld />
           Geographic
         </h1>
         <div className="flex flex-col gap-2 p-8 pt-4">
@@ -245,7 +216,8 @@ function Details({ countryStr }: CountryDetailsProps) {
   const RENDER_INFO_POLITIC = () => (
     <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold">
+        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold flex gap-2 items-center">
+          <ImHammer2 />
           Politic
         </h1>
         <div className="flex flex-col gap-2 p-8 pt-4">
@@ -266,10 +238,47 @@ function Details({ countryStr }: CountryDetailsProps) {
     </div>
   );
 
+  const RENDER_INFO_GENERIC = () => (
+    <div className="card max-w-[30rem] grow bg-base-300/30 shadow-lg">
+      <div className="flex flex-col">
+        <h1 className="border-b-2 border-base-content/30 bg-base-300 p-4 text-2xl font-bold flex gap-2 items-center">
+          <BsFileText />
+          Generic
+        </h1>
+        <div className="flex flex-col gap-2 p-8 pt-4">
+          <p>
+            {" "}
+            <span className="font-bold">Capital :</span>{" "}
+            {country.capital.join(", ")}{" "}
+          </p>
+          <p>
+            {" "}
+            <span className="font-bold">Currency :</span>{" "}
+            {country.currencies
+              ?.map(
+                (currItem) =>
+                  `${currItem.name} (${currItem.code} / ${currItem.symbol})`,
+              )
+              .join(" — ")}
+          </p>
+          <p>
+            {" "}
+            <span className="font-bold">Population :</span>{" "}
+            {country.population.toLocaleString()}{" "}
+          </p>
+          <p>
+            <span className="font-bold">Start of the week : </span>
+            <span className="capitalize">{country.startOfWeek}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
   const RENDER_INFO_COMMUNICATION = () => (
     <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold ">
+        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold flex gap-2 items-center">
+          <MdPhoneInTalk />
           Communication
         </h1>
         <div className="flex flex-col gap-2 p-8 pt-4">
