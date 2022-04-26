@@ -130,17 +130,35 @@ export default function MainSection() {
         return (
           <div
             key={idx}
-            className="collapse w-full border-2 border-base-content/10 bg-base-content/10"
+            className="collapse w-full border-base-content/10 bg-base-content/10 
+            first:rounded-t-lg last:rounded-b-lg"
             tabIndex={0}
           >
-            <input type="checkbox" className="peer" />
-            <div className="collapse-title py-4 px-8 bg-base-content/30 text-2xl ">
-              {groupedItem.id}
+            <input type="checkbox" className="peer !p-0" />
+            {/* COLLAPSE */}
+            <div
+              className="collapse-title pointer-events-none 
+              flex justify-between py-4 px-8 text-2xl peer-checked:invisible 
+              peer-checked:bg-base-content/30 peer-hover:bg-base-content/50"
+            >
+              <span>{groupedItem.id}</span>
+              {/* Arrow DOWN */}
+              <span className="opacity-60">&#x25BC;</span>
+            </div>
+            {/* EXPAND */}
+            <div
+              className="collapse-title pointer-events-none 
+              invisible flex justify-between py-4 px-8  text-2xl peer-checked:!visible 
+              peer-checked:bg-base-content/30 peer-hover:bg-base-content/50"
+            >
+              <span>{groupedItem.id}</span>
+              {/* Arrow UP */}
+              <span className="opacity-60">&#x25B2;</span>
             </div>
             <div
-              className="collapse-content opacity-0 transition-all 
-            peer-checked:p-4 peer-checked:opacity-100 sm:peer-checked:p-8
-            "
+              className="collapse-content !border-t-0 border-base-content/30 
+              opacity-0 transition-all peer-checked:!max-h-fit peer-checked:p-4
+              peer-checked:opacity-100 sm:peer-checked:p-8"
             >
               {renderGroupedCountryList(groupedItem.list)}
             </div>
@@ -155,7 +173,7 @@ export default function MainSection() {
   return (
     <section
       id="countries"
-      className="flex min-h-screen w-full flex-col items-center gap-8 p-8 sm:p-16"
+      className="flex min-h-screen w-full flex-col items-center gap-8 p-4 sm:p-16"
     >
       {noData ? (
         <div className="mt-20 flex flex-col items-center gap-4">
@@ -170,7 +188,7 @@ export default function MainSection() {
             Showing <b className="font-bold">{filteredList().length}</b>{" "}
             {filteredList().length > 1 ? "countries" : "country"}
           </div>
-          <div className="flex flex-col overflow-hidden rounded-lg w-full">
+          <div className="flex w-full flex-col divide-y-2 rounded-lg shadow-lg">
             {RENDER_CONTENT()}
           </div>
         </>
