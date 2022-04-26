@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { MdCloseFullscreen, MdOpenInFull } from "react-icons/md";
 import { useCountryContext } from "../../../utils/contexts/country/CountryHook";
 import { useUiContext } from "../../../utils/contexts/ui/UiHook";
 import { Country } from "../../../utils/data/models/Country";
@@ -21,12 +22,34 @@ export default function MainSection() {
     getters: {
       list: {
         filteredList,
+        groupedList,
         filterProps: { getRegionList },
         noData,
       },
       list,
     },
   } = useCountryContext();
+
+  const [activeGroupList, setActiveGroupList] = useState<string[]>([]);
+
+  function removeActiveGroupList(id: string) {
+    // set active group list by updating the current list
+    // by removing the selected item
+    setActiveGroupList([
+      ...activeGroupList.filter((activeGroupItem) => activeGroupItem !== id),
+    ]);
+  }
+
+  function addActiveGroupList(id: string) {
+    setActiveGroupList([...activeGroupList, id]);
+  }
+
+  function expandAllActiveGroupList() {
+    setActiveGroupList(groupedList("region").map((e) => e.id));
+  }
+  function collapseAllActiveGroupList() {
+    setActiveGroupList([]);
+  }
 
   // console.log(countryList);
 
@@ -126,7 +149,7 @@ export default function MainSection() {
   function RENDER_CONTENT() {
     const grouped = true;
     if (grouped === true) {
-      return list.groupedList("region").map((groupedItem, idx) => {
+      return groupedList("region").map((groupedItem, idx) => {
         return (
           <div
             key={idx}
@@ -134,7 +157,18 @@ export default function MainSection() {
             first:rounded-t-lg last:rounded-b-lg"
             tabIndex={0}
           >
-            <input type="checkbox" className="peer !p-0" />
+            <input
+              type="checkbox"
+              checked={activeGroupList.includes(groupedItem.id)}
+              className="peer !p-0"
+              onChange={(e) => {
+                if (e.target.checked === false) {
+                  removeActiveGroupList(groupedItem.id);
+                  return;
+                }
+                addActiveGroupList(groupedItem.id);
+              }}
+            />
             {/* COLLAPSE */}
             <div
               className="collapse-title pointer-events-none 
@@ -173,7 +207,7 @@ export default function MainSection() {
   return (
     <section
       id="countries"
-      className="flex min-h-screen w-full flex-col items-center gap-8 p-4 sm:p-16"
+      className="flex min-h-screen w-full flex-col items-center gap-8 p-4  sm:p-8"
     >
       {noData ? (
         <div className="mt-20 flex flex-col items-center gap-4">
@@ -184,10 +218,37 @@ export default function MainSection() {
         <>
           <MainSectionFilter />
           {RENDER_GROUPING()}
-          <div className="self-start text-2xl">
-            Showing <b className="font-bold">{filteredList().length}</b>{" "}
-            {filteredList().length > 1 ? "countries" : "country"}
+          <div className="flex w-full flex-wrap items-center justify-between gap-4 self-start">
+            <p className="text-2xl">
+              Showing <b className="font-bold">{filteredList().length}</b>{" "}
+              {filteredList().length > 1 ? "countries" : "country"}
+            </p>
+            {/* Expand All */}
+            <label className="swap swap-flip">
+              <input
+                type={"checkbox"}
+                checked={activeGroupList.length < 2}
+                onChange={(e) => {
+                  console.log(e.target.checked);
+                  if (e.target.checked === false) {
+                    expandAllActiveGroupList();
+                    console.log(activeGroupList);
+                    return;
+                  }
+                  collapseAllActiveGroupList();
+                }}
+              />
+              <div className="text-md btn swap-on btn-sm ml-auto gap-2 font-normal normal-case ">
+                <MdOpenInFull className="text-xl" />
+                <span role={"button"}>Expand All</span>
+              </div>
+              <div className="text-md btn swap-off btn-sm ml-auto gap-2 font-normal normal-case ">
+                <MdCloseFullscreen className="text-xl" />
+                <span role={"button"}>Collapse All</span>
+              </div>
+            </label>
           </div>
+
           <div className="flex w-full flex-col divide-y-2 rounded-lg shadow-lg">
             {RENDER_CONTENT()}
           </div>
