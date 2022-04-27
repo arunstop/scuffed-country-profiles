@@ -64,7 +64,41 @@ export default function MainSection() {
   //   // }
   // }, []);
 
-  function renderCountryList(countryList: Country[]) {
+  function RENDER_EXPAND_COLLAPSE_BUTTON() {
+    return (
+      <>
+        {/* Expand All */}
+        <label className="swap">
+          <input
+            type={"checkbox"}
+            checked={
+              groupedList.length !== activeGroupList.length &&
+              activeGroupList.length < 2
+            }
+            onChange={(e) => {
+              console.log(e.target.checked);
+              if (e.target.checked === false) {
+                expandAllActiveGroupList();
+                console.log(activeGroupList);
+                return;
+              }
+              collapseAllActiveGroupList();
+            }}
+          />
+          <div className="text-md btn swap-on btn-sm ml-auto gap-2 font-normal normal-case ">
+            <MdOpenInFull className="text-xl" />
+            <span role={"button"}>Expand All</span>
+          </div>
+          <div className="text-md btn swap-off btn-sm ml-auto gap-2 font-normal normal-case ">
+            <MdCloseFullscreen className="text-xl" />
+            <span role={"button"}>Collapse All</span>
+          </div>
+        </label>
+      </>
+    );
+  }
+
+  function RENDER_COUNTRY_LIST(countryList: Country[]) {
     if (list.noData) {
       return (
         <div className="col-span-full">
@@ -95,11 +129,11 @@ export default function MainSection() {
     });
   }
 
-  function renderGroupedCountryList(countryList: Country[]) {
+  function RENDER_COUNTRY_LIST_CONTAINER(countryList: Country[]) {
     if (viewType.selected === "LIST") {
       return (
         <div className="flex w-full flex-col divide-y-2 transition-all">
-          {renderCountryList(countryList)}
+          {RENDER_COUNTRY_LIST(countryList)}
         </div>
       );
     }
@@ -110,7 +144,7 @@ export default function MainSection() {
           className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
           transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
         >
-          {renderCountryList(countryList)}
+          {RENDER_COUNTRY_LIST(countryList)}
         </div>
       );
     }
@@ -118,10 +152,14 @@ export default function MainSection() {
     else {
       return (
         <div className="flex flex-wrap items-stretch justify-around gap-4">
-          {renderCountryList(countryList)}
+          {RENDER_COUNTRY_LIST(countryList)}
         </div>
       );
     }
+  }
+
+  function RENDER_GROUPED_COUNTRY_LIST_CONTAINER(countryList: Country[]) {
+    return RENDER_COUNTRY_LIST_CONTAINER(countryList);
   }
 
   const RENDER_GROUPING = () => (
@@ -152,16 +190,17 @@ export default function MainSection() {
     if (grouped === true) {
       return groupedList.map((groupedItem, idx) => {
         const countryCount = groupedItem.list.length;
+        const expanded = activeGroupList.includes(groupedItem.id);
         return (
           <div
             key={idx}
-            className="collapse w-full border-base-content/10 bg-base-content/10 
-            first:rounded-t-lg last:rounded-b-lg"
+            className="collapse w-full border-base-content/50 bg-transparent 
+            first:rounded-t-lg last:rounded-b-lg !overflow-visible"
             tabIndex={0}
           >
             <input
               type="checkbox"
-              checked={activeGroupList.includes(groupedItem.id)}
+              checked={expanded}
               className="peer !p-0"
               onChange={(e) => {
                 if (e.target.checked === false) {
@@ -171,11 +210,18 @@ export default function MainSection() {
                 addActiveGroupList(groupedItem.id);
               }}
             />
-            {/* COLLAPSE */}
+            {/* COLLAPSE/EXPAND */}
             <div
-              className="collapse-title pointer-events-none 
-              flex justify-between py-4 px-8 text-2xl peer-checked:invisible 
-              peer-checked:bg-base-content/30 peer-hover:bg-base-content/50"
+              className={`collapse-title  pointer-events-none bg-base-content/10
+              flex justify-between py-4 px-8 text-2xl
+              peer-checked:bg-base-content/20 peer-hover:bg-base-content/30
+              peer-checked:!rounded-lg w-auto peer-checked:shadow-lg 
+              peer-checked:scale-[1.01] peer-checked:translate-y-[-0.1rem]
+              border-2 border-transparent peer-checked:border-base-content
+              transition-all
+              ${idx === 0 ? "rounded-t-lg" : ""}
+              ${idx + 1 === groupedList.length ? "rounded-b-lg" : ""}
+              `}
             >
               <p>
                 <span className="font-bold">{`${groupedItem.id} - `}</span>
@@ -184,45 +230,33 @@ export default function MainSection() {
                 }`}</span>
               </p>
               {/* Arrow DOWN */}
-              <span className="opacity-60">&#x25BC;</span>
-            </div>
-            {/* EXPAND */}
-            <div
-              className="collapse-title pointer-events-none 
-              invisible flex justify-between py-4 px-8  text-2xl peer-checked:!visible 
-              peer-checked:bg-base-content/30 peer-hover:bg-base-content/50"
-            >
-              <p>
-                <span className="font-bold">{`${groupedItem.id} - `}</span>
-                <span className="text-lg">{`${countryCount} ${
-                  countryCount < 2 ? "Country" : "Countries"
-                }`}</span>
-              </p>
-              {/* Arrow UP */}
-              <span className="opacity-60">&#x25B2;</span>
+              <span className="opacity-60">
+                {expanded ? <> &#x25BC;</> : <>&#x25B2;</>}
+              </span>
             </div>
             <div
-              className="collapse-content !border-t-0 border-base-content/30 
-              opacity-0 transition-all peer-checked:!max-h-fit peer-checked:p-4
-              peer-checked:opacity-100 sm:peer-checked:p-8"
+              className="collapse-content  peer-checked:!overflow-visible 
+              !border-t-0 border-base-content/30 
+              opacity-0 transition-all peer-checked:!max-h-fit
+              peer-checked:opacity-100 !p-0 peer-checked:!py-8"
             >
-              {renderGroupedCountryList(groupedItem.list)}
+              {RENDER_GROUPED_COUNTRY_LIST_CONTAINER(groupedItem.list)}
             </div>
           </div>
         );
       });
     }
 
-    return renderGroupedCountryList(filteredList());
+    return RENDER_COUNTRY_LIST_CONTAINER(filteredList());
   }
 
   return (
     <section
       id="countries"
-      className="flex min-h-screen w-full flex-col items-center gap-8 p-4  sm:p-8"
+      className="flex min-h-screen w-full flex-col items-center gap-8 py-8 sm:py-16"
     >
       {noData ? (
-        <div className="mt-20 flex flex-col items-center gap-4">
+        <div className="mt-20 flex flex-col items-center gap-4 px-4 sm:px-8">
           <CircularProgress size={7} />
           <h2 className="text-2xl">Loading countries...</h2>
         </div>
@@ -230,41 +264,15 @@ export default function MainSection() {
         <>
           <MainSectionFilter />
           {/* {RENDER_GROUPING()} */}
-          <div className="flex w-full flex-wrap items-center justify-between gap-4 self-start">
+          <div className="flex w-full flex-wrap items-center justify-between gap-4 self-start p-x-4 sm:px-8">
             <p className="text-2xl">
               Showing <b className="font-bold">{filteredList().length}</b>{" "}
               {filteredList().length > 1 ? "countries" : "country"}
             </p>
-            {/* Expand All */}
-            <label className="swap swap-flip">
-              <input
-                type={"checkbox"}
-                checked={
-                  groupedList.length !== activeGroupList.length &&
-                  activeGroupList.length < 2
-                }
-                onChange={(e) => {
-                  console.log(e.target.checked);
-                  if (e.target.checked === false) {
-                    expandAllActiveGroupList();
-                    console.log(activeGroupList);
-                    return;
-                  }
-                  collapseAllActiveGroupList();
-                }}
-              />
-              <div className="text-md btn swap-on btn-sm ml-auto gap-2 font-normal normal-case ">
-                <MdOpenInFull className="text-xl" />
-                <span role={"button"}>Expand All</span>
-              </div>
-              <div className="text-md btn swap-off btn-sm ml-auto gap-2 font-normal normal-case ">
-                <MdCloseFullscreen className="text-xl" />
-                <span role={"button"}>Collapse All</span>
-              </div>
-            </label>
+            {RENDER_EXPAND_COLLAPSE_BUTTON()}
           </div>
 
-          <div className="flex w-full flex-col divide-y-2 rounded-lg shadow-lg">
+          <div className="flex w-full flex-col divide-y-2 p-x-4 sm:px-8">
             {RENDER_CONTENT()}
           </div>
         </>

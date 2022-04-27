@@ -5,7 +5,7 @@ import { GetServerSideProps } from "next";
 import { BsFileText } from "react-icons/bs";
 import { MdPhoneInTalk } from "react-icons/md";
 import Head from "next/head";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import CircularProgress from "../../components/CircularProgress";
 import CountryItem from "../../components/CountryItem";
 import Header from "../../components/Header";
@@ -122,7 +122,7 @@ function Details({ countryStr }: CountryDetailsProps) {
     setMutualSubregionCountryList(sortByName(excludeCurrentCountry(list)));
   }
 
-  const YES_OR_NO = (value: boolean): string => (value === true ? "YES" : "NO");
+  const yesOrNo = (value: boolean): string => (value === true ? "YES" : "NO");
 
   // render parts
   const RENDER_FLAG = () => (
@@ -135,13 +135,20 @@ function Details({ countryStr }: CountryDetailsProps) {
     </div>
   );
 
+  const RENDER_INFO_HEADER = (text: string, icon: ReactNode) => (
+    <h1
+      className="border-b-2 border-base-content/50 bg-base-300 p-4
+  text-2xl font-bold flex gap-2 items-center"
+    >
+      {icon}
+      {text}
+    </h1>
+  );
+
   const RENDER_INFO_NAMING = () => (
     <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold flex gap-2 items-center">
-          <ImFontSize />
-          Naming
-        </h1>
+        {RENDER_INFO_HEADER("Naming", <ImFontSize />)}
         <div className="flex flex-col gap-2 p-8 pt-4">
           <p>
             <span className="font-bold">Common :</span> {country.name.common}{" "}
@@ -173,10 +180,7 @@ function Details({ countryStr }: CountryDetailsProps) {
   const RENDER_INFO_GEOGRAPHIC = () => (
     <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold flex gap-2 items-center">
-          <BiWorld />
-          Geographic
-        </h1>
+        {RENDER_INFO_HEADER("Geographic", <BiWorld />)}
         <div className="flex flex-col gap-2 p-8 pt-4">
           <p>
             <span className="font-bold">Continent :</span>{" "}
@@ -194,7 +198,7 @@ function Details({ countryStr }: CountryDetailsProps) {
           </p>
           <p>
             <span className="font-bold">Landlocked :</span>{" "}
-            {YES_OR_NO(country.landlocked)}{" "}
+            {yesOrNo(country.landlocked)}{" "}
           </p>
           <p>
             <span className="font-bold">Borders :</span>{" "}
@@ -216,14 +220,11 @@ function Details({ countryStr }: CountryDetailsProps) {
   const RENDER_INFO_POLITIC = () => (
     <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold flex gap-2 items-center">
-          <ImHammer2 />
-          Politic
-        </h1>
+        {RENDER_INFO_HEADER("Politic", <ImHammer2 />)}
         <div className="flex flex-col gap-2 p-8 pt-4">
           <p>
             <span className="font-bold">Independent :</span>{" "}
-            {YES_OR_NO(country.independent)}
+            {yesOrNo(country.independent)}
           </p>
           <p>
             <span className="font-bold">Status :</span>{" "}
@@ -231,7 +232,7 @@ function Details({ countryStr }: CountryDetailsProps) {
           </p>
           <p>
             <span className="font-bold">United Nations member :</span>{" "}
-            {YES_OR_NO(country.unMember)}
+            {yesOrNo(country.unMember)}
           </p>
         </div>
       </div>
@@ -239,12 +240,9 @@ function Details({ countryStr }: CountryDetailsProps) {
   );
 
   const RENDER_INFO_GENERIC = () => (
-    <div className="card max-w-[30rem] grow bg-base-300/30 shadow-lg">
+    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="border-b-2 border-base-content/30 bg-base-300 p-4 text-2xl font-bold flex gap-2 items-center">
-          <BsFileText />
-          Generic
-        </h1>
+        {RENDER_INFO_HEADER("Generic", <BsFileText />)}
         <div className="flex flex-col gap-2 p-8 pt-4">
           <p>
             {" "}
@@ -277,10 +275,7 @@ function Details({ countryStr }: CountryDetailsProps) {
   const RENDER_INFO_COMMUNICATION = () => (
     <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
-        <h1 className="border-b-2 border-base-content/50 bg-base-300 p-4 text-2xl font-bold flex gap-2 items-center">
-          <MdPhoneInTalk />
-          Communication
-        </h1>
+        {RENDER_INFO_HEADER("Communication", <MdPhoneInTalk />)}
         <div className="flex flex-col gap-2 p-8 pt-4">
           <p>
             <span className="font-bold">Language(s) :</span>{" "}
