@@ -191,7 +191,8 @@ function Details({ countryStr }: CountryDetailsProps) {
             <span className="font-bold">Region :</span> {country.region}{" "}
           </p>
           <p>
-            <span className="font-bold">Subregion :</span> {country.subregion}{" "}
+            <span className="font-bold">Subregion :</span>{" "}
+            {country.subregion || "-"}{" "}
           </p>
           <p>
             <span className="font-bold">Land area :</span>{" "}
@@ -203,7 +204,7 @@ function Details({ countryStr }: CountryDetailsProps) {
           </p>
           <p>
             <span className="font-bold">Borders :</span>{" "}
-            {country.borders?.join(", ")}
+            {country.borders?.join(", ") || "-"}
           </p>
           <p>
             <span className="font-bold">Lat-Long :</span>{" "}
@@ -248,7 +249,7 @@ function Details({ countryStr }: CountryDetailsProps) {
           <p>
             {" "}
             <span className="font-bold">Capital :</span>{" "}
-            {country.capital.join(", ")}{" "}
+            {country.capital?.join(", ") || "-"}{" "}
           </p>
           <p>
             {" "}
@@ -280,13 +281,15 @@ function Details({ countryStr }: CountryDetailsProps) {
         <div className="flex flex-col gap-2 p-8 pt-4">
           <p>
             <span className="font-bold">Language(s) :</span>{" "}
-            {country.languages.map((e) => e.name).join(", ")}
+            {country.languages.map((e) => e.name).join(", ") || "-"}
           </p>
           <p>
             <span className="font-bold">
               International direct dialing (IDD) :
             </span>{" "}
-            {`${country.idd.root}${country.idd.suffixes[0]}`}
+            {`${country.idd.root}${
+              country.idd.suffixes ? country.idd.suffixes[0] : "-"
+            }`}
           </p>
           <p>
             <span className="font-bold">Top level domain :</span>{" "}
@@ -304,32 +307,37 @@ function Details({ countryStr }: CountryDetailsProps) {
     </div>
   );
 
-  const RENDER_BORDERING_COUNTRIES = () =>
-    country.borders &&
-    (!borderingCountryList.length ? (
-      RENDER_LOADING_PLACEHOLDER(
-        `Loading bordering countries of ${country.name.common}...`,
-      )
-    ) : (
-      <div className="flex w-full flex-col gap-8 px-8">
-        <h2 className="text-2xl font-bold">
-          Bordering {country.borders.length > 1 ? "Countries" : "Country"} :
-        </h2>
-        <div
-          className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
+  const RENDER_BORDERING_COUNTRIES = () => {
+    if (!country.borders) return "";
+    return (
+      country.borders &&
+      (!borderingCountryList.length ? (
+        RENDER_LOADING_PLACEHOLDER(
+          `Loading bordering countries of ${country.name.common}...`,
+        )
+      ) : (
+        <div className="flex w-full flex-col gap-8 px-8">
+          <h2 className="text-2xl font-bold">
+            Bordering {country.borders.length > 1 ? "Countries" : "Country"} :
+          </h2>
+          <div
+            className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
         transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
-        >
-          {country.borders.length === 0
-            ? ""
-            : borderingCountryList.map((countryItem, idx) => (
-                <CountryItem key={idx} country={countryItem} />
-              ))}
+          >
+            {country.borders.length === 0
+              ? ""
+              : borderingCountryList.map((countryItem, idx) => (
+                  <CountryItem key={idx} country={countryItem} />
+                ))}
+          </div>
         </div>
-      </div>
-    ));
+      ))
+    );
+  };
 
-  const RENDER_MUTUAL_SUBREGION_COUNTRIES = () =>
-    mutualSubregionCountryList.length === 0 ? (
+  const RENDER_MUTUAL_SUBREGION_COUNTRIES = () => {
+    if (!country.subregion) return "";
+    return mutualSubregionCountryList.length === 0 ? (
       RENDER_LOADING_PLACEHOLDER(`Loading countries in ${country.subregion}...`)
     ) : (
       <div className="flex w-full flex-col gap-8 px-8">
@@ -338,7 +346,7 @@ function Details({ countryStr }: CountryDetailsProps) {
         </h2>
         <div
           className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-        transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+          transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
         >
           {mutualSubregionCountryList.map((countryItem, idx) => (
             <CountryItem key={idx} country={countryItem} />
@@ -346,6 +354,7 @@ function Details({ countryStr }: CountryDetailsProps) {
         </div>
       </div>
     );
+  };
   return (
     <>
       <Head>
