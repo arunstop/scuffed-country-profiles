@@ -93,10 +93,12 @@ export const useCountryContext = () => {
     distinctAndSort(_.map(list.map((item) => item.subregion)));
 
   const borderingCountryList = (borderList: string[]): Country[] => {
+    if (!borderList) return [];
     return list.filter((country) => borderList.includes(country.cca3));
   };
 
   const mutualSubregionCountryList = (subregion: string): Country[] => {
+    if (!subregion) return [];
     return list.filter((country) => country.subregion === subregion);
   };
 
@@ -115,7 +117,11 @@ export const useCountryContext = () => {
         } as GroupedCountry),
     );
     // console.log(groupedList);
-    return _.orderBy(groupedList, ["id"], ["asc"]);
+    return _.orderBy(
+      groupedList,
+      [(e) => e.id.split(" ").reverse().join(" ")],
+      ["asc"],
+    );
   };
 
   return {

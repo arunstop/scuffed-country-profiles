@@ -73,6 +73,7 @@ function ListCountryItem({ country }: { country: Country }) {
               rel="noreferrer"
               title="Open in Google Maps"
               onClick={(e) => e.stopPropagation()}
+              tabIndex={-1}
             >
               <SiGooglemaps className="pointer-events-none text-2xl" />
               <span>Open in Google Maps</span>
@@ -87,6 +88,7 @@ function ListCountryItem({ country }: { country: Country }) {
               rel="noreferrer"
               title="Open in Open Street Maps"
               onClick={(e) => e.stopPropagation()}
+              tabIndex={-1}
             >
               <SiOpenstreetmap className="pointer-events-none text-2xl" />
               <span>Open in Open Street Maps</span>

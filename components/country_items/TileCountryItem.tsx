@@ -35,6 +35,7 @@ function TileCountryItem({ country }: { country: Country }) {
               rel="noreferrer"
               title="Open in Google Maps"
               onClick={(e) => e.stopPropagation()}
+              tabIndex={-1}
             >
               <SiGooglemaps className="text-xl group-hover:text-2xl pointer-events-none" />
             </a>
@@ -45,6 +46,7 @@ function TileCountryItem({ country }: { country: Country }) {
               rel="noreferrer"
               title="Open in Open Street Maps"
               onClick={(e) => e.stopPropagation()}
+              tabIndex={-1}
             >
               <SiOpenstreetmap className="text-xl group-hover:text-2xl pointer-events-none" />
             </a>
