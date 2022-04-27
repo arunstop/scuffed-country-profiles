@@ -1,10 +1,10 @@
-import { GroupingTypes } from "./../../data/types/CountryTypes";
-import { CountryContext } from "./CountryContext";
-import { useContext } from "react";
 import _ from "lodash";
-import { lowerCaseChildrenFetch } from "../../helpers/Fetchers";
+import { useContext } from "react";
 import { Country } from "../../data/models/Country";
 import { GroupedCountry } from "../../data/types/CountryTypes";
+import { lowerCaseChildrenFetch } from "../../helpers/Fetchers";
+import { GroupingTypes } from "./../../data/types/CountryTypes";
+import { CountryContext } from "./CountryContext";
 
 export const useCountryContext = () => {
   const {
@@ -124,6 +124,30 @@ export const useCountryContext = () => {
     );
   };
 
+  const pagingDetailsPrevNext = (cca2: string) => {
+    const alphaSortedCcaList = _.sortBy(list, [(e) => e.name.common]).map(
+      (e) => e.cca2,
+    );
+    const currCountryIdx = _.indexOf(alphaSortedCcaList, cca2);
+    const prev: string =
+      currCountryIdx === 0 ? "" : alphaSortedCcaList[currCountryIdx - 1];
+    const next: string =
+      currCountryIdx === alphaSortedCcaList.length
+        ? ""
+        : alphaSortedCcaList[currCountryIdx + 1];
+    return {
+      prev: prev,
+      next: next,
+    };
+  };
+
+  const nextCountry = () => {
+    return "";
+  };
+  const prevCountry = () => {
+    return "";
+  };
+
   return {
     state,
     action,
@@ -140,6 +164,9 @@ export const useCountryContext = () => {
         groupedList: groupedList,
         noResultFound: searchedList().length === 0,
         noData: list.length === 0,
+      },
+      paging: {
+        details: pagingDetailsPrevNext,
       },
     },
   };

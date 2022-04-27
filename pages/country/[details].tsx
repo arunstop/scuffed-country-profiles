@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { BiWorld } from "react-icons/bi";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { ImFontSize, ImHammer2 } from "react-icons/im";
 import { GetServerSideProps } from "next";
 import { BsFileText } from "react-icons/bs";
@@ -19,6 +20,7 @@ import { Country } from "../../utils/data/models/Country";
 import { toCountry } from "../../utils/helpers/Casters";
 import { APP_NAME } from "../../utils/helpers/Constants";
 import Footer from "../../components/Footer";
+import Link from "next/link";
 
 interface CountryDetailsProps {
   countryStr: string;
@@ -72,6 +74,7 @@ function Details({ countryStr }: CountryDetailsProps) {
         filterProps: { getBorderingCountryList, getSubregionCountryList },
         noData,
       },
+      paging: { details },
     },
     action: countryAction,
   } = useCountryContext();
@@ -138,7 +141,7 @@ function Details({ countryStr }: CountryDetailsProps) {
 
   const RENDER_INFO_HEADER = (text: string, icon: ReactNode) => (
     <h1
-      className="border-b-2 border-base-content/50 bg-base-300 p-4
+      className="border-b-2 border-base-content/30 bg-base-300 p-4
   text-2xl font-bold flex gap-2 items-center"
     >
       {icon}
@@ -355,6 +358,74 @@ function Details({ countryStr }: CountryDetailsProps) {
       </div>
     );
   };
+
+  function RENDER_PAGING_BUTTON(to: "prev" | "next") {
+    const pagingDetails = details(country.cca2);
+
+    const prevCountry = countryState.list.find(
+      (e) => e.cca2 === pagingDetails.prev,
+    );
+    const nextCountry = countryState.list.find(
+      (e) => e.cca2 === pagingDetails.next,
+    );
+    const prev = to === "prev";
+    const next = to === "next";
+    const targetCountry = prev ? prevCountry : nextCountry;
+    if (!targetCountry) return "";
+    return (
+      <Link href={`/country/${targetCountry?.cca2}`} passHref>
+        <a
+          className={`btn btn-lg normal-case py-4 h-auto w-auto flex-1
+        hover:underline
+        ${prev ? "justify-start" : "justify-end"}
+        `}
+          role={"button"}
+        >
+          <div
+            className={`flex flex-col gap-4 items-start
+          ${prev ? "items-start" : "items-end"}`}
+          >
+            <span
+              className={`inline-flex gap-2 ${prev ? "" : "flex-row-reverse"}`}
+            >
+              {prev ? (
+                <FaChevronLeft className="text-lg" />
+              ) : (
+                <FaChevronRight className="text-lg" />
+              )}
+              <span className="capitalize font-normal">
+                {prev ? "Previous" : "Next"}
+              </span>
+            </span>
+            <div
+              className={`inline-flex gap-4 items-center 
+            ${prev ? "" : "flex-row-reverse"}`}
+            >
+              <img className="h-16 rounded-lg" src={targetCountry?.flags.png} />
+              <p
+                className={`text-left flex flex-col gap-2
+               ${prev ? "text-left" : "text-right"}`}
+              >
+                <span className="text-xl">{targetCountry?.name.common}</span>
+                <span className="font-normal">
+                  {targetCountry?.name.official}
+                </span>
+              </p>
+            </div>
+          </div>
+        </a>
+      </Link>
+    );
+  }
+
+  function RENDER_PREV_NEXT_COUNTRIES() {
+    return (
+      <div className="flex flex-wrap sm:flex-nowrap justify-between w-full px-8 gap-4">
+        {RENDER_PAGING_BUTTON("prev")}
+        {RENDER_PAGING_BUTTON("next")}
+      </div>
+    );
+  }
   return (
     <>
       <Head>
@@ -382,6 +453,7 @@ function Details({ countryStr }: CountryDetailsProps) {
         </div>
         {RENDER_BORDERING_COUNTRIES()}
         {RENDER_MUTUAL_SUBREGION_COUNTRIES()}
+        {countryState.list.length !== 0 && RENDER_PREV_NEXT_COUNTRIES()}
       </div>
       <Footer />
     </>
