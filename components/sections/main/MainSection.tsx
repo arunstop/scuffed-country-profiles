@@ -239,7 +239,7 @@ export default function MainSection() {
         <>
           <MainSectionFilter />
           {/* {RENDER_GROUPING()} */}
-          <div className="flex w-full flex-wrap items-center justify-between gap-4 self-start p-x-4 sm:px-8">
+          <div className="flex w-full flex-wrap items-center justify-between gap-4 self-start px-4 sm:px-8">
             <p className="text-2xl">
               Showing <b className="font-bold">{filteredList().length}</b>{" "}
               {filteredList().length > 1 ? "countries" : "country"}
@@ -248,7 +248,7 @@ export default function MainSection() {
               RENDER_EXPAND_COLLAPSE_BUTTON()}
           </div>
 
-          <div className="flex w-full flex-col divide-y-2 p-x-4 sm:px-8">
+          <div className="flex w-full flex-col divide-y-2 px-4 sm:px-8">
             {RENDER_CONTENT()}
           </div>
         </>

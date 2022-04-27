@@ -420,7 +420,7 @@ function Details({ countryStr }: CountryDetailsProps) {
 
   function RENDER_PREV_NEXT_COUNTRIES() {
     return (
-      <div className="flex flex-wrap sm:flex-nowrap justify-between w-full px-8 gap-4">
+      <div className="flex flex-col sm:flex-row justify-between w-full px-8 gap-4">
         {RENDER_PAGING_BUTTON("prev")}
         {RENDER_PAGING_BUTTON("next")}
       </div>
@@ -446,9 +446,9 @@ function Details({ countryStr }: CountryDetailsProps) {
         <div className="flex flex-wrap items-start justify-start gap-8 p-8 sm:flex-row">
           {RENDER_FLAG()}
           {RENDER_INFO_NAMING()}
+          {RENDER_INFO_GENERIC()}
           {RENDER_INFO_GEOGRAPHIC()}
           {RENDER_INFO_POLITIC()}
-          {RENDER_INFO_GENERIC()}
           {RENDER_INFO_COMMUNICATION()}
         </div>
         {RENDER_BORDERING_COUNTRIES()}
