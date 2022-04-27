@@ -194,9 +194,8 @@ export default function MainSection() {
         return (
           <div
             key={idx}
-            className="collapse w-full border-base-content/50 bg-transparent 
+            className="collapse w-full border-base-content/30 bg-transparent 
             first:rounded-t-lg last:rounded-b-lg !overflow-visible"
-            tabIndex={0}
           >
             <input
               type="checkbox"
@@ -217,7 +216,7 @@ export default function MainSection() {
               peer-checked:bg-base-content/20 peer-hover:bg-base-content/30
               peer-checked:!rounded-lg w-auto peer-checked:shadow-lg 
               peer-checked:scale-[1.01] peer-checked:translate-y-[-0.1rem]
-              border-2 border-transparent peer-checked:border-base-content
+              border-2 border-transparent peer-checked:border-base-content/30
               transition-all
               ${idx === 0 ? "rounded-t-lg" : ""}
               ${idx + 1 === groupedList.length ? "rounded-b-lg" : ""}
