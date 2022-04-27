@@ -8,12 +8,16 @@ export const INIT_COUNTRY_STATE: CountryState = {
     subregion: [],
   },
   sorting: {
-    list: [
+    types: [
       { id: "name.common", label: "Name" },
       { id: "population", label: "Population" },
       { id: "area", label: "Land area in km²" },
     ],
-    indicator: "name.common",
+    active: "name.common",
     order: "ASC",
+  },
+  grouping: {
+    types: ["continents", "region", "subregion", "none"],
+    active: "none",
   },
 };

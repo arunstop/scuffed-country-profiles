@@ -1,3 +1,4 @@
+import { GroupingTypes } from "./../../data/types/CountryTypes";
 import { CountryContext } from "./CountryContext";
 import { useContext } from "react";
 import _ from "lodash";
@@ -18,7 +19,7 @@ export const useCountryContext = () => {
     // sort by property :
     // [(item) => (item as any)[sorting.indicator]],
     // casting to string again because without it, the orderBy
-    [sorting.indicator],
+    [sorting.active],
     // order
     // casting sorting order to any first
     // to avoid type_error
@@ -99,9 +100,13 @@ export const useCountryContext = () => {
     return list.filter((country) => country.subregion === subregion);
   };
 
-  const groupedList = (id: "region" | "subregion"): GroupedCountry[] => {
+  const groupedList = (id: GroupingTypes): GroupedCountry[] => {
+    if (id === "none") return [];
     // const groupedList = () => {
-    const groupedResult = _.groupBy(searchedList(), (e) => (e as any)[id]);
+    const groupedResult = _.groupBy(
+      searchedList(),
+      (e) => (e as any)[id] || "Unspecified",
+    );
     const groupedList = Object.keys(groupedResult).map(
       (e) =>
         ({

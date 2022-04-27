@@ -20,7 +20,7 @@ interface RenderFilterProps {
 function MainSectionFilter() {
   const {
     state: countryState,
-    state: { filters, sorting },
+    state: { filters, sorting, grouping },
     action: countryAction,
     getters: {
       list: {
@@ -31,7 +31,7 @@ function MainSectionFilter() {
           getSubregionList: subregionList,
         },
       },
-      list,
+      list: countryList,
     },
   } = useCountryContext();
 
@@ -152,7 +152,7 @@ function MainSectionFilter() {
                 // then change the order to DESC
                 const orderBy: SortingOrder =
                   sorting.order === "ASC" ? "DESC" : "ASC";
-                countryAction.setSorting(sorting.indicator, orderBy);
+                countryAction.setSorting(sorting.active, orderBy);
               }}
             />
             {/* asc */}
@@ -168,12 +168,12 @@ function MainSectionFilter() {
           </label>
           <select
             className="select-bordered select grow"
-            value={sorting.indicator}
+            value={sorting.active}
             onChange={(e) => {
               countryAction.setSorting(e.target.value, sorting.order);
             }}
           >
-            {sorting.list.map((sortingItem, idx) => (
+            {sorting.types.map((sortingItem, idx) => (
               <option key={idx} value={sortingItem.id}>
                 {sortingItem.label} — {(sorting.order + "ending").toUpperCase()}
               </option>
@@ -191,7 +191,9 @@ function MainSectionFilter() {
         <div className="form-control w-full sm:w-72">
           <div className="dropdown">
             <label
-              className="btn btn-ghost btn-active inline-flex gap-2 border-[3px] capitalize hover:border-base-content"
+              className="btn btn-ghost btn-active inline-flex gap-2 border-[3px] 
+              capitalize hover:border-base-content w-48 items-center justify-start 
+              text-lg"
               tabIndex={0}
             >
               <span className="text-xl">
@@ -204,18 +206,18 @@ function MainSectionFilter() {
               className="dropdown-content menu w-52 rounded-lg bg-base-100
               p-2 shadow !ring-2 !ring-base-content !ring-opacity-30"
             >
-              {viewType.list.map((viewType, idx) => (
+              {viewType.list.map((vtItem, idx) => (
                 <li
                   className=""
                   key={idx}
                   onClick={(e) => {
-                    uiAction.setListView(viewType.type);
+                    uiAction.setListView(vtItem.type);
                     (document.activeElement as HTMLElement).blur();
                   }}
                 >
                   <a className="capitalize">
-                    <span className="text-xl">{viewType.icon}</span>
-                    {viewType.type.toLowerCase()}
+                    <span className="text-xl">{vtItem.icon}</span>
+                    {vtItem.type.toLowerCase()}
                   </a>
                 </li>
               ))}
@@ -240,6 +242,44 @@ function MainSectionFilter() {
     );
   };
 
+  const RENDER_GROUPING_TYPE = () => {
+    return (
+      <div className="grid w-full gap-4 sm:w-fit">
+        <label className="flex h-8 items-center">Group by :</label>
+        <div className="form-control w-full sm:w-72">
+          <div className="dropdown">
+            <label
+              className="btn btn-ghost btn-active inline-flex gap-2 border-[3px] 
+              capitalize hover:border-base-content w-48 items-center justify-start 
+              text-lg"
+              tabIndex={0}
+            >
+              {grouping.active}
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu w-52 rounded-lg bg-base-100
+              p-2 shadow !ring-2 !ring-base-content !ring-opacity-30"
+            >
+              {grouping.types.map((groupingItem, idx) => (
+                <li
+                  className=""
+                  key={idx}
+                  onClick={(e) => {
+                    countryAction.setGrouping(groupingItem);
+                    (document.activeElement as HTMLElement).blur();
+                  }}
+                >
+                  <a className="capitalize">{groupingItem}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-wrap gap-4 w-full px-4 sm:px-8">
       {RENDER_SEARCHBAR()}
@@ -254,6 +294,7 @@ function MainSectionFilter() {
       <div className="w-full"></div>
       {RENDER_SORTING()}
       {RENDER_VIEW_TYPE()}
+      {RENDER_GROUPING_TYPE()}
     </div>
   );
 }

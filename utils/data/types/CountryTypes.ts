@@ -1,6 +1,7 @@
 import { Country } from "../models/Country";
 
 export type ListViewTypes = "LIST" | "TILES" | "CARDS";
+export type GroupingTypes = "region" | "subregion" | "continents" | "none";
 
 export interface CountryState {
   searchKeyword: string;
@@ -11,9 +12,14 @@ export interface CountryState {
     subregion: string[];
   };
   sorting: {
-    list: CountryListSortingItem[];
-    indicator: string;
+    types: CountryListSortingItem[];
+    // currently selected sorting
+    active: string;
     order: SortingOrder;
+  };
+  grouping: {
+    types: GroupingTypes[];
+    active: GroupingTypes;
   };
 }
 
@@ -31,6 +37,7 @@ export interface CountryAction {
   }) => void;
   clearFilter: (key: string) => void;
   setSorting: (id: string, order: SortingOrder) => void;
+  setGrouping: (by: GroupingTypes) => void;
 }
 
 export type CountryActionTypes =
@@ -57,6 +64,10 @@ export type CountryActionTypes =
   | {
       type: "SET_SORTING";
       payload: { id: string; order: SortingOrder };
+    }
+  | {
+      type: "SET_GROUPING";
+      payload: { id: GroupingTypes };
     };
 
 export type CountryContextProps = {

@@ -63,8 +63,8 @@ export const countryReducer = (
       let updatedSorting = { ...stateSorting };
       // only change the order IF
       // sorting item of payload and state is the same
-      if (id !== stateSorting.indicator) {
-        updatedSorting = { ...stateSorting, indicator: id };
+      if (id !== stateSorting.active) {
+        updatedSorting = { ...stateSorting, active: id };
       }
       // only change the indicator
       else if (order !== stateSorting.order) {
@@ -75,6 +75,15 @@ export const countryReducer = (
       return {
         ...state,
         sorting: updatedSorting,
+      };
+    }
+
+    case "SET_GROUPING": {
+      const { id } = action.payload;
+      const updatedId = id;
+      return {
+        ...state,
+        grouping: { ...state.grouping, active: updatedId },
       };
     }
     default:

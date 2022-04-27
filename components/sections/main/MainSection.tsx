@@ -24,6 +24,7 @@ export default function MainSection() {
         filteredList,
         filterProps: { getRegionList },
         noData,
+        noResultFound,
       },
       list,
     },
@@ -31,7 +32,7 @@ export default function MainSection() {
 
   const [activeGroupList, setActiveGroupList] = useState<string[]>([]);
 
-  const groupedList = list.groupedList("region");
+  const groupedList = list.groupedList(countryState.grouping.active);
 
   function removeActiveGroupList(id: string) {
     // set active group list by updating the current list
@@ -99,20 +100,6 @@ export default function MainSection() {
   }
 
   function RENDER_COUNTRY_LIST(countryList: Country[]) {
-    if (list.noData) {
-      return (
-        <div className="col-span-full">
-          <NoDataPlaceHolder message="No data." />
-        </div>
-      );
-    } else if (list.noResultFound) {
-      return (
-        <div className="col-span-full">
-          <NoDataPlaceHolder message="No results were found." />
-        </div>
-      );
-    }
-
     return countryList.map((country) => {
       // LIST
       if (viewType.selected === "LIST") {
@@ -130,6 +117,19 @@ export default function MainSection() {
   }
 
   function RENDER_COUNTRY_LIST_CONTAINER(countryList: Country[]) {
+    if (list.noData) {
+      return (
+        <div className="">
+          <NoDataPlaceHolder message="No data." />
+        </div>
+      );
+    } else if (list.noResultFound) {
+      return (
+        <div className="">
+          <NoDataPlaceHolder message="No results were found." />
+        </div>
+      );
+    }
     if (viewType.selected === "LIST") {
       return (
         <div className="flex w-full flex-col divide-y-2 transition-all">
@@ -162,32 +162,8 @@ export default function MainSection() {
     return RENDER_COUNTRY_LIST_CONTAINER(countryList);
   }
 
-  const RENDER_GROUPING = () => (
-    <div className="flex w-full flex-col items-stretch justify-items-stretch gap-4">
-      <div className="flex flex-wrap bg-red-500 ">
-        {getRegionList().map((region, idx) => (
-          <a
-            className="btn font-normal normal-case"
-            key={idx}
-            onClick={(e) => {
-              // const element = e.currentTarget.classList;
-              // if (element.contains("")) {
-              //   element.remove("");
-              //   return;
-              // }
-              // element.add("");
-            }}
-          >
-            {region}
-          </a>
-        ))}
-      </div>
-    </div>
-  );
-
   function RENDER_CONTENT() {
-    const grouped = true;
-    if (grouped === true) {
+    if (countryState.grouping.active !== "none" && !noResultFound) {
       return groupedList.map((groupedItem, idx) => {
         const countryCount = groupedItem.list.length;
         const expanded = activeGroupList.includes(groupedItem.id);
@@ -268,7 +244,8 @@ export default function MainSection() {
               Showing <b className="font-bold">{filteredList().length}</b>{" "}
               {filteredList().length > 1 ? "countries" : "country"}
             </p>
-            {RENDER_EXPAND_COLLAPSE_BUTTON()}
+            {countryState.grouping.active !== "none" &&
+              RENDER_EXPAND_COLLAPSE_BUTTON()}
           </div>
 
           <div className="flex w-full flex-col divide-y-2 p-x-4 sm:px-8">

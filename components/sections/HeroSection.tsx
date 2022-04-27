@@ -1,4 +1,5 @@
 import React from "react";
+import { BiSearch } from "react-icons/bi";
 
 function HeroSection() {
   return (
@@ -23,12 +24,12 @@ function HeroSection() {
           <button
             className={`absolute inset-y-0 right-0 my-auto flex h-12 w-24 bg-purple-300 text-4xl
             text-purple-600 transition-colors peer-valid:bg-purple-600 peer-valid:!text-purple-300 
-            peer-invalid:pointer-events-none peer-invalid:!cursor-move`}
+            peer-invalid:pointer-events-none peer-invalid:!cursor-move items-center justify-center`}
             onClick={() => {
               alert("search click");
             }}
           >
-            SEARCH
+            <BiSearch className="rotate-90" />
           </button>
         </div>
       </label>

@@ -5,7 +5,7 @@ interface NoDataPlaceHolderProps {
 }
 
 function NoDataPlaceHolder({ message }: NoDataPlaceHolderProps) {
-  return <div className="text-center">{message}</div>;
+  return <div className="text-center h-60">{message}</div>;
 }
 
 export default NoDataPlaceHolder;
