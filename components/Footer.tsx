@@ -1,20 +1,24 @@
 import React from "react";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
+import { BiGlobeAlt } from "react-icons/bi";
+import { BsGithub } from "react-icons/bs";
 
 export default function Footer() {
   return (
-    <footer className={styles.footer}>
-      <a
-        href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Powered by{" "}
-        <span className={styles.logo}>
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </span>
-      </a>
+    <footer className="footer p-10 bg-neutral text-neutral-content">
+      <div>
+        <BiGlobeAlt className="text-[5rem]" />
+        <p className="text-lg">
+          <b className="font-bold">Country Profiles</b>
+          <br />
+          Profiles of all country in the world
+        </p>
+      </div>
+      <div>
+        <span className="footer-title">Connect</span>
+        <div className="flex flex-wrap gap-4 text-4xl">
+          <BsGithub />
+        </div>
+      </div>
     </footer>
   );
 }

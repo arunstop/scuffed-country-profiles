@@ -18,6 +18,7 @@ import { useCountryContext } from "../../utils/contexts/country/CountryHook";
 import { Country } from "../../utils/data/models/Country";
 import { toCountry } from "../../utils/helpers/Casters";
 import { APP_NAME } from "../../utils/helpers/Constants";
+import Footer from "../../components/Footer";
 
 interface CountryDetailsProps {
   countryStr: string;
@@ -373,6 +374,7 @@ function Details({ countryStr }: CountryDetailsProps) {
         {RENDER_BORDERING_COUNTRIES()}
         {RENDER_MUTUAL_SUBREGION_COUNTRIES()}
       </div>
+      <Footer />
     </>
   );
 }
