@@ -6,7 +6,7 @@ import { Country } from "../../utils/data/models/Country";
 
 function ListCountryItem({ country }: { country: Country }) {
   return (
-    <Link href={`/country/${country.cca2}`}>
+    <Link href={`/country/${country.cca2}/`}>
       <a
         className="group relative flex min-w-[300px] grow 
         flex-col gap-4 overflow-hidden border-base-content/40 

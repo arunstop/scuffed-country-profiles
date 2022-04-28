@@ -22,6 +22,7 @@ import { APP_NAME } from "../../utils/helpers/Constants";
 import Footer from "../../components/Footer";
 import Link from "next/link";
 import InfoCardDetails from "../../components/details/InfoCardDetails";
+import SearchModal from "../../components/modals/SearchModal";
 
 interface CountryDetailsProps {
   countryStr: string;
@@ -291,7 +292,7 @@ function Details({ countryStr }: CountryDetailsProps) {
           <div
             className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
             transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 
-            bg-base-300/50 p-4 rounded-b-lg rounded-tr-lg"
+            bg-base-300/50 p-4 rounded-r-lg"
           >
             {country.borders.length === 0
               ? ""
@@ -319,7 +320,7 @@ function Details({ countryStr }: CountryDetailsProps) {
         <div
           className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
           transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 
-          bg-base-300/50 p-4 rounded-b-lg rounded-tr-lg"
+          bg-base-300/50 p-4 rounded-r-lg"
         >
           {mutualSubregionCountryList.map((countryItem, idx) => (
             <CountryItem key={idx} country={countryItem} />
@@ -428,6 +429,7 @@ function Details({ countryStr }: CountryDetailsProps) {
         {countryState.list.length !== 0 && RENDER_PREV_NEXT_COUNTRIES()}
       </div>
       <Footer />
+      <SearchModal />
     </>
   );
 }

@@ -6,7 +6,7 @@ import { Country } from "../../utils/data/models/Country";
 
 function TileCountryItem({ country }: { country: Country }) {
   return (
-    <Link href={`/country/${country.cca2}`}>
+    <Link href={`/country/${country.cca2}/`}>
       <a
         className="group flex min-w-[300px] grow 
       gap-4 overflow-hidden rounded-lg bg-base-300 p-4 

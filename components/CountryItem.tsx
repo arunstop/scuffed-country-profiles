@@ -4,7 +4,7 @@ import { Country } from "../utils/data/models/Country";
 
 function CountryItem({ country }: { country: Country }) {
   return (
-    <Link href={`/country/${country.cca2}`} passHref>
+    <Link href={`/country/${country.cca2}/`} passHref>
       <a className="transition-transform">
         <div className={`card text-center rounded-none group overflow-visible`}>
           {/* <div

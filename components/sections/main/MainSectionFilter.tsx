@@ -52,7 +52,7 @@ function MainSectionFilter() {
           <label
             className={`btn !btn-circle !btn-sm my-auto mx-2 
             absolute inset-y-0 right-0 btn-error btn-outline bg-opacity-60
-            ${countryState.searchKeyword.length ? "visiblae" : "hidden"}`}
+            ${countryState.searchKeyword.length ? "visible" : "hidden"}`}
             onClick={() => {
               countryAction.setSearchKeyword("");
             }}

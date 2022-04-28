@@ -15,7 +15,7 @@ const RENDER_HEADER = (icon: ReactNode, title: string) => (
   </h1>
 );
 const RENDER_DETAILS_ITEM = (lead: string, desc: string) => (
-  <p>
+  <p key={lead}>
     <span className="font-bold">{lead}</span> <span className="">{desc}</span>
   </p>
 );
