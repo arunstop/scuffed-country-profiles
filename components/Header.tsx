@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   MdOutlineDarkMode,
   MdOutlineLightMode,
@@ -9,7 +9,6 @@ import {
 import { apiGetCountryList } from "../utils/apis/CountryApi";
 import { useCountryContext } from "../utils/contexts/country/CountryHook";
 import { useUiContext } from "../utils/contexts/ui/UiHook";
-import { getSearchModalElement, toggleSearchModal } from "./modals/SearchModal";
 
 export default function Header() {
   const { state: uiState, action: uiAction } = useUiContext();
@@ -22,27 +21,31 @@ export default function Header() {
   } = useCountryContext();
   const router = useRouter();
 
-  useEffect(() => {
-    document.removeEventListener("keydown", toggleSearchModalEvent);
-    if (router.pathname !== "/") {
-      document.addEventListener("keydown", toggleSearchModalEvent);
-    } else {
-      document.removeEventListener("keydown", toggleSearchModalEvent);
-    }
+  // useEffect(() => {
+  //   // document.removeEventListener("keydown", toggleSearchModalEvent);
+  //   if (router.pathname !== "/") {
+  //     document.addEventListener("keydown", toggleSearchModalEvent);
+  //     // alert(router.pathname);
+  //   } else {
+  //     document.removeEventListener("keydown", toggleSearchModalEvent);
+  //   }
 
-    return () => {};
-  }, [router.pathname]);
+  //   return () => {};
+  // }, [router]);
 
-  function toggleSearchModalEvent(ev: KeyboardEvent) {
-    const searchedModalOpen = getSearchModalElement().checked;
-    if (searchedModalOpen && ev.key.toLowerCase() === "escape") {
-      return toggleSearchModal(!getSearchModalElement().checked);
-    }
-    if (ev.ctrlKey && ev.key.toLowerCase() === "/") {
-      toggleSearchModal(!getSearchModalElement().checked);
-      loadCountryList();
-    }
-  }
+  // function toggleSearchModalEvent(ev: KeyboardEvent) {
+  //   // alert(router.pathname);
+  //   if (!getSearchModalElement()) return;
+
+  //   const searchedModalOpen = getSearchModalElement().checked;
+  //   if (searchedModalOpen && ev.key.toLowerCase() === "escape") {
+  //     return toggleSearchModal(!getSearchModalElement().checked);
+  //   }
+  //   if (ev.ctrlKey && ev.key.toLowerCase() === "/") {
+  //     toggleSearchModal(!getSearchModalElement().checked);
+  //     loadCountryList();
+  //   }
+  // }
 
   async function loadCountryList() {
     if (noData) {

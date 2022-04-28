@@ -12,6 +12,7 @@ import CountryItem from "../../components/CountryItem";
 import Header from "../../components/Header";
 import {
   apiGetBorderingCountryList,
+  apiGetCountryList,
   apiGetMutualSubregionCountryList,
   getCountry,
 } from "../../utils/apis/CountryApi";
@@ -22,7 +23,10 @@ import { APP_NAME } from "../../utils/helpers/Constants";
 import Footer from "../../components/Footer";
 import Link from "next/link";
 import InfoCardDetails from "../../components/details/InfoCardDetails";
-import SearchModal from "../../components/modals/SearchModal";
+import SearchModal, {
+  getSearchModalElement,
+  toggleSearchModal,
+} from "../../components/modals/SearchModal";
 
 interface CountryDetailsProps {
   countryStr: string;
@@ -91,12 +95,35 @@ function Details({ countryStr }: CountryDetailsProps) {
   useEffect(() => {
     loadBorderingCountryList();
     loadMutualSubregionCountryList();
-    countryAction.setSearchKeyword("");
+    // countryAction.setSearchKeyword("");
+
+    document.addEventListener("keydown", toggleSearchModalEvent);
     return () => {
       setBorderingCountryList([]);
       setMutualSubregionCountryList([]);
+      document.removeEventListener("keydown", toggleSearchModalEvent);
     };
   }, [countryStr]);
+
+  function toggleSearchModalEvent(ev: KeyboardEvent) {
+    // alert(router.pathname);
+    // if (!getSearchModalElement()) return;
+
+    const searchedModalOpen = getSearchModalElement().checked;
+    if (searchedModalOpen && ev.key.toLowerCase() === "escape") {
+      return toggleSearchModal(!getSearchModalElement().checked);
+    }
+    if (ev.ctrlKey && ev.key.toLowerCase() === "/") {
+      toggleSearchModal(!getSearchModalElement().checked);
+      loadCountryList();
+    }
+  }
+
+  async function loadCountryList() {
+    if (noData) {
+      countryAction.setCountryList(await apiGetCountryList());
+    }
+  }
 
   function sortByName(countryList: Country[]): Country[] {
     return _.orderBy(countryList, ["name.common"], ["asc"]);
@@ -343,7 +370,7 @@ function Details({ countryStr }: CountryDetailsProps) {
     const next = to === "next";
 
     const targetCountry = prev ? prevCountry : nextCountry;
-    if (!targetCountry) return "";
+    if (!targetCountry) return <div className="flex-1"></div>;
     return (
       <Link href={`/country/${targetCountry?.cca2}`} passHref>
         <a

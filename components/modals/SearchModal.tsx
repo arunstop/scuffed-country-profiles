@@ -102,6 +102,7 @@ function SearchModal() {
                         onClick={() => {
                           // hide the modal
                           toggleSearchModal(false);
+                          setKeyword("");
                         }}
                       >
                         <img
