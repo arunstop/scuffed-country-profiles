@@ -191,7 +191,12 @@ function Details({ countryStr }: CountryDetailsProps) {
         { lead: "Subregion :", desc: country.subregion || "-" },
         { lead: "Land area :", desc: country.area.toLocaleString() + " km^" },
         { lead: "Landlocked :", desc: yesOrNo(country.landlocked) },
-        { lead: "Borders :", desc: country.borders?.join(", ") || "-" },
+        {
+          lead: "Borders :",
+          desc:
+            borderingCountryList.map((e, idx) => e.name.common).join(", ") ||
+            "-",
+        },
         { lead: "Lat-Long :", desc: country.latlng.join(", ") },
         { lead: "Timezone(s) :", desc: country.timezones.join(", ") },
       ]}
@@ -276,13 +281,17 @@ function Details({ countryStr }: CountryDetailsProps) {
           `Loading bordering countries of ${country.name.common}...`,
         )
       ) : (
-        <div className="flex w-full flex-col gap-8 px-8">
-          <h2 className="text-2xl font-bold">
-            Bordering {country.borders.length > 1 ? "Countries" : "Country"} :
+        <div className="flex w-full flex-col px-8">
+          <h2
+            className="text-2xl font-bold bg-base-300 self-start p-4
+             rounded-t-lg border-b-2 border-base-content/30"
+          >
+            Bordering {country.borders.length > 1 ? "Countries" : "Country"}
           </h2>
           <div
             className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-        transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+            transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 
+            bg-base-300/50 p-4 rounded-b-lg rounded-tr-lg"
           >
             {country.borders.length === 0
               ? ""
@@ -300,13 +309,17 @@ function Details({ countryStr }: CountryDetailsProps) {
     return mutualSubregionCountryList.length === 0 ? (
       RENDER_LOADING_PLACEHOLDER(`Loading countries in ${country.subregion}...`)
     ) : (
-      <div className="flex w-full flex-col gap-8 px-8">
-        <h2 className="text-2xl font-bold">
-          Countries in {country.subregion} :
+      <div className="flex w-full flex-col px-8">
+        <h2
+          className="text-2xl font-bold bg-base-300 self-start p-4
+           rounded-t-lg border-b-2 border-base-content/30"
+        >
+          Countries in {country.subregion}
         </h2>
         <div
           className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-          transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+          transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 
+          bg-base-300/50 p-4 rounded-b-lg rounded-tr-lg"
         >
           {mutualSubregionCountryList.map((countryItem, idx) => (
             <CountryItem key={idx} country={countryItem} />
@@ -334,8 +347,9 @@ function Details({ countryStr }: CountryDetailsProps) {
       <Link href={`/country/${targetCountry?.cca2}`} passHref>
         <a
           className={`btn btn-lg normal-case py-4 h-auto w-auto flex-1 
-          hover:underline bg-opacity-60 border-0
-        ${prev ? "justify-start" : "justify-end"}
+          hover:underline bg-base-300 border-0 text-base-content
+          hover:bg-neutral/50
+          ${prev ? "justify-start" : "justify-end"}
         `}
           role={"button"}
         >
@@ -406,8 +420,8 @@ function Details({ countryStr }: CountryDetailsProps) {
           {RENDER_INFO_NAMING()}
           {RENDER_INFO_GENERIC()}
           {RENDER_INFO_GEOGRAPHIC()}
-          {RENDER_INFO_POLITIC()}
           {RENDER_INFO_COMMUNICATION()}
+          {RENDER_INFO_POLITIC()}
         </div>
         {RENDER_BORDERING_COUNTRIES()}
         {RENDER_MUTUAL_SUBREGION_COUNTRIES()}
