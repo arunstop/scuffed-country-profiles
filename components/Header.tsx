@@ -6,12 +6,19 @@ import {
   MdOutlineLightMode,
   MdOutlineSearch,
 } from "react-icons/md";
+import { apiGetCountryList } from "../utils/apis/CountryApi";
 import { useCountryContext } from "../utils/contexts/country/CountryHook";
 import { useUiContext } from "../utils/contexts/ui/UiHook";
 
 export default function Header() {
   const { state: uiState, action: uiAction } = useUiContext();
-  const { state: countryState, action: countryAction } = useCountryContext();
+  const {
+    state: countryState,
+    action: countryAction,
+    getters: {
+      list: { noData },
+    },
+  } = useCountryContext();
   const router = useRouter();
 
   return (
@@ -24,19 +31,24 @@ export default function Header() {
       </Link>
       {/* Only show searchbar in header when not on index page */}
       {router.pathname !== "/" && (
-        <a
-          href="#search-modal"
+        <label
+          htmlFor="search-modal"
           className="btn p-2 w-72 normal-case font-normal h-auto btn-sm ring-2 
         ring-slate-500/10 bg-base-300 border-0 hover:bg-neutral/50 text-base-content"
+          onClick={async () => {
+            if (noData) {
+              countryAction.setCountryList(await apiGetCountryList());
+            }
+          }}
         >
           <span className="text-2xl mr-2">
             <MdOutlineSearch />
           </span>
-          <span className="text-md opacity-50">Search countries...</span>
+          <span className="text-md opacity-50">Search countries</span>
           <span className="ml-auto">
             <kbd className="kbd kbd-sm text-base-content">Ctrl + K</kbd>
           </span>
-        </a>
+        </label>
       )}
       <div className="ml-auto inline-flex items-center justify-center gap-4 ">
         {/* <label>Dark mode :</label> */}
