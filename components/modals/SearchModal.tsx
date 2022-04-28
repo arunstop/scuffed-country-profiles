@@ -5,6 +5,14 @@ import { MdClose, MdOutlineSearch, MdPlace } from "react-icons/md";
 import { useCountryContext } from "../../utils/contexts/country/CountryHook";
 import CircularProgress from "../CircularProgress";
 
+export function toggleSearchModal(value: boolean) {
+  getSearchModalElement().checked = value;
+}
+
+export const getSearchModalElement = () => {
+  return document.getElementById("search-modal") as HTMLInputElement;
+};
+
 function SearchModal() {
   const [keyword, setKeyword] = useState("");
   const {
@@ -43,7 +51,7 @@ function SearchModal() {
         htmlFor="search-modal"
         className="modal modal-bottom sm:modal-middle"
       >
-        <label className="modal-box cursor-auto p-0" htmlFor="">
+        <label className="modal-box cursor-auto p-0 transition-all" htmlFor="">
           <div className="flex flex-col gap-4  p-4">
             <div className="inline-flex justify-between items-center">
               <h3 className="font-semibold text-2xl">Search countries</h3>
@@ -60,8 +68,8 @@ function SearchModal() {
               </span>
               <label
                 className={`btn !btn-circle !btn-sm my-auto mx-2 
-            absolute inset-y-0 right-0 btn-error btn-outline bg-opacity-60
-            ${keyword.length ? "visible" : "hidden"}`}
+                absolute inset-y-0 right-0 btn-error btn-outline bg-opacity-60
+                ${keyword.length ? "visible" : "hidden"}`}
                 onClick={() => {
                   setKeyword("");
                 }}
@@ -76,6 +84,7 @@ function SearchModal() {
                 onChange={(e) => {
                   setKeyword(e.target.value.trim().toLowerCase());
                 }}
+                disabled={noData}
               />
             </label>
             {noData ? (
@@ -89,9 +98,10 @@ function SearchModal() {
                   return (
                     <Link key={idx} href={`/country/${cItem.cca2}/`} passHref>
                       <a
-                        className="flex w-full gap-4 p-4 hover:bg-neutral-focus hover:rounded-lg"
+                        className="flex w-full gap-4 p-4 hover:bg-base-content/30 hover:rounded-lg"
                         onClick={() => {
-                          document.getElementById("search-modal")?.click();
+                          // hide the modal
+                          toggleSearchModal(false);
                         }}
                       >
                         <img
