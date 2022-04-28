@@ -21,6 +21,7 @@ import { toCountry } from "../../utils/helpers/Casters";
 import { APP_NAME } from "../../utils/helpers/Constants";
 import Footer from "../../components/Footer";
 import Link from "next/link";
+import InfoCardDetails from "../../components/details/InfoCardDetails";
 
 interface CountryDetailsProps {
   countryStr: string;
@@ -141,8 +142,8 @@ function Details({ countryStr }: CountryDetailsProps) {
 
   const RENDER_INFO_HEADER = (text: string, icon: ReactNode) => (
     <h1
-      className="border-b-2 border-base-content/30 bg-base-300 p-4
-  text-2xl font-bold flex gap-2 items-center"
+      className="flex items-center gap-2 border-b-2
+  border-base-content/30 bg-base-300 p-4 text-2xl font-bold"
     >
       {icon}
       {text}
@@ -150,157 +151,113 @@ function Details({ countryStr }: CountryDetailsProps) {
   );
 
   const RENDER_INFO_NAMING = () => (
-    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
-      <div className="flex flex-col">
-        {RENDER_INFO_HEADER("Naming", <ImFontSize />)}
-        <div className="flex flex-col gap-2 p-8 pt-4">
-          <p>
-            <span className="font-bold">Common :</span> {country.name.common}{" "}
-          </p>
-          <p>
-            <span className="font-bold">Official :</span>{" "}
-            {country.name.official}{" "}
-          </p>
-          <p>
-            <span className="font-bold">Native name :</span>{" "}
-            {[
-              countryName.official,
-              ...nameList.map((nameItem) => nameItem.official),
-            ].join(" — ")}{" "}
-          </p>
-          <p>
-            <span className="font-bold">Alternative Spellings :</span>{" "}
-            {country.altSpellings.join(", ")}{" "}
-          </p>
-          <p>
-            <span className="font-bold">Name in other languages :</span>{" "}
-            {country.translations.length}
-          </p>
-        </div>
-      </div>
-    </div>
+    <InfoCardDetails
+      icon={<ImFontSize />}
+      title="Naming"
+      details={[
+        {
+          lead: "Common :",
+          desc: country.name.common,
+        },
+        {
+          lead: "Official :",
+          desc: country.name.official,
+        },
+        {
+          lead: "Native name :",
+          desc: [
+            countryName.official,
+            ...nameList.map((nameItem) => nameItem.official),
+          ].join(" — "),
+        },
+        {
+          lead: "Alternative Spellings :",
+          desc: country.altSpellings.join(", "),
+        },
+        {
+          lead: "Name in other languages :",
+          desc: country.translations.length + "",
+        },
+      ]}
+    />
   );
 
   const RENDER_INFO_GEOGRAPHIC = () => (
-    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
-      <div className="flex flex-col">
-        {RENDER_INFO_HEADER("Geographic", <BiWorld />)}
-        <div className="flex flex-col gap-2 p-8 pt-4">
-          <p>
-            <span className="font-bold">Continent :</span>{" "}
-            {country.continents.join(", ")}{" "}
-          </p>
-          <p>
-            <span className="font-bold">Region :</span> {country.region}{" "}
-          </p>
-          <p>
-            <span className="font-bold">Subregion :</span>{" "}
-            {country.subregion || "-"}{" "}
-          </p>
-          <p>
-            <span className="font-bold">Land area :</span>{" "}
-            {country.area.toLocaleString()} km^2
-          </p>
-          <p>
-            <span className="font-bold">Landlocked :</span>{" "}
-            {yesOrNo(country.landlocked)}{" "}
-          </p>
-          <p>
-            <span className="font-bold">Borders :</span>{" "}
-            {country.borders?.join(", ") || "-"}
-          </p>
-          <p>
-            <span className="font-bold">Lat-Long :</span>{" "}
-            {country.latlng.join(", ")}
-          </p>
-          <p>
-            <span className="font-bold">Timezone(s) :</span>{" "}
-            {country.timezones.join(", ")}
-          </p>
-        </div>
-      </div>
-    </div>
+    <InfoCardDetails
+      icon={<BiWorld />}
+      title="Geographic"
+      details={[
+        { lead: "Region :", desc: country.region },
+        { lead: "Subregion :", desc: country.subregion || "-" },
+        { lead: "Land area :", desc: country.area.toLocaleString() + " km^" },
+        { lead: "Landlocked :", desc: yesOrNo(country.landlocked) },
+        { lead: "Borders :", desc: country.borders?.join(", ") || "-" },
+        { lead: "Lat-Long :", desc: country.latlng.join(", ") },
+        { lead: "Timezone(s) :", desc: country.timezones.join(", ") },
+      ]}
+    />
   );
 
   const RENDER_INFO_POLITIC = () => (
-    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
-      <div className="flex flex-col">
-        {RENDER_INFO_HEADER("Politic", <ImHammer2 />)}
-        <div className="flex flex-col gap-2 p-8 pt-4">
-          <p>
-            <span className="font-bold">Independent :</span>{" "}
-            {yesOrNo(country.independent)}
-          </p>
-          <p>
-            <span className="font-bold">Status :</span>{" "}
-            {country.status.toUpperCase()}
-          </p>
-          <p>
-            <span className="font-bold">United Nations member :</span>{" "}
-            {yesOrNo(country.unMember)}
-          </p>
-        </div>
-      </div>
-    </div>
+    <InfoCardDetails
+      icon={<ImHammer2 />}
+      title="Politic"
+      details={[
+        { lead: "Independent :", desc: yesOrNo(country.independent) },
+        { lead: "Status :", desc: country.status.toUpperCase() },
+        { lead: "United Nations member :", desc: yesOrNo(country.unMember) },
+      ]}
+    />
   );
 
   const RENDER_INFO_GENERIC = () => (
-    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
-      <div className="flex flex-col">
-        {RENDER_INFO_HEADER("Generic", <BsFileText />)}
-        <div className="flex flex-col gap-2 p-8 pt-4">
-          <p>
-            {" "}
-            <span className="font-bold">Capital :</span>{" "}
-            {country.capital?.join(", ") || "-"}{" "}
-          </p>
-          <p>
-            {" "}
-            <span className="font-bold">Currency :</span>{" "}
-            {country.currencies
+    <>
+      <InfoCardDetails
+        icon={<BsFileText />}
+        title="Generic"
+        details={[
+          { lead: "Capital :", desc: country.capital?.join(", ") || "-" },
+          {
+            lead: "Currency :",
+            desc: country.currencies
               ?.map(
                 (currItem) =>
                   `${currItem.name} (${currItem.code} / ${currItem.symbol})`,
               )
-              .join(" — ")}
-          </p>
-          <p>
-            {" "}
-            <span className="font-bold">Population :</span>{" "}
-            {country.population.toLocaleString()}{" "}
-          </p>
-          <p>
-            <span className="font-bold">Start of the week : </span>
-            <span className="capitalize">{country.startOfWeek}</span>
-          </p>
-        </div>
-      </div>
-    </div>
+              .join(" — "),
+          },
+          { lead: "Population :", desc: country.population.toLocaleString() },
+          {
+            lead: "Start of the week :",
+            desc:
+              country.startOfWeek[0].toUpperCase() +
+              country.startOfWeek.slice(1),
+          },
+        ]}
+      />
+    </>
   );
+
   const RENDER_INFO_COMMUNICATION = () => (
-    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
-      <div className="flex flex-col">
-        {RENDER_INFO_HEADER("Communication", <MdPhoneInTalk />)}
-        <div className="flex flex-col gap-2 p-8 pt-4">
-          <p>
-            <span className="font-bold">Language(s) :</span>{" "}
-            {country.languages.map((e) => e.name).join(", ") || "-"}
-          </p>
-          <p>
-            <span className="font-bold">
-              International direct dialing (IDD) :
-            </span>{" "}
-            {`${country.idd.root}${
+    <>
+      <InfoCardDetails
+        icon={<MdPhoneInTalk />}
+        title="Communication"
+        details={[
+          {
+            lead: "Language(s) :",
+            desc: country.languages.map((e) => e.name).join(", ") || "-",
+          },
+          {
+            lead: "International direct dialing (IDD) :",
+            desc: `${country.idd.root}${
               country.idd.suffixes ? country.idd.suffixes[0] : "-"
-            }`}
-          </p>
-          <p>
-            <span className="font-bold">Top level domain :</span>{" "}
-            {country.tld.join(" — ")}{" "}
-          </p>
-        </div>
-      </div>
-    </div>
+            }`,
+          },
+          { lead: "Top level domain :", desc: country.tld.join(" — ") },
+        ]}
+      />
+    </>
   );
 
   const RENDER_LOADING_PLACEHOLDER = (label: string) => (
@@ -370,13 +327,14 @@ function Details({ countryStr }: CountryDetailsProps) {
     );
     const prev = to === "prev";
     const next = to === "next";
+
     const targetCountry = prev ? prevCountry : nextCountry;
     if (!targetCountry) return "";
     return (
       <Link href={`/country/${targetCountry?.cca2}`} passHref>
         <a
-          className={`btn btn-lg normal-case py-4 h-auto w-auto flex-1
-        hover:underline
+          className={`btn btn-lg normal-case py-4 h-auto w-auto flex-1 
+          hover:underline bg-opacity-60 border-0
         ${prev ? "justify-start" : "justify-end"}
         `}
           role={"button"}
@@ -393,7 +351,7 @@ function Details({ countryStr }: CountryDetailsProps) {
               ) : (
                 <FaChevronRight className="text-lg" />
               )}
-              <span className="capitalize font-normal">
+              <span className="font-normal capitalize">
                 {prev ? "Previous" : "Next"}
               </span>
             </span>
@@ -420,7 +378,7 @@ function Details({ countryStr }: CountryDetailsProps) {
 
   function RENDER_PREV_NEXT_COUNTRIES() {
     return (
-      <div className="flex flex-col sm:flex-row justify-between w-full px-8 gap-4">
+      <div className="flex w-full flex-col justify-between gap-4 px-8 sm:flex-row">
         {RENDER_PAGING_BUTTON("prev")}
         {RENDER_PAGING_BUTTON("next")}
       </div>
