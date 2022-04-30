@@ -27,6 +27,7 @@ import SearchModal, {
   getSearchModalElement,
   toggleSearchModal,
 } from "../../components/modals/SearchModal";
+import ImagePreviewModal from "../../components/modals/ImagePreviewModal";
 
 interface CountryDetailsProps {
   countryStr: string;
@@ -159,13 +160,17 @@ function Details({ countryStr }: CountryDetailsProps) {
 
   // render parts
   const RENDER_FLAG = () => (
-    <div className="flex flex-col justify-center gap-4 self-center">
+    <label
+      htmlFor="img-preview-modal"
+      className="flex flex-col justify-center gap-4 self-center"
+      role={"button"}
+    >
       <img
         className="rounded-lg shadow-lg ring-4 ring-slate-600/30"
         src={country.flags.png}
       />
       <h1 className="text-4xl font-bold">{country.name.common}</h1>
-    </div>
+    </label>
   );
 
   const RENDER_INFO_HEADER = (text: string, icon: ReactNode) => (
@@ -457,6 +462,7 @@ function Details({ countryStr }: CountryDetailsProps) {
       </div>
       <Footer />
       <SearchModal />
+      <ImagePreviewModal country={country} />
     </>
   );
 }

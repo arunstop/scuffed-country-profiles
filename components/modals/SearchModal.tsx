@@ -45,8 +45,9 @@ function SearchModal() {
           (cItem.capital?.join(" — ") || "").toLowerCase().includes(keyword);
   });
   return (
-    <>
+    <div>
       <input type="checkbox" id="search-modal" className="modal-toggle" />
+      {/* Use <label/> to make modal to close when the overlay clicked */}
       <label
         htmlFor="search-modal"
         className="modal modal-bottom sm:modal-middle"
@@ -68,7 +69,8 @@ function SearchModal() {
               </span>
               <label
                 className={`btn !btn-circle !btn-sm my-auto mx-2 
-                absolute inset-y-0 right-0 bg-opacity-60
+                absolute inset-y-0 right-0 bg-opacity-60 
+                btn-outline border-0 text-error
                 ${keyword.length ? "visible" : "hidden"}`}
                 onClick={() => {
                   setKeyword("");
@@ -93,7 +95,7 @@ function SearchModal() {
                 <span>Loading countries...</span>
               </span>
             ) : (
-              <div className="flex h-96  flex-wrap overflow-auto pr-4">
+              <div className="flex h-96  flex-wrap overflow-auto pr-4 items-start">
                 {searchedCountryList.map((cItem, idx) => {
                   return (
                     <Link key={idx} href={`/country/${cItem.cca2}/`} passHref>
@@ -133,7 +135,7 @@ function SearchModal() {
           </div>
         </label>
       </label>
-    </>
+    </div>
   );
 }
 
