@@ -28,6 +28,7 @@ import SearchModal, {
   toggleSearchModal,
 } from "../../components/modals/SearchModal";
 import ImagePreviewModal from "../../components/modals/ImagePreviewModal";
+import { scrollToTop } from "../../utils/helpers/UIHelpers";
 
 interface CountryDetailsProps {
   countryStr: string;
@@ -94,6 +95,7 @@ function Details({ countryStr }: CountryDetailsProps) {
   >([]);
 
   useEffect(() => {
+    scrollToTop();
     loadBorderingCountryList();
     loadMutualSubregionCountryList();
     // countryAction.setSearchKeyword("");
@@ -162,12 +164,12 @@ function Details({ countryStr }: CountryDetailsProps) {
   const RENDER_FLAG = () => (
     <label
       htmlFor="img-preview-modal"
-      className="flex flex-col justify-center gap-4 self-center"
+      className="flex flex-col justify-center gap-4 self-center flex-1"
       role={"button"}
     >
       <img
-        className="rounded-lg shadow-lg ring-4 ring-slate-600/30"
-        src={country.flags.png}
+        className="rounded-lg shadow-lg ring-4 ring-slate-600/30 min-w-[300px]"
+        src={country.flags.svg}
       />
       <h1 className="text-4xl font-bold">{country.name.common}</h1>
     </label>
@@ -316,15 +318,15 @@ function Details({ countryStr }: CountryDetailsProps) {
       ) : (
         <div className="flex w-full flex-col px-8">
           <h2
-            className="text-2xl font-bold bg-base-300 self-start p-4
-             rounded-t-lg border-b-2 border-base-content/30"
+            className="self-start rounded-t-lg border-b-2 border-base-content/30 bg-base-300
+             p-4 text-2xl font-bold"
           >
             Bordering {country.borders.length > 1 ? "Countries" : "Country"}
           </h2>
           <div
             className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-            transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 
-            bg-base-300/50 p-4 rounded-r-lg"
+            rounded-r-lg bg-base-300/50 p-4 transition-all 
+            sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
           >
             {country.borders.length === 0
               ? ""
@@ -344,15 +346,15 @@ function Details({ countryStr }: CountryDetailsProps) {
     ) : (
       <div className="flex w-full flex-col px-8">
         <h2
-          className="text-2xl font-bold bg-base-300 self-start p-4
-           rounded-t-lg border-b-2 border-base-content/30"
+          className="self-start rounded-t-lg border-b-2 border-base-content/30 bg-base-300
+           p-4 text-2xl font-bold"
         >
           Countries in {country.subregion}
         </h2>
         <div
           className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-          transition-all sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 
-          bg-base-300/50 p-4 rounded-r-lg"
+          rounded-r-lg bg-base-300/50 p-4 transition-all 
+          sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
         >
           {mutualSubregionCountryList.map((countryItem, idx) => (
             <CountryItem key={idx} country={countryItem} />
@@ -406,7 +408,7 @@ function Details({ countryStr }: CountryDetailsProps) {
               className={`inline-flex gap-4 items-center 
             ${prev ? "" : "flex-row-reverse"}`}
             >
-              <img className="h-16 rounded-lg" src={targetCountry?.flags.png} />
+              <img className="h-16 rounded-lg" src={targetCountry?.flags.svg} />
               <p
                 className={`text-left flex flex-col gap-2
                ${prev ? "text-left" : "text-right"}`}
@@ -445,7 +447,7 @@ function Details({ countryStr }: CountryDetailsProps) {
         <img
           className="absolute inset-0 -z-[1] h-[30rem] rounded-r-3xl
           rounded-br-full opacity-40 blur-lg transition-all group-hover:scale-150"
-          src={country.flags.png}
+          src={country.flags.svg}
           alt={country.name.common}
         />
         <div className="flex flex-wrap items-start justify-start gap-8 p-8 sm:flex-row">

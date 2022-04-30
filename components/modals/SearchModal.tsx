@@ -87,6 +87,7 @@ function SearchModal() {
                   setKeyword(e.target.value.trim().toLowerCase());
                 }}
                 disabled={noData}
+                autoFocus
               />
             </label>
             {noData ? (

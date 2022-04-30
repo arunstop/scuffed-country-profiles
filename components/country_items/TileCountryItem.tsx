@@ -22,8 +22,8 @@ function TileCountryItem({ country }: { country: Country }) {
           >
             <img
               className="avatar max-w-[120px] 
-            transition-transform duration-500 group-hover:scale-150"
-              src={country.flags.png}
+            transition-transform duration-500 group-hover:scale-150 h-full w-full"
+              src={country.flags.svg}
               alt={country.name.common}
             />
           </div>

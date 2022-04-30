@@ -8,6 +8,7 @@ import {
   KEY_DARK_MODE,
   KEY_LIST_VIEWTYPE as KEY_LIST_VIEW_TYPE,
 } from "../../helpers/localStorage/StorageKeys";
+import { mainContainerOnScrollListener } from "../../helpers/UIHelpers";
 import { UiContext } from "./UiContext";
 import { INIT_UI_STATE } from "./UiInitializers";
 import { uiReducer } from "./UiReducer";
@@ -56,6 +57,7 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
     if (userListViewType !== uiState.viewType.selected) {
       action.setListView(userListViewType);
     }
+    // mainContainerOnScroll();
     // action.toggleDarkMode(JSON.parse());
   }, []);
 

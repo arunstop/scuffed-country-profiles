@@ -19,7 +19,7 @@ function ListCountryItem({ country }: { country: Country }) {
         <img
           className="absolute inset-0 h-full rounded-r-3xl
           opacity-40  blur-lg transition-all group-hover:scale-150"
-          src={country.flags.png}
+          src={country.flags.svg}
           alt={country.name.common}
         />
         <div className="z-0 flex gap-4">
@@ -31,8 +31,9 @@ function ListCountryItem({ country }: { country: Country }) {
             >
               <img
                 className="avatar max-w-[120px] transition-transform 
-                duration-500 group-hover:z-10 group-hover:scale-150 sm:max-w-[240px]"
-                src={country.flags.png}
+                duration-500 group-hover:z-10 group-hover:scale-150 sm:max-w-[240px]
+                h-full w-full"
+                src={country.flags.svg}
                 alt={country.name.common}
               />
             </div>
