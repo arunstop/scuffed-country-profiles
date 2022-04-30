@@ -436,7 +436,7 @@ function Details({ countryStr }: CountryDetailsProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <div className="flex flex-col gap-8 py-16">
+      <div className="flex flex-col gap-8 pb-16">
         <img
           className="absolute inset-0 -z-[1] h-[30rem] rounded-r-3xl
           rounded-br-full opacity-40 blur-lg transition-all group-hover:scale-150"

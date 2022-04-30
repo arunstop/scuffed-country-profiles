@@ -53,22 +53,22 @@ function SearchModal() {
       >
         <label className="modal-box cursor-auto p-0 transition-all" htmlFor="">
           <div className="flex flex-col gap-4  p-4">
-            <div className="inline-flex justify-between items-center">
-              <h3 className="font-semibold text-2xl">Search countries</h3>
+            <div className="inline-flex items-center justify-between">
+              <h3 className="text-2xl font-semibold">Search countries</h3>
               <label
-                className="btn btn-circle btn-error btn-sm btn-outline"
+                className="btn-outline btn btn-error btn-sm btn-circle"
                 htmlFor="search-modal"
               >
                 <MdClose className="text-2xl" />
               </label>
             </div>
-            <label className="input-group-lg input-group max-w-lg relative">
+            <label className="input-group-lg input-group relative max-w-lg">
               <span className="">
                 <MdOutlineSearch className="text-2xl" />
               </span>
               <label
                 className={`btn !btn-circle !btn-sm my-auto mx-2 
-                absolute inset-y-0 right-0 btn-error btn-outline bg-opacity-60
+                absolute inset-y-0 right-0 bg-opacity-60
                 ${keyword.length ? "visible" : "hidden"}`}
                 onClick={() => {
                   setKeyword("");
@@ -88,17 +88,17 @@ function SearchModal() {
               />
             </label>
             {noData ? (
-              <span className="inline-flex gap-4 justify-center items-center h-24">
+              <span className="inline-flex h-24 items-center justify-center gap-4">
                 <CircularProgress size={2} />
                 <span>Loading countries...</span>
               </span>
             ) : (
-              <div className="flex flex-wrap  max-h-96 overflow-auto pr-4">
+              <div className="flex h-96  flex-wrap overflow-auto pr-4">
                 {searchedCountryList.map((cItem, idx) => {
                   return (
                     <Link key={idx} href={`/country/${cItem.cca2}/`} passHref>
                       <a
-                        className="flex w-full gap-4 p-4 hover:bg-base-content/30 hover:rounded-lg"
+                        className="flex w-full gap-4 p-4 hover:rounded-lg hover:bg-base-content/30"
                         onClick={() => {
                           // hide the modal
                           toggleSearchModal(false);
@@ -109,11 +109,11 @@ function SearchModal() {
                           className="h-12 rounded-lg"
                           src={cItem.flags.svg}
                         />
-                        <div className="grow flex flex-col">
-                          <span className="font-semibold text-xl">
+                        <div className="flex grow flex-col">
+                          <span className="text-xl font-semibold">
                             {cItem.name.common}
                           </span>
-                          <span className="opacity-60 inline-flex gap-1 items-center">
+                          <span className="inline-flex items-center gap-1 opacity-60">
                             <MdPlace className="text-lg" />
                             {cItem.capital?.join(", ") || "-"}
                           </span>

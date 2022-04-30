@@ -55,8 +55,8 @@ export default function Header() {
 
   return (
     <header
-      className="fixed z-10 flex h-16 w-full items-center
-      bg-base-100/90 p-4 shadow-lg transition-colors gap-4"
+      className="sticky z-10 flex h-16 w-full items-center
+      bg-base-100/90 p-4 shadow-lg transition-colors gap-4 top-0"
     >
       <Link href={"/#countries"} passHref>
         <a>Country Profiles</a>
