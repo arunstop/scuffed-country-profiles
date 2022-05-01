@@ -18,7 +18,9 @@ function ScrollToTopButton() {
     // >
     <button
       id="scroll-to-top-btn"
-      className="transition-all btn btn-square btn-primary fixed bottom-0 right-0 opacity-0"
+      className="transition-all btn btn-square btn-primary 
+      fixed bottom-0 right-0 opacity-0
+      m-4 sm:m-8 mb-2 sm:mb-4"
       onClick={(ev) => {
         // alert(getMainContainer());
         scrollToTop();
