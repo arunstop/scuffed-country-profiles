@@ -55,8 +55,8 @@ export default function Header() {
 
   return (
     <header
-      className="sticky z-10 flex h-16 w-full items-center
-      bg-base-100/90 p-4 shadow-lg transition-colors gap-4 top-0"
+      className="sticky top-0 z-10 flex h-16 w-full
+      items-center gap-4 bg-base-100/90 p-4 shadow-lg transition-colors"
     >
       <Link href={"/#countries"} passHref>
         <a>Country Profiles</a>
@@ -65,18 +65,18 @@ export default function Header() {
       {router.pathname !== "/" && (
         <label
           htmlFor="search-modal"
-          className="btn p-2 w-72 normal-case font-normal h-auto btn-sm ring-2 
-        ring-slate-500/10 bg-base-300 border-0 hover:bg-neutral/50 text-base-content"
+          className="btn btn-sm h-auto w-72 border-0 bg-base-300 p-2 font-normal 
+        normal-case text-base-content ring-2 ring-slate-500/10 hover:bg-neutral/50"
           onClick={() => {
             loadCountryList();
           }}
         >
-          <span className="text-2xl mr-2">
+          <span className="mr-2 text-2xl">
             <MdOutlineSearch />
           </span>
-          <span className="text-md opacity-50">Search countries</span>
+          <span className="text-md opacity-50">Quick search...</span>
           <span className="ml-auto">
-            <kbd className="kbd kbd-sm text-base-content border-base-content/50">
+            <kbd className="kbd kbd-sm border-base-content/50 text-base-content">
               Ctrl + /
             </kbd>
           </span>

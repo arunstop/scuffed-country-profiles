@@ -76,38 +76,38 @@ function MapSectionDetails({ country }: { country: Country }) {
   // );
 
   return (
-    <div className="flex flex-col px-8 items-start">
+    <div className="flex flex-col items-start px-8">
       <h2
         className="self-start rounded-t-lg border-b-2 border-base-content/30 bg-base-300
              p-4 text-2xl font-bold"
       >
         Maps of {country.name.common}
       </h2>
-      <div className="flex flex-col gap-2 pt-4 bg-base-300/50 p-4 rounded-lg rounded-tr-lg w-full sm:w-auto">
-        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2">
+      <div className="flex w-full flex-col gap-2 rounded-lg rounded-tr-lg bg-base-300/50 p-8 sm:w-auto">
+        <div className="flex flex-col gap-8 sm:flex-row sm:flex-wrap">
           <a
-            className="hover:bg-content-base btn grow gap-2
-            rounded-lg normal-case sm:grow-0"
+            className="hover:bg-content-base btn-outline btn h-32 grow
+            flex-col gap-4 rounded-lg normal-case sm:grow-0"
             href={country.maps.googleMaps}
             target="_blank"
             rel="noreferrer"
             title="Open in Google Maps"
             tabIndex={-1}
           >
-            <SiGooglemaps className="pointer-events-none text-2xl" />
-            <span>Open in Google Maps</span>
+            <SiGooglemaps className="pointer-events-none text-5xl" />
+            <span className="text-lg">Open in Google Maps</span>
           </a>
           <a
-            className="hover:bg-content-base btn grow gap-2 
-            rounded-lg normal-case sm:grow-0"
+            className="hover:bg-content-base btn-outline btn h-32 grow 
+            flex-col gap-4 rounded-lg normal-case sm:grow-0"
             href={country.maps.openStreetMaps}
             target="_blank"
             rel="noreferrer"
             title="Open in Open Street Maps"
             tabIndex={-1}
           >
-            <SiOpenstreetmap className="pointer-events-none text-2xl" />
-            <span>Open in Open Street Maps</span>
+            <SiOpenstreetmap className="pointer-events-none text-5xl" />
+            <span className="text-lg">Open in Open Street Maps</span>
           </a>
         </div>
       </div>
