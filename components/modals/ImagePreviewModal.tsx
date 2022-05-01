@@ -49,8 +49,9 @@ function ImagePreviewModal({ country }: { country: Country }) {
             <div className="flex justify-center overflow-hidden p-4 my-auto">
               <img
                 className="max-h-full max-w-full min-w-screen 
-                pointer-events-auto ring-2 ring-slate-600/30"
+                pointer-events-auto ring-2 ring-slate-600/30 h-full min-w-[50vw]"
                 src={country.flags.svg}
+                alt={"Flag of " + country.name.common}
               />
             </div>
           </div>

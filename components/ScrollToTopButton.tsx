@@ -23,7 +23,7 @@ function ScrollToTopButton() {
       m-4 sm:m-8 mb-2 sm:mb-4"
       onClick={(ev) => {
         // alert(getMainContainer());
-        scrollToTop();
+        scrollToTop(true);
       }}
     >
       <FaChevronUp className="text-3xl" />

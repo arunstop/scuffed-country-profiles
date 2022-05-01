@@ -1,7 +1,7 @@
 //   main next container
 export const getMainContainer = () => document.getElementById("__next");
 
-export function scrollToTop() {
+export function scrollToTop(smooth = false) {
   const mainContainer = getMainContainer();
   const scrollToTopButton = getScrollToTopButton();
 
@@ -9,11 +9,14 @@ export function scrollToTop() {
   if (!scrollToTopButton) return;
   if (mainContainer.scrollTop === 0) return;
   //   console.log(document.getElementById("__next") === mainContainer);
-  mainContainer.scrollTop = 0;
-  //   mainContainer.scroll({
-  //     top: 0,
-  //     behavior: "smooth",
-  //   });
+  if (smooth) {
+    mainContainer.scroll({
+      top: 0,
+      behavior: "smooth",
+    });
+  } else {
+    mainContainer.scrollTop = 0;
+  }
   //   console.log(mainContainer);
 }
 

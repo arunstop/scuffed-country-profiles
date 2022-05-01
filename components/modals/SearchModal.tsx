@@ -109,7 +109,7 @@ function SearchModal() {
                         }}
                       >
                         <img
-                          className="h-12 rounded-lg"
+                          className="h-12 rounded-md ring-1 ring-slate-600/30"
                           src={cItem.flags.svg}
                         />
                         <div className="flex grow flex-col">

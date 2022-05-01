@@ -12,7 +12,7 @@
     height: 100%;
     position: relative !important;
     overscroll-behavior: contain;
-    scroll-behavior: smooth;
+    /* scroll-behavior: smooth; */
   }
 }
 

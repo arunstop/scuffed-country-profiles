@@ -29,6 +29,7 @@ import SearchModal, {
 } from "../../components/modals/SearchModal";
 import ImagePreviewModal from "../../components/modals/ImagePreviewModal";
 import { scrollToTop } from "../../utils/helpers/UIHelpers";
+import MapSectionDetails from "../../components/details/MapSectionDetails";
 
 interface CountryDetailsProps {
   countryStr: string;
@@ -164,11 +165,11 @@ function Details({ countryStr }: CountryDetailsProps) {
   const RENDER_FLAG = () => (
     <label
       htmlFor="img-preview-modal"
-      className="flex flex-col justify-center gap-4 self-center flex-1"
+      className="flex flex-col justify-center gap-4 self-center"
       role={"button"}
     >
       <img
-        className="rounded-lg shadow-lg ring-4 ring-slate-600/30 min-w-[300px]"
+        className="rounded-lg shadow-lg ring-4 ring-slate-600/30 w-full sm:max-w-sm"
         src={country.flags.svg}
       />
       <h1 className="text-4xl font-bold">{country.name.common}</h1>
@@ -433,6 +434,10 @@ function Details({ countryStr }: CountryDetailsProps) {
       </div>
     );
   }
+  function RENDER_MAPS() {
+    return <MapSectionDetails country={country} />;
+  }
+
   return (
     <>
       <Head>
@@ -458,6 +463,7 @@ function Details({ countryStr }: CountryDetailsProps) {
           {RENDER_INFO_COMMUNICATION()}
           {RENDER_INFO_POLITIC()}
         </div>
+        {RENDER_MAPS()}
         {RENDER_BORDERING_COUNTRIES()}
         {RENDER_MUTUAL_SUBREGION_COUNTRIES()}
         {countryState.list.length !== 0 && RENDER_PREV_NEXT_COUNTRIES()}
