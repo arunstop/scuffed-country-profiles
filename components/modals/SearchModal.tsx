@@ -122,7 +122,7 @@ function SearchModal() {
                 <span>Loading countries...</span>
               </span>
             ) : (
-              <div className="flex h-96  flex-wrap overflow-auto pr-4 items-start">
+              <div className="flex h-96 flex-col overflow-auto pr-4 items-start">
                 {searchedCountryList.map((cItem, idx) => {
                   return (
                     <Link key={idx} href={`/country/${cItem.cca2}/`} passHref>
