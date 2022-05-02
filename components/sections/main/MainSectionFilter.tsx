@@ -211,8 +211,10 @@ function MainSectionFilter() {
                   className=""
                   key={idx}
                   onClick={(e) => {
-                    uiAction.setListView(vtItem.type);
                     (document.activeElement as HTMLElement).blur();
+                    // if view type is already selected, do nothing
+                    if (viewType.selected === vtItem.type) return;
+                    uiAction.setListView(vtItem.type);
                   }}
                 >
                   <a className="capitalize">

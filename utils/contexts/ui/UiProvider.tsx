@@ -8,7 +8,6 @@ import {
   KEY_DARK_MODE,
   KEY_LIST_VIEWTYPE as KEY_LIST_VIEW_TYPE,
 } from "../../helpers/localStorage/StorageKeys";
-import { mainContainerOnScrollListener } from "../../helpers/UIHelpers";
 import { UiContext } from "./UiContext";
 import { INIT_UI_STATE } from "./UiInitializers";
 import { uiReducer } from "./UiReducer";
@@ -34,8 +33,6 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
       }
     },
     setListView: (listViewType: string) => {
-      // if view type is already selected, do nothing
-      if (listViewType === uiState.viewType.selected) return;
       uiDispatch({ type: "SET_LIST_VIEW", payload: { listViewType } });
       storageSave(KEY_LIST_VIEW_TYPE, JSON.stringify(listViewType));
     },
@@ -49,12 +46,16 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    const userDarkMode = storageFind(KEY_DARK_MODE);
-    if (userDarkMode !== null) {
-      action.toggleDarkMode(JSON.parse(userDarkMode));
+    const userDarkMode = JSON.parse(storageFind(KEY_DARK_MODE));
+    // init user dark mode
+    if (!userDarkMode) {
+      action.toggleDarkMode(!!userDarkMode);
     }
-    const userListViewType = JSON.parse(storageFind(KEY_LIST_VIEW_TYPE)!);
-    if (userListViewType !== uiState.viewType.selected) {
+    const userListViewType = JSON.parse(storageFind(KEY_LIST_VIEW_TYPE));
+    // if not yet initialized
+    if (!userListViewType) {
+      action.setListView(uiState.viewType.selected);
+    } else if (userListViewType !== uiState.viewType.selected) {
       action.setListView(userListViewType);
     }
     // mainContainerOnScroll();

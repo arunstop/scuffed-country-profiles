@@ -4,11 +4,11 @@ export const INIT_UI_STATE: UiState = {
   darkMode: false,
   viewType: {
     list: [
+      { type: "CARDS", icon: MdCallToAction({}) },
       { type: "LIST", icon: MdViewList({}) },
       { type: "TILES", icon: MdViewModule({}) },
-      { type: "CARDS", icon: MdCallToAction({}) },
     ],
-    selected: "LIST",
+    selected: "CARDS",
   },
   filtersOn: false,
 };
