@@ -7,6 +7,24 @@ import CircularProgress from "../CircularProgress";
 
 export function toggleSearchModal(value: boolean) {
   getSearchModalElement().checked = value;
+  modalOnChange(value);
+}
+
+function modalOnChange(value: boolean) {
+  if (value === true) {
+    setTimeout(() => {
+      const inputSearch = document.getElementById(
+        "search-modal-input",
+      ) as HTMLInputElement;
+      inputSearch.focus();
+    }, 500);
+    // if (inputSearch) {
+    //   inputSearch.scrollIntoView();
+    // }
+    // console.log(
+    //   document.getElementById("search-modal-input") as HTMLInputElement,
+    // );
+  }
 }
 
 export const getSearchModalElement = () => {
@@ -44,9 +62,17 @@ function SearchModal() {
           cItem.altSpellings.join(" — ").toLowerCase().includes(keyword) ||
           (cItem.capital?.join(" — ") || "").toLowerCase().includes(keyword);
   });
+
   return (
     <div>
-      <input type="checkbox" id="search-modal" className="modal-toggle" />
+      <input
+        type="checkbox"
+        id="search-modal"
+        className="modal-toggle"
+        onChange={(ev) => {
+          modalOnChange(ev.target.checked);
+        }}
+      />
       {/* Use <label/> to make modal to close when the overlay clicked */}
       <label
         htmlFor="search-modal"
@@ -79,6 +105,7 @@ function SearchModal() {
                 <MdClose className="text-2xl" />
               </label>
               <input
+                id="search-modal-input"
                 className="input-bordered input w-full pr-12"
                 value={keyword}
                 type="text"
@@ -87,7 +114,6 @@ function SearchModal() {
                   setKeyword(e.target.value.trim().toLowerCase());
                 }}
                 disabled={noData}
-                autoFocus
               />
             </label>
             {noData ? (
