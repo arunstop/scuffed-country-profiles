@@ -406,7 +406,7 @@ function Details({ countryStr }: CountryDetailsProps) {
           }; A country in ${
             country.subregion
           }; With the population of ${country.population.toLocaleString()} people,
-          Who speak ${country.languages.join(", ")}`}
+          Who speak ${country.languages.map((e) => e.name).join(", ")}`}
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
