@@ -240,12 +240,12 @@ function Details({ countryStr }: CountryDetailsProps) {
         { lead: "Landlocked :", desc: yesOrNo(country.landlocked) },
         {
           lead: "Borders :",
-          desc:
-            typeof borderingCountryList === "string"
-              ? _.sortBy(country.borders).join(", ")
-              : borderingCountryList
-                  .map((e, idx) => e.name.common)
-                  .join(", ") || "-",
+          desc: !country.borders
+            ? "-"
+            : typeof borderingCountryList === "string"
+            ? _.sortBy(country.borders).join(", ")
+            : borderingCountryList.map((e, idx) => e.name.common).join(", ") ||
+              "-",
         },
         { lead: "Lat-Long :", desc: country.latlng.join(", ") },
         { lead: "Timezone(s) :", desc: country.timezones.join(", ") },

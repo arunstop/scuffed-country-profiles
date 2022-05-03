@@ -24,7 +24,7 @@ function RelatedSectionDetails({
 rounded-r-lg bg-base-300/50 p-4 transition-all 
 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
       >
-        {country.borders.length === 0
+        {!list.length
           ? "No result found."
           : list.map((countryItem, idx) => (
               <CountryItem key={idx} country={countryItem} />
