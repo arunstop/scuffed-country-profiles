@@ -88,11 +88,11 @@ function Details({ countryStr }: CountryDetailsProps) {
     action: countryAction,
   } = useCountryContext();
 
-  const [borderingCountryList, setBorderingCountryList] = useState<Country[]>(
-    [],
-  );
+  const [borderingCountryList, setBorderingCountryList] = useState<
+    Country[] | string
+  >([]);
   const [mutualSubregionCountryList, setMutualSubregionCountryList] = useState<
-    Country[]
+    Country[] | string
   >([]);
 
   useEffect(() => {
@@ -143,37 +143,59 @@ function Details({ countryStr }: CountryDetailsProps) {
     // check if countryList exist in state
     // and load from API if it does not
     // or simply load it from the sate if it does.
-    const list: Country[] = noData
-      ? await apiGetBorderingCountryList(country.borders)
-      : getBorderingCountryList(country.borders);
-    setBorderingCountryList(sortByName(list));
+
+    if (noData) {
+      const list = await apiGetBorderingCountryList(country.borders);
+      console.log(typeof list);
+      if (typeof list === "string") {
+        setBorderingCountryList(list);
+      } else {
+        setBorderingCountryList(sortByName(list));
+      }
+    } else {
+      setBorderingCountryList(
+        sortByName(getBorderingCountryList(country.borders)),
+      );
+    }
   }
 
   async function loadMutualSubregionCountryList() {
     // check if countryList exist in state
     // and load from API if it does not
-    // or simply load it from the sate if it does.
-    const list: Country[] = noData
-      ? await apiGetMutualSubregionCountryList(country.subregion)
-      : getSubregionCountryList(country.subregion);
-    setMutualSubregionCountryList(sortByName(excludeCurrentCountry(list)));
+    // or simply load it from the state if it does.
+
+    if (noData) {
+      const list = await apiGetMutualSubregionCountryList(country.subregion);
+      // console.log(typeof list);
+      if (typeof list === "string") {
+        setMutualSubregionCountryList(list);
+      } else {
+        setMutualSubregionCountryList(sortByName(excludeCurrentCountry(list)));
+      }
+    } else {
+      setMutualSubregionCountryList(
+        sortByName(
+          excludeCurrentCountry(getSubregionCountryList(country.subregion)),
+        ),
+      );
+    }
   }
 
   const yesOrNo = (value: boolean): string => (value === true ? "YES" : "NO");
 
   // render parts
   const RENDER_FLAG = () => (
-    <label
-      htmlFor="img-preview-modal"
-      className="flex flex-col justify-center gap-4 self-center"
-      role={"button"}
-    >
-      <img
-        className="rounded-lg shadow-lg ring-4 ring-slate-600/30 w-full sm:max-w-sm"
-        src={country.flags.svg}
-      />
+    <div className="flex flex-col justify-center gap-4 self-center">
+      <label
+        htmlFor="img-preview-modal"
+        role={"button"}
+        className="rounded-lg shadow-lg ring-4 ring-slate-600/30 w-full sm:max-w-sm overflow-hidden"
+      >
+        <img className="w-full" src={country.flags.svg} />
+      </label>
+
       <h1 className="text-4xl font-bold">{country.name.common}</h1>
-    </label>
+    </div>
   );
 
   const RENDER_INFO_NAMING = () => (
@@ -220,8 +242,11 @@ function Details({ countryStr }: CountryDetailsProps) {
         {
           lead: "Borders :",
           desc:
-            borderingCountryList.map((e, idx) => e.name.common).join(", ") ||
-            "-",
+            typeof borderingCountryList === "string"
+              ? _.sortBy(country.borders).join(", ")
+              : borderingCountryList
+                  .map((e, idx) => e.name.common)
+                  .join(", ") || "-",
         },
         { lead: "Lat-Long :", desc: country.latlng.join(", ") },
         { lead: "Timezone(s) :", desc: country.timezones.join(", ") },
@@ -300,24 +325,26 @@ function Details({ countryStr }: CountryDetailsProps) {
 
   const RENDER_BORDERING_COUNTRIES = () => {
     if (!country.borders) return "";
-    return (
-      country.borders &&
-      (!borderingCountryList.length ? (
-        RENDER_LOADING_PLACEHOLDER(
-          `Loading bordering countries of ${country.name.common}...`,
-        )
-      ) : (
+
+    if (typeof borderingCountryList === "string") {
+      return RENDER_LOADING_PLACEHOLDER(borderingCountryList);
+    } else if (borderingCountryList.length === 0) {
+      return RENDER_LOADING_PLACEHOLDER(
+        `Loading bordering countries of ${country.name.common}...`,
+      );
+    } else {
+      return (
         <div className="flex w-full flex-col px-8">
           <h2
             className="self-start rounded-t-lg border-b-2 border-base-content/10 bg-base-300
-             p-4 text-2xl font-bold"
+         p-4 text-2xl font-bold"
           >
             Bordering {country.borders.length > 1 ? "Countries" : "Country"}
           </h2>
           <div
             className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-            rounded-r-lg bg-base-300/50 p-4 transition-all 
-            sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+        rounded-r-lg bg-base-300/50 p-4 transition-all 
+        sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
           >
             {country.borders.length === 0
               ? ""
@@ -326,33 +353,39 @@ function Details({ countryStr }: CountryDetailsProps) {
                 ))}
           </div>
         </div>
-      ))
-    );
+      );
+    }
   };
 
   const RENDER_MUTUAL_SUBREGION_COUNTRIES = () => {
     if (!country.subregion) return "";
-    return mutualSubregionCountryList.length === 0 ? (
-      RENDER_LOADING_PLACEHOLDER(`Loading countries in ${country.subregion}...`)
-    ) : (
-      <div className="flex w-full flex-col px-8">
-        <h2
-          className="self-start rounded-t-lg border-b-2 border-base-content/10 bg-base-300
-           p-4 text-2xl font-bold"
-        >
-          Countries in {country.subregion}
-        </h2>
-        <div
-          className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-          rounded-r-lg bg-base-300/50 p-4 transition-all 
-          sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
-        >
-          {mutualSubregionCountryList.map((countryItem, idx) => (
-            <CountryItem key={idx} country={countryItem} />
-          ))}
+    if (typeof mutualSubregionCountryList === "string") {
+      return RENDER_LOADING_PLACEHOLDER(mutualSubregionCountryList);
+    } else if (mutualSubregionCountryList.length === 0) {
+      return RENDER_LOADING_PLACEHOLDER(
+        `Loading countries in ${country.subregion}...`,
+      );
+    } else {
+      return (
+        <div className="flex w-full flex-col px-8">
+          <h2
+            className="self-start rounded-t-lg border-b-2 border-base-content/10 bg-base-300
+   p-4 text-2xl font-bold"
+          >
+            Countries in {country.subregion}
+          </h2>
+          <div
+            className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
+  rounded-r-lg bg-base-300/50 p-4 transition-all 
+  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
+          >
+            {mutualSubregionCountryList.map((countryItem, idx) => (
+              <CountryItem key={idx} country={countryItem} />
+            ))}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   };
 
   function RENDER_PAGING_BUTTON(to: "prev" | "next") {

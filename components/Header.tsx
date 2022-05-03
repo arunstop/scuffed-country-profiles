@@ -68,6 +68,7 @@ export default function Header() {
       {/* Only show searchbar in header when not on index page */}
       {router.pathname !== "/" && (
         <label
+          id="search-modal-btn"
           htmlFor="search-modal"
           className="btn btn-sm h-auto w-72 border-0 bg-base-300 p-2 font-normal 
         normal-case text-base-content ring-2 ring-slate-500/10 hover:bg-neutral/50"

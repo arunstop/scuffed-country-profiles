@@ -6,7 +6,21 @@ import { useCountryContext } from "../../utils/contexts/country/CountryHook";
 import CircularProgress from "../CircularProgress";
 
 export function toggleSearchModal(value: boolean) {
-  getSearchModalElement().checked = value;
+  // click the quick search button
+  if (value === true) {
+    const modalBtn = document.getElementById("search-modal-btn");
+    modalBtn?.click();
+  }
+  // click the
+  else {
+    const modalCloseBtn = document.getElementById("search-modal-close-btn");
+    modalCloseBtn?.click();
+  }
+
+  // const searchModal = getSearchModalElement();
+  // if (searchModal) {
+  //   searchModal.click();
+  // }
   const inputSearch = getSearchModalInput();
   inputSearch.value = "";
   searchModalOnChange(value);
@@ -70,7 +84,7 @@ function SearchModal() {
   const RENDER_COUNTRY_LIST = () => {
     if (noData) {
       return (
-        <span className="inline-flex h-24 items-center justify-center gap-4">
+        <span className="inline-flex h-24 items-center justify-center gap-4 mx-auto">
           <CircularProgress size={2} />
           <span>Loading countries...</span>
         </span>
@@ -78,7 +92,11 @@ function SearchModal() {
     }
     // when data is loaded but empty
     else if (searchedCountryList.length == 0) {
-      return <div className="mx-auto mt-12">No result found.</div>;
+      return (
+        <div className="inline-flex h-24 items-center justify-center gap-4 mx-auto">
+          No result found.
+        </div>
+      );
     }
     // when data is loaded and not empty
     else {
@@ -121,7 +139,8 @@ function SearchModal() {
         className="modal-toggle"
         onChange={(ev) => {
           searchModalOnChange(ev.target.checked);
-          setKeyword("");
+          if (ev.target.checked === true) setKeyword("");
+          // alert(ev.target.checked);
         }}
       />
       {/* Use <label/> to make modal to close when the overlay clicked */}
@@ -134,6 +153,7 @@ function SearchModal() {
             <div className="inline-flex items-center justify-between">
               <h3 className="text-2xl font-semibold">Search countries</h3>
               <label
+                id="search-modal-close-btn"
                 className="btn-outline btn btn-error btn-sm btn-circle"
                 htmlFor="search-modal"
               >
@@ -147,7 +167,7 @@ function SearchModal() {
               <label
                 className={`btn !btn-circle !btn-sm my-auto mx-2 
                 absolute inset-y-0 right-0 bg-opacity-60 
-                btn-outline border-0 text-error
+                btn-outline border-0
                 ${keyword.length ? "visible" : "hidden"}`}
                 onClick={() => {
                   setKeyword("");

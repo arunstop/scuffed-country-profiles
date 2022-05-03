@@ -1,7 +1,7 @@
-import { toCountry } from "./../helpers/Casters";
 import { Country } from "../data/models/Country";
-import { apiFetch } from "../helpers/Fetchers";
 import { REST_COUNTRIES_BASE_URL } from "../helpers/Constants";
+import { apiFetch } from "../helpers/Fetchers";
+import { toCountry } from "./../helpers/Casters";
 
 export const apiGetCountryList = async (): Promise<Country[]> => {
   try {
@@ -33,7 +33,7 @@ export const getCountry = async (cca2: string): Promise<string> => {
 
 export const apiGetBorderingCountryList = async (
   borderList: string[],
-): Promise<Country[]> => {
+): Promise<Country[] | string> => {
   try {
     // extracting country codes to string
     // e.g = IDN,GBR,FRA
@@ -46,13 +46,13 @@ export const apiGetBorderingCountryList = async (
     return data;
   } catch (error) {
     console.log(error);
-    return [];
+    return error + "";
   }
 };
 
 export const apiGetMutualSubregionCountryList = async (
   subregion: string,
-): Promise<Country[]> => {
+): Promise<Country[] | string> => {
   try {
     const data = await apiFetch<any[]>(
       `${REST_COUNTRIES_BASE_URL}/subregion/${subregion}`,
@@ -61,7 +61,7 @@ export const apiGetMutualSubregionCountryList = async (
     );
     return data;
   } catch (error) {
-    console.log(error);
-    return [];
+    // console.log(error);
+    return error + "";
   }
 };
