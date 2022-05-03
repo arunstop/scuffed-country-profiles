@@ -7,15 +7,19 @@ import CircularProgress from "../CircularProgress";
 
 export function toggleSearchModal(value: boolean) {
   getSearchModalElement().checked = value;
+  const inputSearch = getSearchModalInput();
+  inputSearch.value = "";
   searchModalOnChange(value);
+}
+
+export function getSearchModalInput() {
+  return document.getElementById("search-modal-input") as HTMLInputElement;
 }
 
 export function searchModalOnChange(value: boolean) {
   if (value === true) {
     setTimeout(() => {
-      const inputSearch = document.getElementById(
-        "search-modal-input",
-      ) as HTMLInputElement;
+      const inputSearch = getSearchModalInput();
       inputSearch.focus();
     }, 500);
     // if (inputSearch) {
@@ -63,6 +67,52 @@ function SearchModal() {
           (cItem.capital?.join(" — ") || "").toLowerCase().includes(keyword);
   });
 
+  const RENDER_COUNTRY_LIST = () => {
+    if (noData) {
+      return (
+        <span className="inline-flex h-24 items-center justify-center gap-4">
+          <CircularProgress size={2} />
+          <span>Loading countries...</span>
+        </span>
+      );
+    }
+    // when data is loaded but empty
+    else if (searchedCountryList.length == 0) {
+      return <div className="mx-auto mt-12">No result found.</div>;
+    }
+    // when data is loaded and not empty
+    else {
+      return searchedCountryList.map((cItem, idx) => {
+        return (
+          <Link key={idx} href={`/country/${cItem.cca2}/`} passHref>
+            <a
+              className="flex w-full gap-4 p-4 hover:rounded-lg hover:bg-base-content/30"
+              onClick={() => {
+                // hide the modal
+                toggleSearchModal(false);
+                setKeyword("");
+              }}
+            >
+              <img
+                className="h-12 rounded-md ring-1 ring-slate-600/30"
+                src={cItem.flags.svg}
+              />
+              <div className="flex grow flex-col">
+                <span className="text-xl font-semibold">
+                  {cItem.name.common}
+                </span>
+                <span className="inline-flex items-center gap-1 opacity-60">
+                  <MdPlace className="text-lg" />
+                  {cItem.capital?.join(", ") || "-"}
+                </span>
+              </div>
+            </a>
+          </Link>
+        );
+      });
+    }
+  };
+
   return (
     <div>
       <input
@@ -71,6 +121,7 @@ function SearchModal() {
         className="modal-toggle"
         onChange={(ev) => {
           searchModalOnChange(ev.target.checked);
+          setKeyword("");
         }}
       />
       {/* Use <label/> to make modal to close when the overlay clicked */}
@@ -116,44 +167,9 @@ function SearchModal() {
                 disabled={noData}
               />
             </label>
-            {noData ? (
-              <span className="inline-flex h-24 items-center justify-center gap-4">
-                <CircularProgress size={2} />
-                <span>Loading countries...</span>
-              </span>
-            ) : (
-              <div className="flex h-96 flex-col overflow-auto pr-4 items-start">
-                {searchedCountryList.map((cItem, idx) => {
-                  return (
-                    <Link key={idx} href={`/country/${cItem.cca2}/`} passHref>
-                      <a
-                        className="flex w-full gap-4 p-4 hover:rounded-lg hover:bg-base-content/30"
-                        onClick={() => {
-                          // hide the modal
-                          toggleSearchModal(false);
-                          setKeyword("");
-                        }}
-                      >
-                        <img
-                          className="h-12 rounded-md ring-1 ring-slate-600/30"
-                          src={cItem.flags.svg}
-                        />
-                        <div className="flex grow flex-col">
-                          <span className="text-xl font-semibold">
-                            {cItem.name.common}
-                          </span>
-                          <span className="inline-flex items-center gap-1 opacity-60">
-                            <MdPlace className="text-lg" />
-                            {cItem.capital?.join(", ") || "-"}
-                          </span>
-                        </div>
-                      </a>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-
+            <div className="flex h-96 flex-col overflow-auto pr-4 items-start">
+              {RENDER_COUNTRY_LIST()}
+            </div>
             {/* <div className="modal-action">
             <label htmlFor="search-modal" className="btn">
               Yay!
