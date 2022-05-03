@@ -8,7 +8,7 @@ interface InfoCardDetailsProps {
 const RENDER_HEADER = (icon: ReactNode, title: string) => (
   <h1
     className="flex items-center gap-2 border-b-2
-  border-base-content/30 bg-base-300 p-4 text-2xl font-bold"
+  border-base-content/10 bg-base-300 p-4 text-2xl font-bold"
   >
     {icon}
     {title}

@@ -78,7 +78,7 @@ function MapSectionDetails({ country }: { country: Country }) {
   return (
     <div className="flex flex-col items-start px-8">
       <h2
-        className="self-start rounded-t-lg border-b-2 border-base-content/30 bg-base-300
+        className="self-start rounded-t-lg border-b-2 border-base-content/10 bg-base-300
              p-4 text-2xl font-bold"
       >
         Maps of {country.name.common}

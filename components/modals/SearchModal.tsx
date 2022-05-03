@@ -7,10 +7,10 @@ import CircularProgress from "../CircularProgress";
 
 export function toggleSearchModal(value: boolean) {
   getSearchModalElement().checked = value;
-  modalOnChange(value);
+  searchModalOnChange(value);
 }
 
-function modalOnChange(value: boolean) {
+export function searchModalOnChange(value: boolean) {
   if (value === true) {
     setTimeout(() => {
       const inputSearch = document.getElementById(
@@ -70,7 +70,7 @@ function SearchModal() {
         id="search-modal"
         className="modal-toggle"
         onChange={(ev) => {
-          modalOnChange(ev.target.checked);
+          searchModalOnChange(ev.target.checked);
         }}
       />
       {/* Use <label/> to make modal to close when the overlay clicked */}

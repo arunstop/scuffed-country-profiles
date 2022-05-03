@@ -9,6 +9,7 @@ import {
 import { apiGetCountryList } from "../utils/apis/CountryApi";
 import { useCountryContext } from "../utils/contexts/country/CountryHook";
 import { useUiContext } from "../utils/contexts/ui/UiHook";
+import { searchModalOnChange } from "./modals/SearchModal";
 
 export default function Header() {
   const { state: uiState, action: uiAction } = useUiContext();
@@ -49,7 +50,10 @@ export default function Header() {
 
   async function loadCountryList() {
     if (noData) {
-      countryAction.setCountryList(await apiGetCountryList());
+      apiGetCountryList().then((cList) => {
+        countryAction.setCountryList(cList);
+        searchModalOnChange(true);
+      });
     }
   }
 

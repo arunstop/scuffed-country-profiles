@@ -39,10 +39,10 @@ function ListCountryItem({ country }: { country: Country }) {
             </div>
           </div>
           <div className="flex flex-col">
-            <h1 className="text-3xl font-medium">
-              {country.name.common || "-"}
-            </h1>
-            <div className="mb-1">{country.name.official || "-"}</div>
+            <h1 className="text-3xl font-bold">{country.name.common || "-"}</h1>
+            <div className="mb-1 font-normal">
+              {country.name.official || "-"}
+            </div>
             <div className="flex gap-1">
               <MdPlace className="mt-1" />
               {country.capital?.join(", ") || "-"}
