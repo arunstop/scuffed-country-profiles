@@ -401,9 +401,12 @@ function Details({ countryStr }: CountryDetailsProps) {
         <title>{`${countryName.common} — ${APP_NAME}`}</title>
         <meta
           name="description"
-          content={`Who speak ${country.languages
-            .map((e) => e.name)
-            .join(", ")}`}
+          content={`Information about ${countryName.common} - ${
+            countryName.official
+          }; A country in ${
+            country.subregion
+          }; With the population of ${country.population.toLocaleString()} people,
+          Who speak ${country.languages.map((e) => e.name).join(", ")}`}
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
