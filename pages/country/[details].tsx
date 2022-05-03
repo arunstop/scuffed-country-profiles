@@ -1,17 +1,16 @@
 import _ from "lodash";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BiWorld } from "react-icons/bi";
 import { BsFileText } from "react-icons/bs";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { ImFontSize, ImHammer2 } from "react-icons/im";
 import { MdPhoneInTalk } from "react-icons/md";
 import CircularProgress from "../../components/CircularProgress";
-import CountryItem from "../../components/CountryItem";
 import InfoCardDetails from "../../components/details/InfoCardDetails";
 import MapSectionDetails from "../../components/details/MapSectionDetails";
+import PagingButtonDetails from "../../components/details/PagingButtonDetails";
+import RelatedSectionDetails from "../../components/details/RelatedSectionDetails";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import ImagePreviewModal from "../../components/modals/ImagePreviewModal";
@@ -334,25 +333,13 @@ function Details({ countryStr }: CountryDetailsProps) {
       );
     } else {
       return (
-        <div className="flex w-full flex-col px-8">
-          <h2
-            className="self-start rounded-t-lg border-b-2 border-base-content/10 bg-base-300
-         p-4 text-2xl font-bold"
-          >
-            Bordering {country.borders.length > 1 ? "Countries" : "Country"}
-          </h2>
-          <div
-            className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-        rounded-r-lg bg-base-300/50 p-4 transition-all 
-        sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
-          >
-            {country.borders.length === 0
-              ? ""
-              : borderingCountryList.map((countryItem, idx) => (
-                  <CountryItem key={idx} country={countryItem} />
-                ))}
-          </div>
-        </div>
+        <RelatedSectionDetails
+          title={`Bordering ${
+            country.borders.length > 1 ? "Countries" : "Country"
+          }`}
+          country={country}
+          list={borderingCountryList}
+        />
       );
     }
   };
@@ -367,23 +354,11 @@ function Details({ countryStr }: CountryDetailsProps) {
       );
     } else {
       return (
-        <div className="flex w-full flex-col px-8">
-          <h2
-            className="self-start rounded-t-lg border-b-2 border-base-content/10 bg-base-300
-   p-4 text-2xl font-bold"
-          >
-            Countries in {country.subregion}
-          </h2>
-          <div
-            className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-  rounded-r-lg bg-base-300/50 p-4 transition-all 
-  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
-          >
-            {mutualSubregionCountryList.map((countryItem, idx) => (
-              <CountryItem key={idx} country={countryItem} />
-            ))}
-          </div>
-        </div>
+        <RelatedSectionDetails
+          title={`Countries in ${country.subregion}`}
+          country={country}
+          list={mutualSubregionCountryList}
+        />
       );
     }
   };
@@ -403,53 +378,11 @@ function Details({ countryStr }: CountryDetailsProps) {
     const targetCountry = prev ? prevCountry : nextCountry;
     if (!targetCountry) return <div className="flex-1"></div>;
     return (
-      <Link href={`/country/${targetCountry?.cca2}`} passHref>
-        <a
-          className={`btn btn-lg normal-case py-4 h-auto w-auto flex-1 
-          hover:underline bg-base-300 border-0 text-base-content
-          hover:bg-neutral/50
-          ${prev ? "justify-start" : "justify-end"}
-        `}
-          role={"button"}
-        >
-          <div
-            className={`flex flex-col gap-4 items-start
-          ${prev ? "items-start" : "items-end"}`}
-          >
-            <span
-              className={`inline-flex gap-2 ${prev ? "" : "flex-row-reverse"}`}
-            >
-              {prev ? (
-                <FaChevronLeft className="text-lg" />
-              ) : (
-                <FaChevronRight className="text-lg" />
-              )}
-              <span className="font-normal capitalize">
-                {prev ? "Previous" : "Next"}
-              </span>
-            </span>
-            <div
-              className={`inline-flex gap-4 items-center 
-            ${prev ? "" : "flex-row-reverse"}`}
-            >
-              <img className="h-16 rounded-lg" src={targetCountry?.flags.svg} />
-              <p
-                className={`text-left flex flex-col gap-2
-               ${prev ? "text-left" : "text-right"}`}
-              >
-                <span className="text-xl">{targetCountry?.name.common}</span>
-                <span className="font-normal">
-                  {targetCountry?.name.official}
-                </span>
-              </p>
-            </div>
-          </div>
-        </a>
-      </Link>
+      <PagingButtonDetails isPrevBtn={prev} targetCountry={targetCountry} />
     );
   }
 
-  function RENDER_PREV_NEXT_COUNTRIES() {
+  function RENDER_PAGINATION() {
     return (
       <div className="flex w-full flex-col justify-between gap-4 px-8 sm:flex-row">
         {RENDER_PAGING_BUTTON("prev")}
@@ -457,6 +390,7 @@ function Details({ countryStr }: CountryDetailsProps) {
       </div>
     );
   }
+
   function RENDER_MAPS() {
     return <MapSectionDetails country={country} />;
   }
@@ -487,7 +421,7 @@ function Details({ countryStr }: CountryDetailsProps) {
         {RENDER_MAPS()}
         {RENDER_BORDERING_COUNTRIES()}
         {RENDER_MUTUAL_SUBREGION_COUNTRIES()}
-        {countryState.list.length !== 0 && RENDER_PREV_NEXT_COUNTRIES()}
+        {countryState.list.length !== 0 && RENDER_PAGINATION()}
       </div>
       <Footer />
       <SearchModal />
