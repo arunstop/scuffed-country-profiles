@@ -1,5 +1,8 @@
 import { Country } from "../data/models/Country";
-import { REST_COUNTRIES_BASE_URL } from "../helpers/Constants";
+import {
+  GITHUB_GEO_COUNTRY_BASE_URL,
+  REST_COUNTRIES_BASE_URL,
+} from "../helpers/Constants";
 import { apiFetch } from "../helpers/Fetchers";
 import { toCountry } from "./../helpers/Casters";
 
@@ -40,8 +43,8 @@ export const apiGetBorderingCountryList = async (
     const strBorderList = borderList.join(",");
     const data = await apiFetch<any[]>(
       `${REST_COUNTRIES_BASE_URL}/alpha?codes=${strBorderList}`,
-    ).then((data) =>
-      Array.from(data).map((rawCountryItem) => toCountry(rawCountryItem)),
+    ).then((rawData) =>
+      Array.from(rawData).map((rawCountryItem) => toCountry(rawCountryItem)),
     );
     return data;
   } catch (error) {
@@ -56,12 +59,25 @@ export const apiGetMutualSubregionCountryList = async (
   try {
     const data = await apiFetch<any[]>(
       `${REST_COUNTRIES_BASE_URL}/subregion/${subregion}`,
-    ).then((data) =>
-      Array.from(data).map((rawCountryItem) => toCountry(rawCountryItem)),
+    ).then((rawData) =>
+      Array.from(rawData).map((rawCountryItem) => toCountry(rawCountryItem)),
     );
     return data;
   } catch (error) {
     // console.log(error);
+    return error + "";
+  }
+};
+
+export const apiGetGeoCountry = async (
+  cca3: string,
+): Promise<any[] | string> => {
+  try {
+    const data = await apiFetch<any>(
+      `${GITHUB_GEO_COUNTRY_BASE_URL}/${cca3.toLowerCase()}.geo.json`,
+    ).then((rawData) => JSON.parse(rawData));
+    return "";
+  } catch (error) {
     return error + "";
   }
 };

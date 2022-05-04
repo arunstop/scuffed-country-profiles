@@ -1,13 +1,14 @@
 import _ from "lodash";
 import { GetServerSideProps } from "next";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import { BiWorld } from "react-icons/bi";
 import { BsFileText } from "react-icons/bs";
 import { ImFontSize, ImHammer2 } from "react-icons/im";
 import { MdPhoneInTalk } from "react-icons/md";
-import CircularProgress from "../../components/CircularProgress";
 import InfoCardDetails from "../../components/details/InfoCardDetails";
+import LoadingPlaceholderDetails from "../../components/details/LoadingPlaceholderDetails";
 import MapSectionDetails from "../../components/details/MapSectionDetails";
 import PagingButtonDetails from "../../components/details/PagingButtonDetails";
 import RelatedSectionDetails from "../../components/details/RelatedSectionDetails";
@@ -56,6 +57,13 @@ export const getServerSideProps: GetServerSideProps<
     notFound: !countryTarget,
   };
 };
+
+const RENDER_MAP4REAL = dynamic(
+  () => import("../../components/details/sMapSectionDetails"),
+  {
+    ssr: false,
+  },
+);
 
 function Details({ countryStr }: CountryDetailsProps) {
   //   const router = useRouter();
@@ -145,7 +153,7 @@ function Details({ countryStr }: CountryDetailsProps) {
 
     if (noData) {
       const list = await apiGetBorderingCountryList(country.borders);
-      console.log(typeof list);
+      // console.log(typeof list);
       if (typeof list === "string") {
         setBorderingCountryList(list);
       } else {
@@ -315,21 +323,16 @@ function Details({ countryStr }: CountryDetailsProps) {
     </>
   );
 
-  const RENDER_LOADING_PLACEHOLDER = (label: string) => (
-    <div className="flex items-center gap-4 p-8 text-xl font-semibold">
-      <CircularProgress size={4} />
-      {label}
-    </div>
-  );
-
   const RENDER_BORDERING_COUNTRIES = () => {
     if (!country.borders) return "";
 
     if (typeof borderingCountryList === "string") {
-      return RENDER_LOADING_PLACEHOLDER(borderingCountryList);
+      return <LoadingPlaceholderDetails label={borderingCountryList} />;
     } else if (borderingCountryList.length === 0) {
-      return RENDER_LOADING_PLACEHOLDER(
-        `Loading bordering countries of ${country.name.common}...`,
+      return (
+        <LoadingPlaceholderDetails
+          label={`Loading bordering countries of ${country.name.common}...`}
+        />
       );
     } else {
       return (
@@ -347,10 +350,12 @@ function Details({ countryStr }: CountryDetailsProps) {
   const RENDER_MUTUAL_SUBREGION_COUNTRIES = () => {
     if (!country.subregion) return "";
     if (typeof mutualSubregionCountryList === "string") {
-      return RENDER_LOADING_PLACEHOLDER(mutualSubregionCountryList);
+      return <LoadingPlaceholderDetails label={mutualSubregionCountryList} />;
     } else if (mutualSubregionCountryList.length === 0) {
-      return RENDER_LOADING_PLACEHOLDER(
-        `Loading countries in ${country.subregion}...`,
+      return (
+        <LoadingPlaceholderDetails
+          label={`Loading countries in ${country.subregion}...`}
+        />
       );
     } else {
       return (
@@ -384,7 +389,7 @@ function Details({ countryStr }: CountryDetailsProps) {
 
   function RENDER_PAGINATION() {
     return (
-      <div className="flex w-full flex-col justify-between gap-4 px-8 sm:flex-row">
+      <div className="flex w-full flex-col justify-between gap-x-8 gap-y-4 px-8 sm:flex-row">
         {RENDER_PAGING_BUTTON("prev")}
         {RENDER_PAGING_BUTTON("next")}
       </div>
@@ -410,6 +415,12 @@ function Details({ countryStr }: CountryDetailsProps) {
             .join(", ")}`}
         />
         <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+          integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+          crossOrigin=""
+        />
       </Head>
       <Header />
       <div className="flex flex-col gap-8 pb-16">
@@ -428,6 +439,7 @@ function Details({ countryStr }: CountryDetailsProps) {
           {RENDER_INFO_POLITIC()}
         </div>
         {RENDER_MAPS()}
+        {<RENDER_MAP4REAL country={country} />}
         {RENDER_BORDERING_COUNTRIES()}
         {RENDER_MUTUAL_SUBREGION_COUNTRIES()}
         {countryState.list.length !== 0 && RENDER_PAGINATION()}
