@@ -1,3 +1,4 @@
+import { apiFetchNoCors } from "./../helpers/Fetchers";
 import { Country } from "../data/models/Country";
 import {
   GITHUB_GEO_COUNTRY_BASE_URL,
@@ -69,14 +70,15 @@ export const apiGetMutualSubregionCountryList = async (
   }
 };
 
-export const apiGetGeoCountry = async (
-  cca3: string,
-): Promise<any[] | string> => {
+export const apiGetGeoCountry = async (cca3: string): Promise<any | string> => {
   try {
-    const data = await apiFetch<any>(
-      `${GITHUB_GEO_COUNTRY_BASE_URL}/${cca3.toLowerCase()}.geo.json`,
-    ).then((rawData) => JSON.parse(rawData));
-    return "";
+    const data = await apiFetchNoCors<any>(
+      `https://cors-anywhere.herokuapp.com/${GITHUB_GEO_COUNTRY_BASE_URL}/${cca3.toLowerCase()}.geo.json`,
+    ).then((rawData) => {
+      // console.log(rawData);
+      return rawData;
+    });
+    return data;
   } catch (error) {
     return error + "";
   }

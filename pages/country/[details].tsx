@@ -1,3 +1,4 @@
+import { GeoJsonObject } from "geojson";
 import _ from "lodash";
 import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
@@ -102,11 +103,25 @@ function Details({ countryStr }: CountryDetailsProps) {
     Country[] | string
   >([]);
 
+  const [geoJsonData, setGeoJsonData] = useState<GeoJsonObject | string>(
+    "loading...",
+  );
+
   useEffect(() => {
     scrollToTop();
     loadBorderingCountryList();
     loadMutualSubregionCountryList();
     // countryAction.setSearchKeyword("");
+    // async function loadGeoCountry() {
+    //   const data = await apiGetGeoCountry(country.cca3);
+    //   console.log("data " + data);
+    //   if (typeof data === "string") setGeoJsonData(data);
+    //   else setGeoJsonData(JSON.parse(JSON.stringify(data)) as GeoJsonObject);
+    //   const xd: GeoJsonObject = data as GeoJsonObject;
+    //   // console.log(_.isEqual(gjo, xd));
+    // }
+
+    // loadGeoCountry();
 
     document.addEventListener("keydown", toggleSearchModalEvent);
     return () => {
@@ -439,7 +454,13 @@ function Details({ countryStr }: CountryDetailsProps) {
           {RENDER_INFO_POLITIC()}
         </div>
         {RENDER_MAPS()}
-        {<RENDER_MAP4REAL country={country} />}
+        {
+          <RENDER_MAP4REAL
+            key={country.cca2}
+            country={country}
+            // gjo={geoJsonData}
+          />
+        }
         {RENDER_BORDERING_COUNTRIES()}
         {RENDER_MUTUAL_SUBREGION_COUNTRIES()}
         {countryState.list.length !== 0 && RENDER_PAGINATION()}
