@@ -83,7 +83,7 @@ function MapSectionDetails({ country }: { country: Country }) {
       >
         Maps of {country.name.common}
       </h2>
-      <div className="flex w-full flex-col gap-2 rounded-lg rounded-tr-lg bg-base-300/50 p-8 sm:w-auto">
+      <div className="flex w-full flex-col gap-2 rounded-b-lg rounded-t-none rounded-tr-lg bg-base-300/50 p-8 sm:w-auto">
         <div className="flex flex-col gap-8 sm:flex-row sm:flex-wrap">
           <a
             className="hover:bg-content-base btn-outline btn h-32 grow

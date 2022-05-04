@@ -405,7 +405,7 @@ function Details({ countryStr }: CountryDetailsProps) {
             countryName.official
           }; A country in ${
             country.subregion
-          }; With the population of ${country.population.toLocaleString()} people, Who speak ${country.languages
+          }; With the population of ${country.population.toLocaleString()} people and speak ${country.languages
             .map((e) => e.name)
             .join(", ")}`}
         />

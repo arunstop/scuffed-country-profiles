@@ -84,7 +84,7 @@ function SearchModal() {
   const RENDER_COUNTRY_LIST = () => {
     if (noData) {
       return (
-        <span className="inline-flex h-24 items-center justify-center gap-4 mx-auto">
+        <span className="inline-flex h-24 items-center justify-center gap-4 mx-auto text-xl font-bold">
           <CircularProgress size={2} />
           <span>Loading countries...</span>
         </span>
@@ -93,7 +93,7 @@ function SearchModal() {
     // when data is loaded but empty
     else if (searchedCountryList.length == 0) {
       return (
-        <div className="inline-flex h-24 items-center justify-center gap-4 mx-auto">
+        <div className="inline-flex h-24 items-center justify-center gap-4 mx-auto text-xl font-bold">
           No result found.
         </div>
       );
