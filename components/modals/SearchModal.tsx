@@ -64,21 +64,27 @@ function SearchModal() {
     [(e) => e.name.common],
     ["asc"],
   ).filter((cItem) => {
-    return keyword.length < 2
+    const trimmedKeyword = keyword.trim().toLowerCase();
+    return trimmedKeyword.length < 2
       ? true
       : // common name
-        cItem.name.common.toLowerCase().includes(keyword) ||
+        cItem.name.common.toLowerCase().includes(trimmedKeyword) ||
           // official name
-          cItem.name.official.toLowerCase().includes(keyword) ||
+          cItem.name.official.toLowerCase().includes(trimmedKeyword) ||
           // native names
           cItem.name.nativeName
             .map((e) => `${e.common} · ${e.official}`)
             .join(" — ")
             .toLowerCase()
-            .includes(keyword) ||
+            .includes(trimmedKeyword) ||
           // more names
-          cItem.altSpellings.join(" — ").toLowerCase().includes(keyword) ||
-          (cItem.capital?.join(" — ") || "").toLowerCase().includes(keyword);
+          cItem.altSpellings
+            .join(" — ")
+            .toLowerCase()
+            .includes(trimmedKeyword) ||
+          (cItem.capital?.join(" — ") || "")
+            .toLowerCase()
+            .includes(trimmedKeyword);
   });
 
   const RENDER_COUNTRY_LIST = () => {
@@ -182,7 +188,7 @@ function SearchModal() {
                 type="text"
                 placeholder="Name / Name of capital..."
                 onChange={(e) => {
-                  setKeyword(e.target.value.trim().toLowerCase());
+                  setKeyword(e.target.value);
                 }}
                 disabled={noData}
               />

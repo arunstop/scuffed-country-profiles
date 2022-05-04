@@ -45,7 +45,7 @@ function RealMapSectionDetails({ country }: { country: Country }) {
               <MapContainer
                 className="h-96 w-screen"
                 center={capitalLtLng}
-                zoom={7}
+                zoom={5}
                 scrollWheelZoom={false}
               >
                 <TileLayer
