@@ -32,7 +32,7 @@ function RealMapSectionDetails({ country }: { country: Country }) {
   return (
     <>
       <div
-        className="flex flex-wrap items-start w-full 
+        className="flex flex-col items-start w-full 
       justify-start gap-8 px-8 sm:flex-row "
       >
         <div className="flex w-full min-h-[12rem] p-8 bg-base-300/50 rounded-lg overflow-hidden">

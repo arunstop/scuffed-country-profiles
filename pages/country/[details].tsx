@@ -10,7 +10,6 @@ import { ImFontSize, ImHammer2 } from "react-icons/im";
 import { MdPhoneInTalk } from "react-icons/md";
 import InfoCardDetails from "../../components/details/InfoCardDetails";
 import LoadingPlaceholderDetails from "../../components/details/LoadingPlaceholderDetails";
-import MapSectionDetails from "../../components/details/MapSectionDetails";
 import PagingButtonDetails from "../../components/details/PagingButtonDetails";
 import RelatedSectionDetails from "../../components/details/RelatedSectionDetails";
 import Footer from "../../components/Footer";
@@ -59,8 +58,8 @@ export const getServerSideProps: GetServerSideProps<
   };
 };
 
-const RENDER_MAP4REAL = dynamic(
-  () => import("../../components/details/sMapSectionDetails"),
+const LazyMapSectionDetails = dynamic(
+  () => import("../../components/details/MapSectionDetails"),
   {
     ssr: false,
   },
@@ -412,7 +411,13 @@ function Details({ countryStr }: CountryDetailsProps) {
   }
 
   function RENDER_MAPS() {
-    return <MapSectionDetails country={country} />;
+    return (
+      <LazyMapSectionDetails
+        key={country.cca2}
+        country={country}
+        // gjo={geoJsonData}
+      />
+    );
   }
 
   return (
@@ -454,13 +459,6 @@ function Details({ countryStr }: CountryDetailsProps) {
           {RENDER_INFO_POLITIC()}
         </div>
         {RENDER_MAPS()}
-        {
-          <RENDER_MAP4REAL
-            key={country.cca2}
-            country={country}
-            // gjo={geoJsonData}
-          />
-        }
         {RENDER_BORDERING_COUNTRIES()}
         {RENDER_MUTUAL_SUBREGION_COUNTRIES()}
         {countryState.list.length !== 0 && RENDER_PAGINATION()}
