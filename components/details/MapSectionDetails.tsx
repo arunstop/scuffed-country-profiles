@@ -39,6 +39,7 @@ function MapSectionDetails({ country }: { country: Country }) {
     setFullscreen(value);
     const mapContainer = document.getElementById("map-container");
     // fullscreen mode
+    mapContainer?.classList.toggle("rounded-lg");
     if (value === true) {
       mapContainer?.classList.remove("h-96");
       mapContainer?.classList.add("h-screen");
@@ -51,7 +52,7 @@ function MapSectionDetails({ country }: { country: Country }) {
   function RENDER_MAP() {
     return (
       <div
-        className={`w-full ${
+        className={`w-full rounded-lg ${
           fullscreen ? "fixed z-10 inset-0" : "relative"
         } transition-all`}
       >
