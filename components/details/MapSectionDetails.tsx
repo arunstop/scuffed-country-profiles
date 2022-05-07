@@ -79,11 +79,11 @@ function MapSectionDetails({ country }: { country: Country }) {
         </MapContainer>
         <div
           className="absolute top-0 right-0 mt-[10px] mr-[10px] flex flex-col 
-          overflow-hidden rounded-md divide-slate-400 divide-y-2"
+          divide-y-2 divide-slate-400 overflow-hidden rounded-md"
         >
           {/* <div> */}
           <button
-            className="btn btn-sm btn-square rounded-none"
+            className="btn btn-square btn-sm rounded-none"
             title={`${fullscreen ? "Exit fullscreen" : "Fullscreen"}`}
             onClick={() => {
               toggleFullscreen(!fullscreen);
@@ -157,13 +157,10 @@ function MapSectionDetails({ country }: { country: Country }) {
   return (
     <>
       <div className="flex flex-col items-start px-8">
-        <h2
-          className="self-start rounded-t-lg border-b-2 border-base-content/10 bg-base-300
-             p-4 text-2xl font-bold"
-        >
+        <h2 className="self-start rounded-t-lg border-b-2 border-base-content/10 bg-base-300 p-4 text-2xl font-bold">
           Maps of {country.name.common}
         </h2>
-        <div className="flex flex-col w-full min-h-[12rem] p-8 bg-base-300/50 rounded-lg rounded-t-none rounded-r-lg overflow-hidden gap-8">
+        <div className="flex min-h-[12rem] w-full flex-col gap-8 overflow-hidden rounded-lg rounded-tl-none bg-base-300/50 p-8">
           {typeof geoJsonData === "string" ? (
             <LoadingPlaceholderDetails
               label={`Loading map of ${country.name.common}...`}
