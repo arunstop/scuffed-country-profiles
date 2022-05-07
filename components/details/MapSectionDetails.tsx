@@ -41,9 +41,11 @@ function MapSectionDetails({ country }: { country: Country }) {
     // fullscreen mode
     mapContainer?.classList.toggle("rounded-lg");
     if (value === true) {
+      map?.scrollWheelZoom.enable();
       mapContainer?.classList.remove("h-96");
       mapContainer?.classList.add("h-screen");
     } else {
+      map?.scrollWheelZoom.disable();
       mapContainer?.classList.remove("h-screen");
       mapContainer?.classList.add("h-96");
     }
