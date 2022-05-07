@@ -1,6 +1,7 @@
 import { GeoJsonObject } from "geojson";
 import { LatLngExpression } from "leaflet";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
+import { MdFullscreen } from "react-icons/md";
 import { SiGooglemaps, SiOpenstreetmap } from "react-icons/si";
 import { GeoJSON, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { apiGetGeoCountry } from "../../utils/apis/CountryApi";
@@ -12,7 +13,7 @@ function MapSectionDetails({ country }: { country: Country }) {
   const [geoJsonData, setGeoJsonData] = useState<GeoJsonObject | string>();
 
   useEffect(() => {
-    loadGeoCountry();
+    // loadGeoCountry();
     return () => {};
   }, []);
 
@@ -30,6 +31,77 @@ function MapSectionDetails({ country }: { country: Country }) {
     country.capitalInfo.latlng[0],
     country.capitalInfo.latlng[1],
   ];
+
+  function RENDER_MAP() {
+    return (
+      <div className="w-full relative">
+        <MapContainer
+          className="h-96 w-full rounded-lg overflow-hidden z-0"
+          center={capitalLtLng}
+          zoom={5}
+          scrollWheelZoom={false}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <Marker position={capitalLtLng}>
+            <Popup>{country.capital[0]}</Popup>
+          </Marker>
+          <GeoJSON key={Math.random()} data={geoJsonData as GeoJsonObject} />
+          {/* <GeoJSON data={geoJsonData as GeoJsonObject} /> */}
+        </MapContainer>
+        <button
+          className="btn btn-sm btn-square absolute top-0 right-0 mt-[10px] mr-[10px]"
+          title="Fullscreen"
+        >
+          <MdFullscreen className="text-2xl" />
+        </button>
+      </div>
+    );
+  }
+
+  function RENDER_EXTERNAL_MAP_LINK({
+    url,
+    title,
+    icon,
+  }: {
+    url: string;
+    title: string;
+    icon: ReactNode;
+  }) {
+    return (
+      <a
+        className="hover:bg-content-base btn-outline btn grow  gap-4 rounded-lg normal-case sm:grow-0"
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+        title="Open in Open Street Maps"
+        tabIndex={-1}
+      >
+        {icon}
+        <span className="text-lg">{title}</span>
+      </a>
+    );
+  }
+
+  function RENDER_OPTIONS() {
+    return (
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+        {RENDER_EXTERNAL_MAP_LINK({
+          url: country.maps.googleMaps,
+          title: "Open in Google Maps",
+          icon: <SiGooglemaps className="pointer-events-none text-2xl" />,
+        })}
+        {RENDER_EXTERNAL_MAP_LINK({
+          url: country.maps.openStreetMaps,
+          title: "Open in Open Street Maps",
+          icon: <SiOpenstreetmap className="pointer-events-none text-2xl" />,
+        })}
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="flex flex-col items-start px-8">
@@ -45,52 +117,9 @@ function MapSectionDetails({ country }: { country: Country }) {
               label={`Loading map of ${country.name.common}...`}
             />
           ) : (
-            <>
-              <MapContainer
-                className="h-96 w-full rounded-lg overflow-hidden z-0"
-                center={capitalLtLng}
-                zoom={5}
-                scrollWheelZoom={false}
-              >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={capitalLtLng}>
-                  <Popup>{country.capital[0]}</Popup>
-                </Marker>
-                <GeoJSON
-                  key={Math.random()}
-                  data={geoJsonData as GeoJsonObject}
-                />
-                {/* <GeoJSON data={geoJsonData as GeoJsonObject} /> */}
-              </MapContainer>
-              <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-                <a
-                  className="hover:bg-content-base btn-outline btn grow gap-4 rounded-lg normal-case sm:grow-0"
-                  href={country.maps.googleMaps}
-                  target="_blank"
-                  rel="noreferrer"
-                  title="Open in Google Maps"
-                  tabIndex={-1}
-                >
-                  <SiGooglemaps className="pointer-events-none text-2xl" />
-                  <span className="text-lg">Open in Google Maps</span>
-                </a>
-                <a
-                  className="hover:bg-content-base btn-outline btn grow  gap-4 rounded-lg normal-case sm:grow-0"
-                  href={country.maps.openStreetMaps}
-                  target="_blank"
-                  rel="noreferrer"
-                  title="Open in Open Street Maps"
-                  tabIndex={-1}
-                >
-                  <SiOpenstreetmap className="pointer-events-none text-2xl" />
-                  <span className="text-lg">Open in Open Street Maps</span>
-                </a>
-              </div>
-            </>
+            RENDER_MAP()
           )}
+          {RENDER_OPTIONS()}
         </div>
       </div>
     </>

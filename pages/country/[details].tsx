@@ -12,6 +12,7 @@ import InfoCardDetails from "../../components/details/InfoCardDetails";
 import LoadingPlaceholderDetails from "../../components/details/LoadingPlaceholderDetails";
 import PagingButtonDetails from "../../components/details/PagingButtonDetails";
 import RelatedSectionDetails from "../../components/details/RelatedSectionDetails";
+import FetchFailedPlaceholder from "../../components/FetchFailedPlaceholder";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import ImagePreviewModal from "../../components/modals/ImagePreviewModal";
@@ -164,6 +165,7 @@ function Details({ countryStr }: CountryDetailsProps) {
     // check if countryList exist in state
     // and load from API if it does not
     // or simply load it from the sate if it does.
+    setBorderingCountryList([]);
 
     if (noData) {
       const list = await apiGetBorderingCountryList(country.borders);
@@ -184,6 +186,7 @@ function Details({ countryStr }: CountryDetailsProps) {
     // check if countryList exist in state
     // and load from API if it does not
     // or simply load it from the state if it does.
+    setMutualSubregionCountryList([]);
 
     if (noData) {
       const list = await apiGetMutualSubregionCountryList(country.subregion);
@@ -341,7 +344,16 @@ function Details({ countryStr }: CountryDetailsProps) {
     if (!country.borders) return "";
 
     if (typeof borderingCountryList === "string") {
-      return <LoadingPlaceholderDetails label={borderingCountryList} />;
+      return (
+        <div className="px-8">
+          <FetchFailedPlaceholder
+            label={`Failed to load bordering countries : ${borderingCountryList}`}
+            btnAction={() => {
+              loadBorderingCountryList();
+            }}
+          />
+        </div>
+      );
     } else if (borderingCountryList.length === 0) {
       return (
         <LoadingPlaceholderDetails
@@ -363,8 +375,18 @@ function Details({ countryStr }: CountryDetailsProps) {
 
   const RENDER_MUTUAL_SUBREGION_COUNTRIES = () => {
     if (!country.subregion) return "";
+    // if fetching failed
     if (typeof mutualSubregionCountryList === "string") {
-      return <LoadingPlaceholderDetails label={mutualSubregionCountryList} />;
+      return (
+        <div className="px-8">
+          <FetchFailedPlaceholder
+            label={`Failed to load subregion countries : ${mutualSubregionCountryList}`}
+            btnAction={() => {
+              loadMutualSubregionCountryList();
+            }}
+          />
+        </div>
+      );
     } else if (mutualSubregionCountryList.length === 0) {
       return (
         <LoadingPlaceholderDetails
