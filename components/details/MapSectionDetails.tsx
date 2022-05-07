@@ -1,7 +1,8 @@
 import { GeoJsonObject } from "geojson";
-import { LatLngExpression } from "leaflet";
+import { LatLngExpression, Map } from "leaflet";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import React, { ReactNode, useEffect, useState } from "react";
-import { MdFullscreen } from "react-icons/md";
+import { MdFullscreen, MdFullscreenExit } from "react-icons/md";
 import { SiGooglemaps, SiOpenstreetmap } from "react-icons/si";
 import { GeoJSON, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { apiGetGeoCountry } from "../../utils/apis/CountryApi";
@@ -11,9 +12,11 @@ import LoadingPlaceholderDetails from "./LoadingPlaceholderDetails";
 
 function MapSectionDetails({ country }: { country: Country }) {
   const [geoJsonData, setGeoJsonData] = useState<GeoJsonObject | string>();
+  const [map, setMap] = useState<Map | null>(null);
+  const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
-    // loadGeoCountry();
+    loadGeoCountry();
     return () => {};
   }, []);
 
@@ -32,14 +35,34 @@ function MapSectionDetails({ country }: { country: Country }) {
     country.capitalInfo.latlng[1],
   ];
 
+  function toggleFullscreen(value: boolean) {
+    setFullscreen(value);
+    const mapContainer = document.getElementById("map-container");
+    // fullscreen mode
+    if (value === true) {
+      mapContainer?.classList.remove("h-96");
+      mapContainer?.classList.add("h-screen");
+    } else {
+      mapContainer?.classList.remove("h-screen");
+      mapContainer?.classList.add("h-96");
+    }
+  }
+
   function RENDER_MAP() {
     return (
-      <div className="w-full relative">
+      <div
+        className={`w-full ${
+          fullscreen ? "fixed z-10 inset-0" : "relative"
+        } transition-all`}
+      >
         <MapContainer
-          className="h-96 w-full rounded-lg overflow-hidden z-0"
+          id="map-container"
+          key={country.cca3}
+          className={`w-full rounded-lg overflow-hidden z-0 h-96 transition-all`}
           center={capitalLtLng}
           zoom={5}
           scrollWheelZoom={false}
+          ref={setMap}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -51,12 +74,38 @@ function MapSectionDetails({ country }: { country: Country }) {
           <GeoJSON key={Math.random()} data={geoJsonData as GeoJsonObject} />
           {/* <GeoJSON data={geoJsonData as GeoJsonObject} /> */}
         </MapContainer>
-        <button
-          className="btn btn-sm btn-square absolute top-0 right-0 mt-[10px] mr-[10px]"
-          title="Fullscreen"
+        <div
+          className="absolute top-0 right-0 mt-[10px] mr-[10px] flex flex-col 
+          overflow-hidden rounded-md divide-slate-400 divide-y-2"
         >
-          <MdFullscreen className="text-2xl" />
-        </button>
+          {/* <div> */}
+          <button
+            className="btn btn-sm btn-square rounded-none"
+            title={`${fullscreen ? "Exit fullscreen" : "Fullscreen"}`}
+            onClick={() => {
+              toggleFullscreen(!fullscreen);
+            }}
+          >
+            {fullscreen ? (
+              <MdFullscreenExit className="text-2xl" />
+            ) : (
+              <MdFullscreen className="text-2xl" />
+            )}
+          </button>
+          {/* </div> */}
+          {/* <div> */}
+          <button
+            className={`btn btn-sm btn-square rounded-none`}
+            title={`Reset position`}
+            onClick={() => {
+              // console.log(map);
+              map?.setView(capitalLtLng, 5);
+            }}
+          >
+            <FaMapMarkerAlt className="text-xl" />
+          </button>
+          {/* </div> */}
+        </div>
       </div>
     );
   }
