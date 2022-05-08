@@ -1,7 +1,5 @@
-import { GeoJsonObject } from "geojson";
 import _ from "lodash";
 import { GetServerSideProps } from "next";
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import { BiWorld } from "react-icons/bi";
@@ -10,6 +8,7 @@ import { ImFontSize, ImHammer2 } from "react-icons/im";
 import { MdPhoneInTalk } from "react-icons/md";
 import InfoCardDetails from "../../components/details/InfoCardDetails";
 import LoadingPlaceholderDetails from "../../components/details/LoadingPlaceholderDetails";
+import MapSectionDetails from "../../components/details/MapSectionDetails";
 import PagingButtonDetails from "../../components/details/PagingButtonDetails";
 import RelatedSectionDetails from "../../components/details/RelatedSectionDetails";
 import FetchFailedPlaceholder from "../../components/FetchFailedPlaceholder";
@@ -36,6 +35,8 @@ interface CountryDetailsProps {
   countryStr: string;
 }
 
+type RelatedCountryListProps = string | Country[];
+
 export const getServerSideProps: GetServerSideProps<
   CountryDetailsProps
 > = async (context) => {
@@ -59,12 +60,12 @@ export const getServerSideProps: GetServerSideProps<
   };
 };
 
-const LazyMapSectionDetails = dynamic(
-  () => import("../../components/details/MapSectionDetails"),
-  {
-    ssr: false,
-  },
-);
+// const LazyMapSectionDetails = dynamic(
+//   () => import("../../components/details/MapSectionDetails"),
+//   {
+//     ssr: false,
+//   },
+// );
 
 function Details({ countryStr }: CountryDetailsProps) {
   //   const router = useRouter();
@@ -74,9 +75,6 @@ function Details({ countryStr }: CountryDetailsProps) {
   // getting name list
   const country = toCountry(JSON.parse(countryStr)[0]);
   const countryName = country.name;
-  const nameList = countryName.nativeName.filter(
-    (nameItem) => nameItem.official !== countryName.official,
-  );
 
   // console.log(
   //   ["US", "USA", "United States of America"]
@@ -102,10 +100,6 @@ function Details({ countryStr }: CountryDetailsProps) {
   const [mutualSubregionCountryList, setMutualSubregionCountryList] = useState<
     Country[] | string
   >([]);
-
-  const [geoJsonData, setGeoJsonData] = useState<GeoJsonObject | string>(
-    "loading...",
-  );
 
   useEffect(() => {
     scrollToTop();
@@ -205,241 +199,8 @@ function Details({ countryStr }: CountryDetailsProps) {
     }
   }
 
-  const yesOrNo = (value: boolean): string => (value === true ? "YES" : "NO");
-
-  // render parts
-  const RENDER_FLAG = () => (
-    <div className="flex flex-col justify-center gap-4 self-center">
-      <label
-        htmlFor="img-preview-modal"
-        role={"button"}
-        className="rounded-lg shadow-lg ring-4 ring-slate-600/30 w-full sm:max-w-sm overflow-hidden"
-      >
-        <img className="w-full" src={country.flags.svg} />
-      </label>
-
-      <h1 className="text-4xl font-bold">{country.name.common}</h1>
-    </div>
-  );
-
-  const RENDER_INFO_NAMING = () => (
-    <InfoCardDetails
-      icon={<ImFontSize />}
-      title="Naming"
-      details={[
-        {
-          lead: "Common :",
-          desc: country.name.common,
-        },
-        {
-          lead: "Official :",
-          desc: country.name.official,
-        },
-        {
-          lead: "Native name :",
-          desc: [
-            countryName.official,
-            ...nameList.map((nameItem) => nameItem.official),
-          ].join(" — "),
-        },
-        {
-          lead: "Alternative Spellings :",
-          desc: country.altSpellings.join(", "),
-        },
-        {
-          lead: "Name in other languages :",
-          desc: country.translations.length + "",
-        },
-      ]}
-    />
-  );
-
-  const RENDER_INFO_GEOGRAPHIC = () => (
-    <InfoCardDetails
-      icon={<BiWorld />}
-      title="Geographic"
-      details={[
-        { lead: "Region :", desc: country.region },
-        { lead: "Subregion :", desc: country.subregion || "-" },
-        { lead: "Land area :", desc: country.area.toLocaleString() + " km^" },
-        { lead: "Landlocked :", desc: yesOrNo(country.landlocked) },
-        {
-          lead: "Borders :",
-          desc: !country.borders
-            ? "-"
-            : typeof borderingCountryList === "string"
-            ? _.sortBy(country.borders).join(", ")
-            : borderingCountryList.map((e, idx) => e.name.common).join(", ") ||
-              "-",
-        },
-        { lead: "Lat-Long :", desc: country.latlng.join(", ") },
-        { lead: "Timezone(s) :", desc: country.timezones.join(", ") },
-      ]}
-    />
-  );
-
-  const RENDER_INFO_POLITIC = () => (
-    <InfoCardDetails
-      icon={<ImHammer2 />}
-      title="Politic"
-      details={[
-        { lead: "Independent :", desc: yesOrNo(country.independent) },
-        { lead: "Status :", desc: country.status.toUpperCase() },
-        { lead: "United Nations member :", desc: yesOrNo(country.unMember) },
-      ]}
-    />
-  );
-
-  const RENDER_INFO_GENERIC = () => (
-    <>
-      <InfoCardDetails
-        icon={<BsFileText />}
-        title="Generic"
-        details={[
-          { lead: "Capital :", desc: country.capital?.join(", ") || "-" },
-          {
-            lead: "Currency :",
-            desc: country.currencies
-              ?.map(
-                (currItem) =>
-                  `${currItem.name} (${currItem.code} / ${currItem.symbol})`,
-              )
-              .join(" — "),
-          },
-          { lead: "Population :", desc: country.population.toLocaleString() },
-          {
-            lead: "Start of the week :",
-            desc:
-              country.startOfWeek[0].toUpperCase() +
-              country.startOfWeek.slice(1),
-          },
-        ]}
-      />
-    </>
-  );
-
-  const RENDER_INFO_COMMUNICATION = () => (
-    <>
-      <InfoCardDetails
-        icon={<MdPhoneInTalk />}
-        title="Communication"
-        details={[
-          {
-            lead: "Language(s) :",
-            desc: country.languages.map((e) => e.name).join(", ") || "-",
-          },
-          {
-            lead: "International direct dialing (IDD) :",
-            desc: `${country.idd.root}${
-              country.idd.suffixes ? country.idd.suffixes[0] : "-"
-            }`,
-          },
-          { lead: "Top level domain :", desc: country.tld.join(" — ") },
-        ]}
-      />
-    </>
-  );
-
-  const RENDER_BORDERING_COUNTRIES = () => {
-    if (!country.borders) return "";
-
-    if (typeof borderingCountryList === "string") {
-      return (
-        <div className="px-8">
-          <FetchFailedPlaceholder
-            label={`Failed to load bordering countries : ${borderingCountryList}`}
-            btnAction={() => {
-              loadBorderingCountryList();
-            }}
-          />
-        </div>
-      );
-    } else if (borderingCountryList.length === 0) {
-      return (
-        <LoadingPlaceholderDetails
-          label={`Loading bordering countries of ${country.name.common}...`}
-        />
-      );
-    } else {
-      return (
-        <RelatedSectionDetails
-          title={`Bordering ${
-            country.borders.length > 1 ? "Countries" : "Country"
-          }`}
-          country={country}
-          list={borderingCountryList}
-        />
-      );
-    }
-  };
-
-  const RENDER_MUTUAL_SUBREGION_COUNTRIES = () => {
-    if (!country.subregion) return "";
-    // if fetching failed
-    if (typeof mutualSubregionCountryList === "string") {
-      return (
-        <div className="px-8">
-          <FetchFailedPlaceholder
-            label={`Failed to load subregion countries : ${mutualSubregionCountryList}`}
-            btnAction={() => {
-              loadMutualSubregionCountryList();
-            }}
-          />
-        </div>
-      );
-    } else if (mutualSubregionCountryList.length === 0) {
-      return (
-        <LoadingPlaceholderDetails
-          label={`Loading countries in ${country.subregion}...`}
-        />
-      );
-    } else {
-      return (
-        <RelatedSectionDetails
-          title={`Countries in ${country.subregion}`}
-          country={country}
-          list={mutualSubregionCountryList}
-        />
-      );
-    }
-  };
-
-  function RENDER_PAGING_BUTTON(to: "prev" | "next") {
-    const pagingDetails = details(country.cca2);
-
-    const prevCountry = countryState.list.find(
-      (e) => e.cca2 === pagingDetails.prev,
-    );
-    const nextCountry = countryState.list.find(
-      (e) => e.cca2 === pagingDetails.next,
-    );
-    const prev = to === "prev";
-    const next = to === "next";
-
-    const targetCountry = prev ? prevCountry : nextCountry;
-    if (!targetCountry) return <div className="flex-1"></div>;
-    return (
-      <PagingButtonDetails isPrevBtn={prev} targetCountry={targetCountry} />
-    );
-  }
-
-  function RENDER_PAGINATION() {
-    return (
-      <div className="flex w-full flex-col justify-between gap-x-8 gap-y-4 px-8 sm:flex-row">
-        {RENDER_PAGING_BUTTON("prev")}
-        {RENDER_PAGING_BUTTON("next")}
-      </div>
-    );
-  }
-
-  function RENDER_MAPS() {
-    return (
-      <LazyMapSectionDetails
-        key={country.cca2}
-        country={country}
-        // gjo={geoJsonData}
-      />
-    );
+  function RENDER_MAP_SECTION() {
+    return <MapSectionDetails country={country} />;
   }
 
   return (
@@ -473,22 +234,299 @@ function Details({ countryStr }: CountryDetailsProps) {
           alt={country.name.common}
         />
         <div className="flex flex-wrap items-start justify-start gap-8 p-8 sm:flex-row">
-          {RENDER_FLAG()}
-          {RENDER_INFO_NAMING()}
-          {RENDER_INFO_GENERIC()}
-          {RENDER_INFO_GEOGRAPHIC()}
-          {RENDER_INFO_COMMUNICATION()}
-          {RENDER_INFO_POLITIC()}
+          {RENDER_FLAG(country)}
+          {RENDER_INFO_NAMING(country)}
+          {RENDER_INFO_GENERIC(country)}
+          {RENDER_INFO_GEOGRAPHIC({
+            country: country,
+            borderingCountryList: borderingCountryList,
+          })}
+          {RENDER_INFO_COMMUNICATION(country)}
+          {RENDER_INFO_POLITIC(country)}
         </div>
-        {RENDER_MAPS()}
-        {RENDER_BORDERING_COUNTRIES()}
-        {RENDER_MUTUAL_SUBREGION_COUNTRIES()}
-        {countryState.list.length !== 0 && RENDER_PAGINATION()}
+        {RENDER_MAP_SECTION()}
+        {RENDER_BORDERING_COUNTRIES({
+          country: country,
+          borderingCountryList: borderingCountryList,
+          reloadAction: () => loadBorderingCountryList(),
+        })}
+        {RENDER_MUTUAL_SUBREGION_COUNTRIES({
+          country: country,
+          mutualSubregionCountryList: mutualSubregionCountryList,
+          reloadAction: () => loadMutualSubregionCountryList(),
+        })}
+        {countryState.list.length !== 0 &&
+          RENDER_PAGINATION({
+            countryList: countryState.list,
+            pagingDetails: details(country.cca2),
+          })}
       </div>
       <Footer />
       <SearchModal />
       <ImagePreviewModal country={country} />
     </>
+  );
+}
+
+const yesOrNo = (value: boolean): string => (value === true ? "YES" : "NO");
+
+// render parts
+const RENDER_FLAG = (country: Country) => (
+  <div className="flex flex-col justify-center gap-4 self-center">
+    <label
+      htmlFor="img-preview-modal"
+      role={"button"}
+      className="rounded-lg shadow-lg ring-4 ring-slate-600/30 w-full sm:max-w-sm overflow-hidden"
+    >
+      <img className="w-full" src={country.flags.svg} />
+    </label>
+
+    <h1 className="text-4xl font-bold">{country.name.common}</h1>
+  </div>
+);
+
+const RENDER_INFO_NAMING = (country: Country) => {
+  const name = country.name;
+  const nameList = name.nativeName.filter(
+    (nameItem) => nameItem.official !== name.official,
+  );
+  return (
+    <InfoCardDetails
+      icon={<ImFontSize />}
+      title="Naming"
+      details={[
+        {
+          lead: "Common :",
+          desc: name.common,
+        },
+        {
+          lead: "Official :",
+          desc: name.official,
+        },
+        {
+          lead: "Native name :",
+          desc: [
+            name.official,
+            ...nameList.map((nameItem) => nameItem.official),
+          ].join(" — "),
+        },
+        {
+          lead: "Alternative Spellings :",
+          desc: country.altSpellings.join(", "),
+        },
+        {
+          lead: "Name in other languages :",
+          desc: country.translations.length + "",
+        },
+      ]}
+    />
+  );
+};
+
+const RENDER_INFO_GEOGRAPHIC = ({
+  country,
+  borderingCountryList,
+}: {
+  country: Country;
+  borderingCountryList: RelatedCountryListProps;
+}) => (
+  <InfoCardDetails
+    icon={<BiWorld />}
+    title="Geographic"
+    details={[
+      { lead: "Region :", desc: country.region },
+      { lead: "Subregion :", desc: country.subregion || "-" },
+      { lead: "Land area :", desc: country.area.toLocaleString() + " km^" },
+      { lead: "Landlocked :", desc: yesOrNo(country.landlocked) },
+      {
+        lead: "Borders :",
+        desc: !country.borders
+          ? "-"
+          : typeof borderingCountryList === "string"
+          ? _.sortBy(country.borders).join(", ")
+          : borderingCountryList.map((e, idx) => e.name.common).join(", ") ||
+            "-",
+      },
+      { lead: "Lat-Long :", desc: country.latlng.join(", ") },
+      { lead: "Timezone(s) :", desc: country.timezones.join(", ") },
+    ]}
+  />
+);
+
+const RENDER_INFO_POLITIC = (country: Country) => (
+  <InfoCardDetails
+    icon={<ImHammer2 />}
+    title="Politic"
+    details={[
+      { lead: "Independent :", desc: yesOrNo(country.independent) },
+      { lead: "Status :", desc: country.status.toUpperCase() },
+      { lead: "United Nations member :", desc: yesOrNo(country.unMember) },
+    ]}
+  />
+);
+
+const RENDER_INFO_GENERIC = (country: Country) => (
+  <>
+    <InfoCardDetails
+      icon={<BsFileText />}
+      title="Generic"
+      details={[
+        { lead: "Capital :", desc: country.capital?.join(", ") || "-" },
+        {
+          lead: "Currency :",
+          desc: country.currencies
+            ?.map(
+              (currItem) =>
+                `${currItem.name} (${currItem.code} / ${currItem.symbol})`,
+            )
+            .join(" — "),
+        },
+        { lead: "Population :", desc: country.population.toLocaleString() },
+        {
+          lead: "Start of the week :",
+          desc:
+            country.startOfWeek[0].toUpperCase() + country.startOfWeek.slice(1),
+        },
+      ]}
+    />
+  </>
+);
+
+const RENDER_INFO_COMMUNICATION = (country: Country) => (
+  <>
+    <InfoCardDetails
+      icon={<MdPhoneInTalk />}
+      title="Communication"
+      details={[
+        {
+          lead: "Language(s) :",
+          desc: country.languages.map((e) => e.name).join(", ") || "-",
+        },
+        {
+          lead: "International direct dialing (IDD) :",
+          desc: `${country.idd.root}${
+            country.idd.suffixes ? country.idd.suffixes[0] : "-"
+          }`,
+        },
+        { lead: "Top level domain :", desc: country.tld?.join(" — ") || "-" },
+      ]}
+    />
+  </>
+);
+
+const RENDER_MUTUAL_SUBREGION_COUNTRIES = ({
+  country,
+  mutualSubregionCountryList,
+  reloadAction = () => {},
+}: {
+  country: Country;
+  mutualSubregionCountryList: RelatedCountryListProps;
+  reloadAction: () => void;
+}) => {
+  if (!country.subregion) return "";
+  // if fetching failed
+  if (typeof mutualSubregionCountryList === "string") {
+    return (
+      <div className="px-8">
+        <FetchFailedPlaceholder
+          label={`Failed to load subregion countries : ${mutualSubregionCountryList}`}
+          btnAction={() => reloadAction()}
+        />
+      </div>
+    );
+  } else if (mutualSubregionCountryList.length === 0) {
+    return (
+      <LoadingPlaceholderDetails
+        label={`Loading countries in ${country.subregion}...`}
+      />
+    );
+  } else {
+    return (
+      <RelatedSectionDetails
+        title={`Countries in ${country.subregion}`}
+        country={country}
+        list={mutualSubregionCountryList}
+      />
+    );
+  }
+};
+
+const RENDER_BORDERING_COUNTRIES = ({
+  country,
+  borderingCountryList,
+  reloadAction = () => {},
+}: {
+  country: Country;
+  borderingCountryList: RelatedCountryListProps;
+  reloadAction: () => void;
+}) => {
+  if (!country.borders) return "";
+
+  if (typeof borderingCountryList === "string") {
+    return (
+      <div className="px-8">
+        <FetchFailedPlaceholder
+          label={`Failed to load bordering countries : ${borderingCountryList}`}
+          btnAction={() => reloadAction()}
+        />
+      </div>
+    );
+  } else if (borderingCountryList.length === 0) {
+    return (
+      <LoadingPlaceholderDetails
+        label={`Loading bordering countries of ${country.name.common}...`}
+      />
+    );
+  } else {
+    return (
+      <RelatedSectionDetails
+        title={`Bordering ${
+          country.borders.length > 1 ? "Countries" : "Country"
+        }`}
+        country={country}
+        list={borderingCountryList}
+      />
+    );
+  }
+};
+
+function RENDER_PAGING_BUTTON({
+  to,
+  countryList,
+  pagingDetails,
+}: {
+  to: "prev" | "next";
+  countryList: Country[];
+  pagingDetails: {
+    prev: string;
+    next: string;
+  };
+}) {
+  const prevCountry = countryList.find((e) => e.cca2 === pagingDetails.prev);
+  const nextCountry = countryList.find((e) => e.cca2 === pagingDetails.next);
+  const prev = to === "prev";
+  const next = to === "next";
+
+  const targetCountry = prev ? prevCountry : nextCountry;
+  if (!targetCountry) return <div className="flex-1"></div>;
+  return <PagingButtonDetails isPrevBtn={prev} targetCountry={targetCountry} />;
+}
+
+function RENDER_PAGINATION({
+  countryList,
+  pagingDetails,
+}: {
+  countryList: Country[];
+  pagingDetails: {
+    prev: string;
+    next: string;
+  };
+}) {
+  return (
+    <div className="flex w-full flex-col justify-between gap-x-8 gap-y-4 px-8 sm:flex-row">
+      {RENDER_PAGING_BUTTON({ to: "prev", countryList, pagingDetails })}
+      {RENDER_PAGING_BUTTON({ to: "next", countryList, pagingDetails })}
+    </div>
   );
 }
 
