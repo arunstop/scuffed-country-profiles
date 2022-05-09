@@ -29,7 +29,8 @@ function MapSectionDetails({ country }: { country: Country }) {
   }) {
     return (
       <a
-        className="hover:bg-content-base btn-outline btn grow  gap-4 rounded-lg normal-case sm:grow-0"
+        className="hover:bg-content-base btn-outline btn h-auto grow 
+        gap-x-4 gap-y-2 rounded-lg p-4 normal-case sm:grow-0"
         href={url}
         target="_blank"
         rel="noreferrer"
@@ -37,7 +38,7 @@ function MapSectionDetails({ country }: { country: Country }) {
         tabIndex={-1}
       >
         {icon}
-        <span className="text-lg">{title}</span>
+        <span className="sm:text-lg">{title}</span>
       </a>
     );
   }
@@ -48,12 +49,16 @@ function MapSectionDetails({ country }: { country: Country }) {
         {RENDER_EXTERNAL_MAP_LINK({
           url: country.maps.googleMaps,
           title: "Open in Google Maps",
-          icon: <SiGooglemaps className="pointer-events-none text-2xl" />,
+          icon: (
+            <SiGooglemaps className="pointer-events-none text-xl sm:text-2xl" />
+          ),
         })}
         {RENDER_EXTERNAL_MAP_LINK({
           url: country.maps.openStreetMaps,
           title: "Open in Open Street Maps",
-          icon: <SiOpenstreetmap className="pointer-events-none text-2xl" />,
+          icon: (
+            <SiOpenstreetmap className="pointer-events-none text-xl sm:text-2xl" />
+          ),
         })}
       </div>
     );
@@ -62,10 +67,16 @@ function MapSectionDetails({ country }: { country: Country }) {
   return (
     <>
       <div className="flex flex-col items-start px-8">
-        <h2 className="self-start rounded-t-lg border-b-2 border-base-content/10 bg-base-300 p-4 text-2xl font-bold">
+        <h2
+          className="self-start rounded-t-lg border-b-2 
+          border-base-content/10 bg-base-300 p-4 text-2xl font-bold"
+        >
           Maps of {country.name.common}
         </h2>
-        <div className="flex min-h-[12rem] w-full flex-col gap-8 overflow-hidden rounded-lg rounded-tl-none bg-base-300/50 p-8">
+        <div
+          className="flex min-h-[12rem] w-full flex-col gap-8 
+          overflow-hidden rounded-lg rounded-tl-none bg-base-300/50 p-8"
+        >
           {RENDER_MAP()}
           {RENDER_OPTIONS()}
         </div>

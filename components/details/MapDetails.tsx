@@ -9,7 +9,9 @@ import { Country } from "../../utils/data/models/Country";
 // import "leaflet/dist/leaflet.css";
 
 function RealMapSectionDetails({ country }: { country: Country }) {
-  const [geoJsonData, setGeoJsonData] = useState<GeoJsonObject | string>();
+  const [geoJsonData, setGeoJsonData] = useState<GeoJsonObject | string | null>(
+    null,
+  );
   const [map, setMap] = useState<Map | null>(null);
   const [fullscreen, setFullscreen] = useState(false);
 
@@ -71,7 +73,9 @@ function RealMapSectionDetails({ country }: { country: Country }) {
           <Marker position={capitalLtLng}>
             <Popup>{country.capital[0]}</Popup>
           </Marker>
-          <GeoJSON key={Math.random()} data={geoJsonData as GeoJsonObject} />
+          {typeof geoJsonData !== "string" && (
+            <GeoJSON key={Math.random()} data={geoJsonData as GeoJsonObject} />
+          )}
           {/* <GeoJSON data={geoJsonData as GeoJsonObject} /> */}
         </MapContainer>
         <div

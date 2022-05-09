@@ -18,11 +18,11 @@ function HeroSection() {
           Browse every country in the world!
         </p>
         <a
-          className="btn btn-primary btn-lg w-72 justify-between gap-2 rounded-full normal-case "
+          className="btn btn-primary btn-lg w-72 justify-between gap-2 rounded-full normal-case items-center"
           href="#countries"
         >
-          <span className="text-2xl font-bold">Browse</span>
-          <BiSearch className="rotate-90 text-4xl" />
+          <span className="text-2xl font-bold my-auto">Browse</span>
+          <BiSearch className="rotate-90 text-4xl my-auto" />
         </a>
       </label>
     </section>
