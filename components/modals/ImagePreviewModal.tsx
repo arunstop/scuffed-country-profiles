@@ -10,10 +10,7 @@ function ImagePreviewModal({ country }: { country: Country }) {
         id="img-preview-modal"
         className="modal-toggle"
       />
-      <label
-        htmlFor="img-preview-modal"
-        className="modal modal-bottom bg-base-100/80"
-      >
+      <label htmlFor="img-preview-modal" className="modal modal-bottom">
         <label
           className="modal-box h-screen !max-h-screen sm:w-auto sm:max-w-full 
           sm:max-h-full cursor-auto p-0 transition-all 
