@@ -53,10 +53,8 @@ function TileCountryItem({ country }: { country: Country }) {
           </div>
         </div>
         <div className="flex flex-col max-w-[300px]">
-          <h1 className="text-2xl font-semibold">
-            {country.name.common || "-"}
-          </h1>
-          <div className="mb-1">{country.name.official || "-"}</div>
+          <h1 className="text-2xl font-bold">{country.name.common || "-"}</h1>
+          <div className="mb-1 font-medium">{country.name.official || "-"}</div>
           <div className="flex gap-1">
             <MdPlace className="mt-1" />
             {country.capital?.join(", ") || "-"}

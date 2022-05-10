@@ -40,7 +40,7 @@ function ListCountryItem({ country }: { country: Country }) {
           </div>
           <div className="flex flex-col">
             <h1 className="text-3xl font-bold">{country.name.common || "-"}</h1>
-            <div className="mb-1 font-normal">
+            <div className="mb-1 font-medium">
               {country.name.official || "-"}
             </div>
             <div className="flex gap-1">
