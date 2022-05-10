@@ -1,5 +1,6 @@
 import { GeoJsonObject } from "geojson";
 import { LatLngExpression, Map } from "leaflet";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { MdFullscreen, MdFullscreenExit } from "react-icons/md";
@@ -30,10 +31,11 @@ function RealMapSectionDetails({ country }: { country: Country }) {
     // console.log(_.isEqual(gjo, xd));
   }
 
-  const capitalLtLng: LatLngExpression = [
-    country.capitalInfo.latlng[0],
-    country.capitalInfo.latlng[1],
-  ];
+  const capitalLtLng: LatLngExpression | undefined = _.isEmpty(
+    country.capitalInfo,
+  )
+    ? (country.latlng as LatLngExpression)
+    : [country.capitalInfo.latlng[0], country.capitalInfo.latlng[1]];
 
   function toggleFullscreen(value: boolean) {
     setFullscreen(value);
@@ -70,8 +72,9 @@ function RealMapSectionDetails({ country }: { country: Country }) {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
+
           <Marker position={capitalLtLng}>
-            <Popup>{country.capital[0]}</Popup>
+            <Popup>{country.capital?.[0] || country.name.common}</Popup>
           </Marker>
           {typeof geoJsonData !== "string" && (
             <GeoJSON key={Math.random()} data={geoJsonData as GeoJsonObject} />
@@ -103,7 +106,7 @@ function RealMapSectionDetails({ country }: { country: Country }) {
             title={`Reset position`}
             onClick={() => {
               // console.log(map);
-              map?.setView(capitalLtLng, 5);
+              if (capitalLtLng) map?.setView(capitalLtLng, 5);
             }}
           >
             <FaMapMarkerAlt className="text-xl" />

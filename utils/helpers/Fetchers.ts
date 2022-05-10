@@ -20,6 +20,29 @@ export const apiFetch = async <T>(url: string): Promise<T> => {
     });
 };
 
+export const apiFetch1 = async (url: string): Promise<Response> => {
+  return fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    // mode: "no-cors",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw response;
+      }
+      return response;
+    })
+    .then((successResponse) => successResponse)
+    .catch((error) => {
+      // console.log("--------" + error);
+      // throw error;
+      return error;
+    });
+};
+
 export const apiFetchNoCors = async <T>(url: string): Promise<T> => {
   return fetch(url, {
     method: "GET",

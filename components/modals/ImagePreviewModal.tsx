@@ -21,9 +21,9 @@ function ImagePreviewModal({ country }: { country: Country }) {
             <div
               className="inline-flex items-center justify-between p-4 bg-base-100 
             rounded-b-box sm:border-2 sm:border-t-0 border-b-2 border-base-content/30 
-            sm:mx-2 pointer-events-auto"
+            sm:mx-2 pointer-events-auto gap-8"
             >
-              <h3 className="text-xl font-semibold">
+              <h3 className="text-xl font-semibold flex-1">
                 Flags of {country.name.common}
               </h3>
               <div className="flex items-center gap-4">

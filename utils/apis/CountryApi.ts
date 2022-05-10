@@ -1,4 +1,4 @@
-import { apiFetchNoCors } from "./../helpers/Fetchers";
+import { apiFetch1, apiFetchNoCors } from "./../helpers/Fetchers";
 import { Country } from "../data/models/Country";
 import {
   GITHUB_GEO_COUNTRY_BASE_URL,
@@ -6,6 +6,7 @@ import {
 } from "../helpers/Constants";
 import { apiFetch } from "../helpers/Fetchers";
 import { toCountry } from "./../helpers/Casters";
+import { NetworkResponse } from "../data/types/NetworkTypes";
 
 export const apiGetCountryList = async (): Promise<Country[]> => {
   try {
@@ -20,18 +21,30 @@ export const apiGetCountryList = async (): Promise<Country[]> => {
   }
 };
 
-export const getCountry = async (cca2: string): Promise<string> => {
+export const getCountry = async (cca2: string): Promise<NetworkResponse> => {
   try {
-    const data = await apiFetch<string>(
+    const response = await apiFetch1(
       // This endpoint returns an array now
       `https://restcountries.com/v3.1/alpha/${cca2}`,
-    ).then((data) => {
+    ).then((response) => {
       // console.log(data[0].name.nativeName);
-      return data;
+      return response;
     });
-    return data;
-  } catch (error) {
-    return "";
+    return {
+      ok: response.ok,
+      message: response.statusText,
+      status: response.status,
+      data: JSON.stringify(await response.json()),
+    };
+  } catch (err) {
+    // const errorResponse = err as Response;
+    // console.log("++++++++++++++++" + errorResponse);
+    return {
+      ok: false,
+      message: err + "",
+      status: 0,
+      data: "",
+    };
   }
 };
 
