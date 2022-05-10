@@ -67,207 +67,6 @@ export const getServerSideProps: GetServerSideProps<
 //   },
 // );
 
-function Details({ countryStr }: CountryDetailsProps) {
-  //   const router = useRouter();
-  //   const { country } = router.query;
-  // console.log(country.name.nativeName);
-  // console.log(country.languages);
-  // getting name list
-  const country = toCountry(JSON.parse(countryStr)[0]);
-  const countryName = country.name;
-
-  // console.log(
-  //   ["US", "USA", "United States of America"]
-  //     .map((e) => e.toLowerCase())
-  //     .includes("US".toLowerCase()),
-  // );
-
-  const {
-    state: countryState,
-    getters: {
-      list: {
-        filterProps: { getBorderingCountryList, getSubregionCountryList },
-        noData,
-      },
-      paging: { details },
-    },
-    action: countryAction,
-  } = useCountryContext();
-
-  const [borderingCountryList, setBorderingCountryList] = useState<
-    Country[] | string
-  >([]);
-  const [mutualSubregionCountryList, setMutualSubregionCountryList] = useState<
-    Country[] | string
-  >([]);
-
-  useEffect(() => {
-    scrollToTop();
-    loadBorderingCountryList();
-    loadMutualSubregionCountryList();
-    // countryAction.setSearchKeyword("");
-    // async function loadGeoCountry() {
-    //   const data = await apiGetGeoCountry(country.cca3);
-    //   console.log("data " + data);
-    //   if (typeof data === "string") setGeoJsonData(data);
-    //   else setGeoJsonData(JSON.parse(JSON.stringify(data)) as GeoJsonObject);
-    //   const xd: GeoJsonObject = data as GeoJsonObject;
-    //   // console.log(_.isEqual(gjo, xd));
-    // }
-
-    // loadGeoCountry();
-
-    document.addEventListener("keydown", toggleSearchModalEvent);
-    return () => {
-      setBorderingCountryList([]);
-      setMutualSubregionCountryList([]);
-      document.removeEventListener("keydown", toggleSearchModalEvent);
-    };
-  }, [countryStr]);
-
-  function toggleSearchModalEvent(ev: KeyboardEvent) {
-    // alert(router.pathname);
-    // if (!getSearchModalElement()) return;
-
-    const searchedModalOpen = getSearchModalElement().checked;
-    if (searchedModalOpen && ev.key.toLowerCase() === "escape") {
-      return toggleSearchModal(!getSearchModalElement().checked);
-    }
-    if (ev.ctrlKey && ev.key.toLowerCase() === "/") {
-      toggleSearchModal(!getSearchModalElement().checked);
-      loadCountryList();
-    }
-  }
-
-  async function loadCountryList() {
-    if (noData) {
-      countryAction.setCountryList(await apiGetCountryList());
-    }
-  }
-
-  function sortByName(countryList: Country[]): Country[] {
-    return _.orderBy(countryList, ["name.common"], ["asc"]);
-  }
-
-  function excludeCurrentCountry(countryList: Country[]): Country[] {
-    return countryList.filter(
-      (countryItem) => countryItem.cca2 !== country.cca2,
-    );
-  }
-
-  async function loadBorderingCountryList() {
-    // check if countryList exist in state
-    // and load from API if it does not
-    // or simply load it from the sate if it does.
-    setBorderingCountryList([]);
-
-    if (noData) {
-      const list = await apiGetBorderingCountryList(country.borders);
-      // console.log(typeof list);
-      if (typeof list === "string") {
-        setBorderingCountryList(list);
-      } else {
-        setBorderingCountryList(sortByName(list));
-      }
-    } else {
-      setBorderingCountryList(
-        sortByName(getBorderingCountryList(country.borders)),
-      );
-    }
-  }
-
-  async function loadMutualSubregionCountryList() {
-    // check if countryList exist in state
-    // and load from API if it does not
-    // or simply load it from the state if it does.
-    setMutualSubregionCountryList([]);
-
-    if (noData) {
-      const list = await apiGetMutualSubregionCountryList(country.subregion);
-      // console.log(typeof list);
-      if (typeof list === "string") {
-        setMutualSubregionCountryList(list);
-      } else {
-        setMutualSubregionCountryList(sortByName(excludeCurrentCountry(list)));
-      }
-    } else {
-      setMutualSubregionCountryList(
-        sortByName(
-          excludeCurrentCountry(getSubregionCountryList(country.subregion)),
-        ),
-      );
-    }
-  }
-
-  function RENDER_MAP_SECTION() {
-    return <MapSectionDetails country={country} />;
-  }
-
-  return (
-    <>
-      <Head>
-        <title>{`${countryName.common} — ${APP_NAME}`}</title>
-        <meta
-          name="description"
-          content={`Information about ${countryName.common} - ${
-            countryName.official
-          }; A country in ${
-            country.subregion
-          }; With the population of ${country.population.toLocaleString()} people and speak ${country.languages
-            .map((e) => e.name)
-            .join(", ")}`}
-        />
-        <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-          integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-          crossOrigin=""
-        />
-      </Head>
-      <Header />
-      <div className="flex flex-col gap-8 pb-16">
-        <img
-          className="absolute inset-0 -z-[1] h-[30rem] rounded-r-3xl
-          rounded-br-full opacity-40 blur-lg transition-all group-hover:scale-150"
-          src={country.flags.svg}
-          alt={country.name.common}
-        />
-        <div className="flex flex-wrap items-start justify-start gap-8 p-8 sm:flex-row">
-          {RENDER_FLAG(country)}
-          {RENDER_INFO_NAMING(country)}
-          {RENDER_INFO_GENERIC(country)}
-          {RENDER_INFO_GEOGRAPHIC({
-            country: country,
-            borderingCountryList: borderingCountryList,
-          })}
-          {RENDER_INFO_COMMUNICATION(country)}
-          {RENDER_INFO_POLITIC(country)}
-        </div>
-        {RENDER_MAP_SECTION()}
-        {RENDER_BORDERING_COUNTRIES({
-          country: country,
-          borderingCountryList: borderingCountryList,
-          reloadAction: () => loadBorderingCountryList(),
-        })}
-        {RENDER_MUTUAL_SUBREGION_COUNTRIES({
-          country: country,
-          mutualSubregionCountryList: mutualSubregionCountryList,
-          reloadAction: () => loadMutualSubregionCountryList(),
-        })}
-        {countryState.list.length !== 0 &&
-          RENDER_PAGINATION({
-            countryList: countryState.list,
-            pagingDetails: details(country.cca2),
-          })}
-      </div>
-      <Footer />
-      <SearchModal />
-      <ImagePreviewModal country={country} />
-    </>
-  );
-}
-
 const yesOrNo = (value: boolean): string => (value === true ? "YES" : "NO");
 
 // render parts
@@ -527,6 +326,207 @@ function RENDER_PAGINATION({
       {RENDER_PAGING_BUTTON({ to: "prev", countryList, pagingDetails })}
       {RENDER_PAGING_BUTTON({ to: "next", countryList, pagingDetails })}
     </div>
+  );
+}
+
+function Details({ countryStr }: CountryDetailsProps) {
+  //   const router = useRouter();
+  //   const { country } = router.query;
+  // console.log(country.name.nativeName);
+  // console.log(country.languages);
+  // getting name list
+  const country = toCountry(JSON.parse(countryStr)[0]);
+  const countryName = country.name;
+
+  // console.log(
+  //   ["US", "USA", "United States of America"]
+  //     .map((e) => e.toLowerCase())
+  //     .includes("US".toLowerCase()),
+  // );
+
+  const {
+    state: countryState,
+    getters: {
+      list: {
+        filterProps: { getBorderingCountryList, getSubregionCountryList },
+        noData,
+      },
+      paging: { details },
+    },
+    action: countryAction,
+  } = useCountryContext();
+
+  const [borderingCountryList, setBorderingCountryList] = useState<
+    Country[] | string
+  >([]);
+  const [mutualSubregionCountryList, setMutualSubregionCountryList] = useState<
+    Country[] | string
+  >([]);
+
+  useEffect(() => {
+    scrollToTop();
+    loadBorderingCountryList();
+    loadMutualSubregionCountryList();
+    // countryAction.setSearchKeyword("");
+    // async function loadGeoCountry() {
+    //   const data = await apiGetGeoCountry(country.cca3);
+    //   console.log("data " + data);
+    //   if (typeof data === "string") setGeoJsonData(data);
+    //   else setGeoJsonData(JSON.parse(JSON.stringify(data)) as GeoJsonObject);
+    //   const xd: GeoJsonObject = data as GeoJsonObject;
+    //   // console.log(_.isEqual(gjo, xd));
+    // }
+
+    // loadGeoCountry();
+
+    document.addEventListener("keydown", toggleSearchModalEvent);
+    return () => {
+      setBorderingCountryList([]);
+      setMutualSubregionCountryList([]);
+      document.removeEventListener("keydown", toggleSearchModalEvent);
+    };
+  }, [countryStr]);
+
+  function toggleSearchModalEvent(ev: KeyboardEvent) {
+    // alert(router.pathname);
+    // if (!getSearchModalElement()) return;
+
+    const searchedModalOpen = getSearchModalElement().checked;
+    if (searchedModalOpen && ev.key.toLowerCase() === "escape") {
+      return toggleSearchModal(!getSearchModalElement().checked);
+    }
+    if (ev.ctrlKey && ev.key.toLowerCase() === "/") {
+      toggleSearchModal(!getSearchModalElement().checked);
+      loadCountryList();
+    }
+  }
+
+  async function loadCountryList() {
+    if (noData) {
+      countryAction.setCountryList(await apiGetCountryList());
+    }
+  }
+
+  function sortByName(countryList: Country[]): Country[] {
+    return _.orderBy(countryList, ["name.common"], ["asc"]);
+  }
+
+  function excludeCurrentCountry(countryList: Country[]): Country[] {
+    return countryList.filter(
+      (countryItem) => countryItem.cca2 !== country.cca2,
+    );
+  }
+
+  async function loadBorderingCountryList() {
+    // check if countryList exist in state
+    // and load from API if it does not
+    // or simply load it from the sate if it does.
+    setBorderingCountryList([]);
+
+    if (noData) {
+      const list = await apiGetBorderingCountryList(country.borders);
+      // console.log(typeof list);
+      if (typeof list === "string") {
+        setBorderingCountryList(list);
+      } else {
+        setBorderingCountryList(sortByName(list));
+      }
+    } else {
+      setBorderingCountryList(
+        sortByName(getBorderingCountryList(country.borders)),
+      );
+    }
+  }
+
+  async function loadMutualSubregionCountryList() {
+    // check if countryList exist in state
+    // and load from API if it does not
+    // or simply load it from the state if it does.
+    setMutualSubregionCountryList([]);
+
+    if (noData) {
+      const list = await apiGetMutualSubregionCountryList(country.subregion);
+      // console.log(typeof list);
+      if (typeof list === "string") {
+        setMutualSubregionCountryList(list);
+      } else {
+        setMutualSubregionCountryList(sortByName(excludeCurrentCountry(list)));
+      }
+    } else {
+      setMutualSubregionCountryList(
+        sortByName(
+          excludeCurrentCountry(getSubregionCountryList(country.subregion)),
+        ),
+      );
+    }
+  }
+
+  function RENDER_MAP_SECTION() {
+    return <MapSectionDetails country={country} />;
+  }
+
+  return (
+    <>
+      <Head>
+        <title>{`${countryName.common} — ${APP_NAME}`}</title>
+        <meta
+          name="description"
+          content={`Information about ${countryName.common} - ${
+            countryName.official
+          }; A country in ${
+            country.subregion
+          }; With the population of ${country.population.toLocaleString()} people and speak ${country.languages
+            .map((e) => e.name)
+            .join(", ")}`}
+        />
+        <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+          integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+          crossOrigin=""
+        />
+      </Head>
+      <Header />
+      <div className="flex flex-col gap-8 pb-16">
+        <img
+          className="fixed inset-0 -z-[1] w-screen rounded-r-3xl
+          rounded-br-full opacity-40 blur-lg transition-all group-hover:scale-150"
+          src={country.flags.svg}
+          alt={country.name.common}
+        />
+        <div className="flex flex-wrap items-start justify-start gap-8 p-8 sm:flex-row">
+          {RENDER_FLAG(country)}
+          {RENDER_INFO_NAMING(country)}
+          {RENDER_INFO_GENERIC(country)}
+          {RENDER_INFO_GEOGRAPHIC({
+            country: country,
+            borderingCountryList: borderingCountryList,
+          })}
+          {RENDER_INFO_COMMUNICATION(country)}
+          {RENDER_INFO_POLITIC(country)}
+        </div>
+        {RENDER_MAP_SECTION()}
+        {RENDER_BORDERING_COUNTRIES({
+          country: country,
+          borderingCountryList: borderingCountryList,
+          reloadAction: () => loadBorderingCountryList(),
+        })}
+        {RENDER_MUTUAL_SUBREGION_COUNTRIES({
+          country: country,
+          mutualSubregionCountryList: mutualSubregionCountryList,
+          reloadAction: () => loadMutualSubregionCountryList(),
+        })}
+        {countryState.list.length !== 0 &&
+          RENDER_PAGINATION({
+            countryList: countryState.list,
+            pagingDetails: details(country.cca2),
+          })}
+      </div>
+      <Footer />
+      <SearchModal />
+      <ImagePreviewModal country={country} />
+    </>
   );
 }
 
