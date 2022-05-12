@@ -7,6 +7,7 @@ import {
 import { Country } from "../data/models/Country";
 import { NetworkResponse } from "../data/types/NetworkTypes";
 import {
+  BASE_URL,
   GITHUB_GEO_COUNTRY_BASE_URL,
   REST_COUNTRIES_BASE_URL,
 } from "../helpers/Constants";
@@ -17,10 +18,9 @@ export const apiGetCountryList = async (): Promise<
   NetworkResponse<Country[]>
 > => {
   try {
-    const response = await apiFetch(`${REST_COUNTRIES_BASE_URL}/all`).then(
+    const response = await apiFetch(`${BASE_URL}/api/country/all`).then(
       (response) => response,
     );
-
     return {
       ok: response.ok,
       message: response.statusText,
@@ -44,13 +44,12 @@ export const apiGetCountry = async (
   cca2: string,
 ): Promise<NetworkResponse<string>> => {
   try {
-    const response = await apiFetch(
-      // This endpoint returns an array now
-      `https://restcountries.com/v3.1/alpha/${cca2}`,
-    ).then((response) => {
-      // console.log(data[0].name.nativeName);
-      return response;
-    });
+    const response = await apiFetch(`${BASE_URL}/api/country/${cca2}`).then(
+      (response) => {
+        // console.log(response);
+        return response;
+      },
+    );
     return {
       ok: response.ok,
       message: response.statusText,

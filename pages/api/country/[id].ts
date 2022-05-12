@@ -24,7 +24,7 @@ export default async function handler(
       if (!result) {
         res.status(200).json({ error: true, message: "Not result found." });
       } else {
-        res.status(200).json(result);
+        res.status(200).json([result]);
       }
     }
   } else {
