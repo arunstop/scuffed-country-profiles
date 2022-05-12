@@ -24,11 +24,14 @@ import {
   apiGetBorderingCountryList,
   apiGetCountryList,
   apiGetMutualSubregionCountryList,
-  getCountry,
+  apiGetCountry,
 } from "../../utils/apis/CountryApi";
 import { useCountryContext } from "../../utils/contexts/country/CountryHook";
 import { Country } from "../../utils/data/models/Country";
-import { NetworkResponse } from "../../utils/data/types/NetworkTypes";
+import {
+  NetworkData,
+  NetworkResponse,
+} from "../../utils/data/types/NetworkTypes";
 import { toCountry } from "../../utils/helpers/Casters";
 import { APP_NAME } from "../../utils/helpers/Constants";
 import { scrollToTop } from "../../utils/helpers/UIHelpers";
@@ -39,9 +42,9 @@ import { scrollToTop } from "../../utils/helpers/UIHelpers";
 
 type RelatedCountryListProps = string | Country[];
 
-export const getServerSideProps: GetServerSideProps<NetworkResponse> = async (
-  context,
-) => {
+export const getServerSideProps: GetServerSideProps<
+  NetworkResponse<string>
+> = async (context) => {
   // const json = "../../public/CountryProfileList.json";
   // console.log(context);
   // const countryListRaw: any[] = Array.from(
@@ -49,7 +52,7 @@ export const getServerSideProps: GetServerSideProps<NetworkResponse> = async (
   // );
   // console.log(await countryListRaw());
 
-  const countryTarget = await getCountry(
+  const countryTarget = await apiGetCountry(
     (context.query.details + "").toLowerCase(),
   );
 
@@ -131,7 +134,7 @@ const RENDER_INFO_GEOGRAPHIC = ({
   borderingCountryList,
 }: {
   country: Country;
-  borderingCountryList: RelatedCountryListProps;
+  borderingCountryList: NetworkData<Country[]>;
 }) => (
   <InfoCardDetails
     icon={<BiWorld />}
@@ -145,10 +148,11 @@ const RENDER_INFO_GEOGRAPHIC = ({
         lead: "Borders :",
         desc: !country.borders
           ? "-"
-          : typeof borderingCountryList === "string"
+          : !borderingCountryList || typeof borderingCountryList === "string"
           ? _.sortBy(country.borders).join(", ")
-          : borderingCountryList.map((e, idx) => e.name.common).join(", ") ||
-            "-",
+          : (borderingCountryList as Country[])
+              .map((e, idx) => e.name.common)
+              .join(", ") || "-",
       },
       { lead: "Lat-Long :", desc: country.latlng.join(", ") },
       { lead: "Timezone(s) :", desc: country.timezones.join(", ") },
@@ -223,12 +227,19 @@ const RENDER_MUTUAL_SUBREGION_COUNTRIES = ({
   reloadAction = () => {},
 }: {
   country: Country;
-  mutualSubregionCountryList: RelatedCountryListProps;
+  mutualSubregionCountryList: NetworkData<Country[]>;
   reloadAction: () => void;
 }) => {
   if (!country.subregion) return "";
   // if fetching failed
-  if (typeof mutualSubregionCountryList === "string") {
+
+  if (!mutualSubregionCountryList) {
+    return (
+      <LoadingPlaceholderDetails
+        label={`Loading countries in ${country.subregion}...`}
+      />
+    );
+  } else if (typeof mutualSubregionCountryList === "string") {
     return (
       <div className="px-8">
         <FetchFailedPlaceholder
@@ -236,12 +247,6 @@ const RENDER_MUTUAL_SUBREGION_COUNTRIES = ({
           btnAction={() => reloadAction()}
         />
       </div>
-    );
-  } else if (mutualSubregionCountryList.length === 0) {
-    return (
-      <LoadingPlaceholderDetails
-        label={`Loading countries in ${country.subregion}...`}
-      />
     );
   } else {
     return (
@@ -260,12 +265,17 @@ const RENDER_BORDERING_COUNTRIES = ({
   reloadAction = () => {},
 }: {
   country: Country;
-  borderingCountryList: RelatedCountryListProps;
+  borderingCountryList: NetworkData<Country[]>;
   reloadAction: () => void;
 }) => {
   if (!country.borders) return "";
-
-  if (typeof borderingCountryList === "string") {
+  if (!borderingCountryList) {
+    return (
+      <LoadingPlaceholderDetails
+        label={`Loading bordering countries of ${country.name.common}...`}
+      />
+    );
+  } else if (typeof borderingCountryList === "string") {
     return (
       <div className="px-8">
         <FetchFailedPlaceholder
@@ -273,12 +283,6 @@ const RENDER_BORDERING_COUNTRIES = ({
           btnAction={() => reloadAction()}
         />
       </div>
-    );
-  } else if (borderingCountryList.length === 0) {
-    return (
-      <LoadingPlaceholderDetails
-        label={`Loading bordering countries of ${country.name.common}...`}
-      />
     );
   } else {
     return (
@@ -349,7 +353,7 @@ const RENDER_HEAD = ({ title, desc }: { title: string; desc: string }) => {
   );
 };
 
-function Details({ ok, message, data }: NetworkResponse) {
+function Details({ ok, message, data }: NetworkResponse<string>) {
   //   const router = useRouter();
   //   const { country } = router.query;
   // console.log(country.name.nativeName);
@@ -374,12 +378,10 @@ function Details({ ok, message, data }: NetworkResponse) {
     action: countryAction,
   } = useCountryContext();
 
-  const [borderingCountryList, setBorderingCountryList] = useState<
-    Country[] | string
-  >([]);
-  const [mutualSubregionCountryList, setMutualSubregionCountryList] = useState<
-    Country[] | string
-  >([]);
+  const [borderingCountryList, setBorderingCountryList] =
+    useState<NetworkData<Country[]>>(null);
+  const [mutualSubregionCountryList, setMutualSubregionCountryList] =
+    useState<NetworkData<Country[]>>(null);
 
   useEffect(() => {
     if (!ok) return;
@@ -434,7 +436,9 @@ function Details({ ok, message, data }: NetworkResponse) {
 
   async function loadCountryList() {
     if (noData) {
-      countryAction.setCountryList(await apiGetCountryList());
+      countryAction.setCountryList(
+        await apiGetCountryList().then((response) => response.data),
+      );
     }
   }
 
@@ -455,7 +459,9 @@ function Details({ ok, message, data }: NetworkResponse) {
     setBorderingCountryList([]);
 
     if (noData) {
-      const list = await apiGetBorderingCountryList(country.borders);
+      const list = await apiGetBorderingCountryList(country.borders).then(
+        (res) => res.data,
+      );
       // console.log(typeof list);
       if (typeof list === "string") {
         setBorderingCountryList(list);
@@ -476,7 +482,9 @@ function Details({ ok, message, data }: NetworkResponse) {
     setMutualSubregionCountryList([]);
 
     if (noData) {
-      const list = await apiGetMutualSubregionCountryList(country.subregion);
+      const list = await apiGetMutualSubregionCountryList(
+        country.subregion,
+      ).then((res) => res.data);
       // console.log(typeof list);
       if (typeof list === "string") {
         setMutualSubregionCountryList(list);

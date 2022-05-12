@@ -39,7 +39,9 @@ function Home() {
 
   async function loadCountryList() {
     if (countryState.list.length === 0) {
-      countryAction.setCountryList(await apiGetCountryList());
+      countryAction.setCountryList(
+        await apiGetCountryList().then((response) => response.data),
+      );
     }
   }
 

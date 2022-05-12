@@ -51,8 +51,9 @@ export default function Header() {
 
   async function loadCountryList() {
     if (noData) {
-      apiGetCountryList().then((cList) => {
-        countryAction.setCountryList(cList);
+      apiGetCountryList().then((response) => {
+        if (response.ok === false) return;
+        countryAction.setCountryList(response.data);
         searchModalOnChange(true);
       });
     }
@@ -70,7 +71,7 @@ export default function Header() {
           <span
             className={`${
               router.pathname !== "/" ? "hidden sm:block" : ""
-            } text-xl font-bold`}
+            } text-xl font-black`}
           >
             Country Profiles
           </span>

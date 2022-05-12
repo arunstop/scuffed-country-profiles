@@ -29,8 +29,8 @@ function MapSectionDetails({ country }: { country: Country }) {
   }) {
     return (
       <a
-        className="hover:bg-content-base btn-outline btn h-auto grow 
-        gap-x-4 gap-y-2 rounded-lg p-4 normal-case sm:grow-0"
+        className="hover:bg-content-base btn-base border-0 bg-opacity-50 btn h-auto grow 
+        gap-x-4 gap-y-2 rounded-lg p-4 normal-case sm:grow-0 hover:bg-opacity-100"
         href={url}
         target="_blank"
         rel="noreferrer"
@@ -38,7 +38,7 @@ function MapSectionDetails({ country }: { country: Country }) {
         tabIndex={-1}
       >
         {icon}
-        <span className="sm:text-lg">{title}</span>
+        <span className="">{title}</span>
       </a>
     );
   }

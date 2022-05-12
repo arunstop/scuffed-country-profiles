@@ -1,29 +1,45 @@
-import { apiFetch1, apiFetchNoCors } from "./../helpers/Fetchers";
+import { CollectionReference, getDocs } from "firebase/firestore/lite";
 import { Country } from "../data/models/Country";
+import { NetworkResponse } from "../data/types/NetworkTypes";
 import {
   GITHUB_GEO_COUNTRY_BASE_URL,
   REST_COUNTRIES_BASE_URL,
 } from "../helpers/Constants";
-import { apiFetch } from "../helpers/Fetchers";
 import { toCountry } from "./../helpers/Casters";
-import { NetworkResponse } from "../data/types/NetworkTypes";
+import { apiFetch, apiFetchNoCors } from "./../helpers/Fetchers";
 
-export const apiGetCountryList = async (): Promise<Country[]> => {
+export const apiGetCountryList = async (): Promise<
+  NetworkResponse<Country[]>
+> => {
   try {
-    const data = await apiFetch<any[]>(`${REST_COUNTRIES_BASE_URL}/all`).then(
-      (data) =>
-        Array.from(data).map((rawCountryItem) => toCountry(rawCountryItem)),
+    const response = await apiFetch(`${REST_COUNTRIES_BASE_URL}/all`).then(
+      (response) => response,
     );
-    return data;
+
+    return {
+      ok: response.ok,
+      message: response.statusText,
+      status: response.status,
+      data: Array.from(await response.json()).map((rawCountryItem) =>
+        toCountry(rawCountryItem),
+      ),
+    };
   } catch (error) {
     console.log(error);
-    return [];
+    return {
+      ok: false,
+      message: error + "",
+      status: 0,
+      data: [],
+    };
   }
 };
 
-export const getCountry = async (cca2: string): Promise<NetworkResponse> => {
+export const apiGetCountry = async (
+  cca2: string,
+): Promise<NetworkResponse<string>> => {
   try {
-    const response = await apiFetch1(
+    const response = await apiFetch(
       // This endpoint returns an array now
       `https://restcountries.com/v3.1/alpha/${cca2}`,
     ).then((response) => {
@@ -50,36 +66,56 @@ export const getCountry = async (cca2: string): Promise<NetworkResponse> => {
 
 export const apiGetBorderingCountryList = async (
   borderList: string[],
-): Promise<Country[] | string> => {
+): Promise<NetworkResponse<Country[]>> => {
   try {
     // extracting country codes to string
     // e.g = IDN,GBR,FRA
     const strBorderList = borderList.join(",");
-    const data = await apiFetch<any[]>(
+    const response = await apiFetch(
       `${REST_COUNTRIES_BASE_URL}/alpha?codes=${strBorderList}`,
-    ).then((rawData) =>
-      Array.from(rawData).map((rawCountryItem) => toCountry(rawCountryItem)),
-    );
-    return data;
+    ).then((_) => _);
+    return {
+      ok: response.ok,
+      message: response.statusText,
+      status: response.status,
+      data: Array.from(await response.json()).map((rawCountryItem) =>
+        toCountry(rawCountryItem),
+      ),
+    };
   } catch (error) {
     console.log(error);
-    return error + "";
+    return {
+      ok: false,
+      message: error + "",
+      status: 0,
+      data: [],
+    };
   }
 };
 
 export const apiGetMutualSubregionCountryList = async (
   subregion: string,
-): Promise<Country[] | string> => {
+): Promise<NetworkResponse<Country[]>> => {
   try {
-    const data = await apiFetch<any[]>(
+    const response = await apiFetch(
       `${REST_COUNTRIES_BASE_URL}/subregion/${subregion}`,
-    ).then((rawData) =>
-      Array.from(rawData).map((rawCountryItem) => toCountry(rawCountryItem)),
-    );
-    return data;
+    ).then((_) => _);
+    return {
+      ok: response.ok,
+      message: response.statusText,
+      status: response.status,
+      data: Array.from(await response.json()).map((rawCountryItem) =>
+        toCountry(rawCountryItem),
+      ),
+    };
   } catch (error) {
     // console.log(error);
-    return error + "";
+    return {
+      ok: false,
+      message: error + "",
+      status: 0,
+      data: [],
+    };
   }
 };
 
@@ -96,3 +132,11 @@ export const apiGetGeoCountry = async (cca3: string): Promise<any | string> => {
     return error + "";
   }
 };
+
+export async function firestoreApiGetCountryList(
+  countryDb: CollectionReference,
+) {
+  const countrySnapshot = await getDocs(countryDb);
+  const countryList = countrySnapshot.docs.map((doc) => doc.data());
+  return countryList;
+}
