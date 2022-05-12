@@ -1,4 +1,9 @@
-import { CollectionReference, getDocs } from "firebase/firestore/lite";
+import {
+  CollectionReference,
+  doc,
+  getDoc,
+  getDocs,
+} from "firebase/firestore/lite";
 import { Country } from "../data/models/Country";
 import { NetworkResponse } from "../data/types/NetworkTypes";
 import {
@@ -133,10 +138,21 @@ export const apiGetGeoCountry = async (cca3: string): Promise<any | string> => {
   }
 };
 
-export async function firestoreApiGetCountryList(
+export async function firestoreApiGetCountryAll(
   countryDb: CollectionReference,
 ) {
   const countrySnapshot = await getDocs(countryDb);
   const countryList = countrySnapshot.docs.map((doc) => doc.data());
   return countryList;
+}
+
+export async function firestoreApiGetCountry(
+  countryDb: CollectionReference,
+  cca2: string,
+) {
+  const countrySnapshot = await getDoc(doc(countryDb, cca2.toUpperCase()));
+  const targetCountry = countrySnapshot.exists()
+    ? countrySnapshot.data()
+    : null;
+  return targetCountry;
 }
