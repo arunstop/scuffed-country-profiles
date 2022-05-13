@@ -21,7 +21,7 @@ function RelatedSectionDetails({
       </h2>
       <div
         className="grid grid-cols-2 items-center justify-items-center gap-4 self-stretch
-rounded-r-lg bg-base-300/50 p-4 transition-all 
+rounded-lg rounded-tl-none bg-base-300/50 p-4 transition-all 
 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8"
       >
         {!list.length

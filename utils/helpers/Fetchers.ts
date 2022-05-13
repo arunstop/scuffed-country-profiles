@@ -1,24 +1,4 @@
-// export const apiFetch = async <T>(url: string): Promise<T> => {
-//   return fetch(url, {
-//     method: "GET",
-//     headers: {
-//       Accept: "application/json",
-//       "Content-Type": "application/json;charset=UTF-8",
-//     },
-//     // mode: "no-cors",
-//   })
-//     .then((response) => {
-//       if (!response.ok) {
-//         throw new Error(response.statusText);
-//       }
-//       return response.json() as Promise<T>;
-//     })
-//     .then((dataRaw) => dataRaw)
-//     .catch((error: Error) => {
-//       console.log(error);
-//       throw error;
-//     });
-// };
+import { ApiError } from "./../data/types/NetworkTypes";
 
 export const apiFetch = async (url: string): Promise<Response> => {
   return fetch(url, {
@@ -68,3 +48,6 @@ export const apiFetchNoCors = async <T>(url: string): Promise<T> => {
 
 export const lowerCaseChildrenFetch = (arr: string[]): string[] =>
   JSON.parse(JSON.stringify(arr).toLowerCase());
+
+export const getApiError = (message:string): ApiError =>
+  ({ error:true, message});

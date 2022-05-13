@@ -9,3 +9,8 @@ export interface NetworkResponse<T> {
 // T = data from api
 // Error = when error
 export type NetworkData<T> = null | T | string;
+
+export interface ApiError {
+  error: boolean;
+  message: string;
+}

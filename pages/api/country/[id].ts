@@ -1,9 +1,10 @@
+import { getApiError } from './../../../utils/helpers/Fetchers';
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   firestoreApiGetCountry,
   firestoreApiGetCountryAll,
-} from "../../../utils/apis/CountryApi";
+} from "../../../utils/apis/FirestoreApi";
 import { countryDb } from "../../../utils/apis/FirestoreClient";
 
 export default async function handler(
@@ -22,12 +23,12 @@ export default async function handler(
     } else {
       const result = await firestoreApiGetCountry(countryDb, id.toString());
       if (!result) {
-        res.status(200).json({ error: true, message: "Not result found." });
+        res.status(200).json(getApiError("Not result found." ));
       } else {
         res.status(200).json([result]);
       }
     }
   } else {
-    res.status(404).json({ error: true, message: "Not found." });
+    res.status(404).json(getApiError("Not found." ));
   }
 }

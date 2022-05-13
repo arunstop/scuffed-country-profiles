@@ -1,26 +1,24 @@
-import {
-  CollectionReference,
-  doc,
-  getDoc,
-  getDocs,
-} from "firebase/firestore/lite";
 import { Country } from "../data/models/Country";
 import { NetworkResponse } from "../data/types/NetworkTypes";
 import {
-  BASE_URL,
-  GITHUB_GEO_COUNTRY_BASE_URL,
-  REST_COUNTRIES_BASE_URL,
+  BASE_URL, REST_COUNTRIES_BASE_URL
 } from "../helpers/Constants";
 import { toCountry } from "./../helpers/Casters";
 import { apiFetch, apiFetchNoCors } from "./../helpers/Fetchers";
 
+
+// BASE_URL = next API routes
+// REST_COUNTRIES_BASE_URL = rest countries api
+
+// GETS ALL COUNTRY
 export const apiGetCountryList = async (): Promise<
   NetworkResponse<Country[]>
 > => {
   try {
-    const response = await apiFetch(`${BASE_URL}/api/country/all`).then(
-      (response) => response,
-    );
+    const response = await apiFetch(
+      // `${BASE_URL}/api/country/all`,
+      `${REST_COUNTRIES_BASE_URL}/all`,
+    ).then((response) => response);
     return {
       ok: response.ok,
       message: response.statusText,
@@ -40,16 +38,18 @@ export const apiGetCountryList = async (): Promise<
   }
 };
 
+// GET COUNTRY BY CCA2
 export const apiGetCountry = async (
   cca2: string,
 ): Promise<NetworkResponse<string>> => {
   try {
-    const response = await apiFetch(`${BASE_URL}/api/country/${cca2}`).then(
-      (response) => {
-        // console.log(response);
-        return response;
-      },
-    );
+    const response = await apiFetch(
+      // `${BASE_URL}/api/country/${cca2}`,
+      `${REST_COUNTRIES_BASE_URL}/alpha/${cca2}`,
+    ).then((response) => {
+      // console.log(response);
+      return response;
+    });
     return {
       ok: response.ok,
       message: response.statusText,
@@ -68,6 +68,8 @@ export const apiGetCountry = async (
   }
 };
 
+// GET LIST OF COUNTRIES BY CCA 3
+// GET LIST OF BORDERING COUNTRIES
 export const apiGetBorderingCountryList = async (
   borderList: string[],
 ): Promise<NetworkResponse<Country[]>> => {
@@ -76,6 +78,7 @@ export const apiGetBorderingCountryList = async (
     // e.g = IDN,GBR,FRA
     const strBorderList = borderList.join(",");
     const response = await apiFetch(
+      // `${BASE_URL}/api/country?codes=${strBorderList}`,
       `${REST_COUNTRIES_BASE_URL}/alpha?codes=${strBorderList}`,
     ).then((_) => _);
     return {
@@ -102,6 +105,7 @@ export const apiGetMutualSubregionCountryList = async (
 ): Promise<NetworkResponse<Country[]>> => {
   try {
     const response = await apiFetch(
+      // `${BASE_URL}/api/country/subregion/${subregion}`,
       `${REST_COUNTRIES_BASE_URL}/subregion/${subregion}`,
     ).then((_) => _);
     return {
@@ -126,7 +130,8 @@ export const apiGetMutualSubregionCountryList = async (
 export const apiGetGeoCountry = async (cca3: string): Promise<any | string> => {
   try {
     const data = await apiFetchNoCors<any>(
-      `https://cors-anywhere.herokuapp.com/${GITHUB_GEO_COUNTRY_BASE_URL}/${cca3.toLowerCase()}.geo.json`,
+      `${BASE_URL}/api/geo/${cca3.toUpperCase()}`,
+      // `https://cors-anywhere.herokuapp.com/${GITHUB_GEO_COUNTRY_BASE_URL}/${cca3.toLowerCase()}.geo.json`,
     ).then((rawData) => {
       // console.log(rawData);
       return rawData;
@@ -136,22 +141,3 @@ export const apiGetGeoCountry = async (cca3: string): Promise<any | string> => {
     return error + "";
   }
 };
-
-export async function firestoreApiGetCountryAll(
-  countryDb: CollectionReference,
-) {
-  const countrySnapshot = await getDocs(countryDb);
-  const countryList = countrySnapshot.docs.map((doc) => doc.data());
-  return countryList;
-}
-
-export async function firestoreApiGetCountry(
-  countryDb: CollectionReference,
-  cca2: string,
-) {
-  const countrySnapshot = await getDoc(doc(countryDb, cca2.toUpperCase()));
-  const targetCountry = countrySnapshot.exists()
-    ? countrySnapshot.data()
-    : null;
-  return targetCountry;
-}
