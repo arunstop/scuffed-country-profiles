@@ -18,7 +18,7 @@ function HeroSection() {
           Browse every country in the world!
         </p>
         <a
-          className="btn btn-primary btn-lg w-72 justify-between gap-2 rounded-full normal-case items-center"
+          className="btn btn-primary sm:btn-lg w-52 sm:w-72 justify-between gap-2 rounded-full normal-case items-center"
           href="#countries"
         >
           <span className="text-lg sm:text-2xl font-bold my-auto">Browse</span>

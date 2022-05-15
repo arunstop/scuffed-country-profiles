@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useEffect } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import MainFilterModal from "../components/modals/MainFilterModal";
 import HeroSection from "../components/sections/HeroSection";
 import MainSection from "../components/sections/main/MainSection";
 import { apiGetCountryList } from "../utils/apis/CountryApi";
@@ -61,6 +62,7 @@ function Home() {
       </main>
 
       <Footer />
+      <MainFilterModal/>
     </>
   );
 }

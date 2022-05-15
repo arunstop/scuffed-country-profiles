@@ -5,6 +5,7 @@ import {
   MdOutlineDarkMode,
   MdOutlineLightMode,
   MdOutlineSearch,
+  MdSearch,
 } from "react-icons/md";
 import { apiGetCountryList } from "../utils/apis/CountryApi";
 import { useCountryContext } from "../utils/contexts/country/CountryHook";
@@ -71,7 +72,7 @@ export default function Header() {
           <span
             className={`${
               router.pathname !== "/" ? "hidden sm:block" : ""
-            } text-xl font-black`}
+            } text-lg sm:text-xl font-semibold italic`}
           >
             Country Profiles
           </span>
@@ -100,6 +101,15 @@ export default function Header() {
         </label>
       )}
       <div className="inline-flex items-center justify-center gap-4 ">
+        {router.pathname === "/" && (
+          <label htmlFor="main-filter-modal" className="sm:hidden">
+            <MdSearch
+              title="Open filter"
+              className="text-3xl"
+              role={"button"}
+            />
+          </label>
+        )}
         {/* <label>Dark mode :</label> */}
         <label className="swap swap-rotate">
           <input

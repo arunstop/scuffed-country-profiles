@@ -283,7 +283,7 @@ function MainSectionFilter() {
   };
 
   return (
-    <div className="flex flex-wrap gap-4 w-full px-4 sm:px-8">
+    <div className="flex flex-wrap gap-4 w-full sm:px-8">
       {RENDER_SEARCHBAR()}
       {filtersOn && (
         <>

@@ -237,7 +237,9 @@ export default function MainSection() {
         </div>
       ) : (
         <>
-          <MainSectionFilter />
+          <div className="hidden sm:block">
+            <MainSectionFilter />
+          </div>
           {/* {RENDER_GROUPING()} */}
           <div className="flex w-full flex-wrap items-center justify-between gap-4 self-start px-4 sm:px-8">
             <p className="text-2xl">
