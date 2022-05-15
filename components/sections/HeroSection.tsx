@@ -14,15 +14,15 @@ function HeroSection() {
         justify-center gap-8 rounded-xl bg-base-100/30 p-8 shadow-lg ring-2 ring-primary/30
         backdrop-blur-lg"
       >
-        <p className="text-center text-5xl font-bold text-base-content">
+        <p className="text-center text-3xl sm:text-5xl font-bold text-base-content">
           Browse every country in the world!
         </p>
         <a
           className="btn btn-primary btn-lg w-72 justify-between gap-2 rounded-full normal-case items-center"
           href="#countries"
         >
-          <span className="text-2xl font-bold my-auto">Browse</span>
-          <BiSearch className="rotate-90 text-4xl my-auto" />
+          <span className="text-lg sm:text-2xl font-bold my-auto">Browse</span>
+          <BiSearch className="rotate-90 text-2xl sm:text-4xl my-auto" />
         </a>
       </label>
     </section>
