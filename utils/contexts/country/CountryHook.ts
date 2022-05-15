@@ -148,6 +148,12 @@ export const useCountryContext = () => {
     return "";
   };
 
+  const isFiltered =
+    state.searchKeyword.trim() !== "" ||
+    filters.continents.length ||
+    filters.region.length ||
+    filters.subregion.length;
+
   return {
     state,
     action,
@@ -165,6 +171,7 @@ export const useCountryContext = () => {
         noResultFound: searchedList().length === 0,
         noData: list.length === 0,
       },
+      isFiltered: isFiltered,
       paging: {
         details: pagingDetailsPrevNext,
       },

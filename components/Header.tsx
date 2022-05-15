@@ -20,6 +20,7 @@ export default function Header() {
     action: countryAction,
     getters: {
       list: { noData },
+      isFiltered,
     },
   } = useCountryContext();
   const router = useRouter();
@@ -102,13 +103,27 @@ export default function Header() {
       )}
       <div className="inline-flex items-center justify-center gap-4 ">
         {router.pathname === "/" && (
-          <label htmlFor="main-filter-modal" className="sm:hidden">
-            <MdSearch
-              title="Open filter"
-              className="text-3xl"
-              role={"button"}
-            />
-          </label>
+          <div className="indicator sm:hidden">
+            <span
+              className={`indicator-item badge bg-red-500 border-0 h-4 w-4 p-0 ${
+                isFiltered ? "visible" : "invisible"
+              }`}
+            ></span>
+            <label
+              htmlFor="main-filter-modal"
+              className={` 
+              border-2 btn btn-outline min-h-min h-auto !h-10 !w-10 !p-0
+              border-opacity-50
+          ${isFiltered ? "btn-primary" : "border-transparent"}`}
+              tabIndex={0}
+            >
+              <MdSearch
+                title="Open filter"
+                className="text-3xl"
+                role={"button"}
+              />
+            </label>
+          </div>
         )}
         {/* <label>Dark mode :</label> */}
         <label className="swap swap-rotate">
