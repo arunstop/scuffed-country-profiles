@@ -85,7 +85,7 @@ export default function Header() {
           id="search-modal-btn"
           htmlFor="search-modal"
           className="btn btn-sm h-auto w-60 sm:w-72 border-0 bg-base-300 p-2 font-normal 
-        normal-case text-base-content ring-2 ring-slate-500/10 hover:bg-neutral/50"
+          normal-case text-base-content ring-2 ring-slate-500/10 hover:bg-neutral/50"
           onClick={() => {
             loadCountryList();
           }}
@@ -112,7 +112,7 @@ export default function Header() {
             <label
               htmlFor="main-filter-modal"
               className={` 
-              border-2 btn btn-outline min-h-min h-auto !h-10 !w-10 !p-0
+              border-2 btn btn-outline min-h-min !h-10 !w-10 !p-0
               border-opacity-50
           ${isFiltered ? "btn-primary" : "border-transparent"}`}
               tabIndex={0}

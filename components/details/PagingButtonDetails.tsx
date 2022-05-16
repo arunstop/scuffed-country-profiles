@@ -14,15 +14,15 @@ function PagingButtonDetails({
     <Link href={`/country/${targetCountry?.cca2}`} passHref>
       <a
         className={`btn btn-lg normal-case py-4 h-auto w-auto flex-1 
-    hover:underline bg-base-300 border-0 text-base-content
-    hover:bg-neutral/50
-    ${isPrevBtn ? "justify-start" : "justify-end"}
-  `}
+        hover:underline bg-base-300 border-0 text-base-content
+        hover:bg-neutral/50 rounded-none sm:rounded-md
+        ${isPrevBtn ? "justify-start" : "justify-end"}
+        `}
         role={"button"}
       >
         <div
           className={`flex flex-col gap-4 items-start
-    ${isPrevBtn ? "items-start" : "items-end"}`}
+          ${isPrevBtn ? "items-start" : "items-end"}`}
         >
           <span
             className={`inline-flex gap-2 ${
@@ -39,13 +39,13 @@ function PagingButtonDetails({
             </span>
           </span>
           <div
-            className={`inline-flex gap-4 items-center 
-      ${isPrevBtn ? "" : "flex-row-reverse"}`}
+            className={`inline-flex gap-4 items-center
+            ${isPrevBtn ? "" : "flex-row-reverse"}`}
           >
             <img className="h-16 rounded-lg" src={targetCountry?.flags.svg} />
             <p
               className={`text-left flex flex-col gap-2
-         ${isPrevBtn ? "text-left" : "text-right"}`}
+              ${isPrevBtn ? "text-left" : "text-right"}`}
             >
               <span className="text-xl">{targetCountry?.name.common}</span>
               <span className="font-normal">

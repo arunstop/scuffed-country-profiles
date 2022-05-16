@@ -78,7 +78,7 @@ const yesOrNo = (value: boolean): string => (value === true ? "YES" : "NO");
 
 // render parts
 const RENDER_FLAG = (country: Country) => (
-  <div className="flex flex-col justify-center gap-4 self-center">
+  <div className="flex flex-col justify-center gap-4 self-center m-1">
     <label
       htmlFor="img-preview-modal"
       role={"button"}
@@ -330,7 +330,7 @@ function RENDER_PAGINATION({
   };
 }) {
   return (
-    <div className="flex w-full flex-col justify-between gap-x-8 gap-y-4 px-8 sm:flex-row">
+    <div className="flex w-full flex-col justify-between gap-x-8 gap-y-4 sm:px-8 sm:flex-row">
       {RENDER_PAGING_BUTTON({ to: "prev", countryList, pagingDetails })}
       {RENDER_PAGING_BUTTON({ to: "next", countryList, pagingDetails })}
     </div>
@@ -517,14 +517,14 @@ function Details({ ok, message, data }: NetworkResponse<string>) {
           .join(", ")}`,
       })}
       <Header />
-      <div className="flex flex-col gap-8 pb-16">
+      <div className="flex flex-col gap-8 py-8">
         <img
           className="fixed inset-0 -z-[1] w-screen rounded-r-3xl
           rounded-br-full opacity-40 blur-lg transition-all group-hover:scale-150"
           src={country.flags.svg}
           alt={country.name.common}
         />
-        <div className="flex flex-wrap items-start justify-start gap-8 p-8 sm:flex-row">
+        <div className="flex flex-wrap items-start justify-start gap-8 sm:px-8 sm:flex-row">
           {RENDER_FLAG(country)}
           {RENDER_INFO_NAMING(country)}
           {RENDER_INFO_GENERIC(country)}

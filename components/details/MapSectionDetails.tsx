@@ -66,7 +66,7 @@ function MapSectionDetails({ country }: { country: Country }) {
 
   return (
     <>
-      <div className="flex flex-col items-start px-8">
+      <div className="flex flex-col items-start sm:px-8">
         <h2
           className="self-start rounded-t-lg border-b-2 
           border-base-content/10 bg-base-300 p-4 text-2xl font-bold"
@@ -75,7 +75,7 @@ function MapSectionDetails({ country }: { country: Country }) {
         </h2>
         <div
           className="flex min-h-[12rem] w-full flex-col gap-8 
-          overflow-hidden rounded-lg rounded-tl-none bg-base-300/50 p-8"
+          overflow-hidden sm:rounded-lg rounded-tl-none bg-base-300/50 p-8"
         >
           {RENDER_MAP()}
           {RENDER_OPTIONS()}

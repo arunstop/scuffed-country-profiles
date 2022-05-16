@@ -21,8 +21,8 @@ const RENDER_DETAILS_ITEM = (lead: string, desc: string) => (
 );
 
 function InfoCardDetails({ icon, title, details = [] }: InfoCardDetailsProps) {
-  return (
-    <div className="card max-w-[30rem] grow bg-base-300/50 shadow-lg">
+  return (  
+    <div className="card rounded-none sm:rounded-md sm:max-w-[30rem] grow bg-base-300/50 shadow-lg">
       <div className="flex flex-col">
         {RENDER_HEADER(icon, title)}
         <div className="flex flex-col gap-2 p-8 pt-4">
