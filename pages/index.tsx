@@ -51,6 +51,7 @@ function Home() {
       <Head>
         <title>{`${APP_NAME}`}</title>
         <meta name="description" content="Browse All countries in the world!" />
+        <meta name="google-site-verification" content="AQqIJM0I0D8TsGfRdXOnpugvvlv2NG0IXJoWFPuWsss" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

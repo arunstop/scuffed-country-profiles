@@ -342,6 +342,7 @@ const RENDER_HEAD = ({ title, desc }: { title: string; desc: string }) => {
     <Head>
       <title>{`${title} — ${APP_NAME}`}</title>
       <meta name="description" content={desc} />
+      <meta name="google-site-verification" content="AQqIJM0I0D8TsGfRdXOnpugvvlv2NG0IXJoWFPuWsss" />
       <link rel="icon" href="/favicon.ico" />
       <link
         rel="stylesheet"
