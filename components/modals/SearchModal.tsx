@@ -166,7 +166,7 @@ function SearchModal() {
                 <MdClose className="text-2xl" />
               </label>
             </div>
-            <label className="input-group-lg input-group relative max-w-lg">
+            <label className="input-group-lg input-group relative sm:max-w-lg">
               <span className="">
                 <MdOutlineSearch className="text-2xl" />
               </span>

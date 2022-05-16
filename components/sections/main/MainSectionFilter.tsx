@@ -45,7 +45,7 @@ function MainSectionFilter() {
     <div className="grid w-full gap-4 sm:w-fit">
       <label className="flex h-8 items-center">Search :</label>
       <div className="form-control w-full sm:w-96">
-        <label className="input-group-lg input-group max-w-lg relative">
+        <label className="input-group-lg input-group sm:max-w-lg relative">
           <span className="">
             <MdOutlineSearch className="text-2xl" />
           </span>

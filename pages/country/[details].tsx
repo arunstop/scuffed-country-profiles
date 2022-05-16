@@ -82,7 +82,7 @@ const RENDER_FLAG = (country: Country) => (
     <label
       htmlFor="img-preview-modal"
       role={"button"}
-      className="rounded-lg shadow-lg ring-4 ring-slate-600/30 w-full sm:max-w-sm overflow-hidden"
+      className="sm:rounded-lg shadow-lg ring-4 ring-slate-600/30 w-full sm:max-w-sm overflow-hidden"
     >
       <img className="w-full" src={country.flags.svg} />
     </label>

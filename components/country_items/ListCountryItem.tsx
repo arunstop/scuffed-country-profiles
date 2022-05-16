@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { ReactNode } from "react";
 import { MdLandscape, MdPeople, MdPlace, MdTranslate } from "react-icons/md";
 import { SiGooglemaps, SiOpenstreetmap } from "react-icons/si";
 import { Country } from "../../utils/data/models/Country";
@@ -63,42 +63,47 @@ function ListCountryItem({ country }: { country: Country }) {
           </div>
         </div>
         <div className="z-0">
-          <div className="flex flex-wrap justify-end sm:gap-2">
-            <a
-              className="hover:bg-content-base btn-outline btn 
-              grow gap-2 rounded-none
-              rounded-t-lg border-b-0 normal-case 
-              sm:grow-0 sm:rounded-lg sm:border-b-[1px]"
-              href={country.maps.googleMaps}
-              target="_blank"
-              rel="noreferrer"
-              title="Open in Google Maps"
-              onClick={(e) => e.stopPropagation()}
-              tabIndex={-1}
-            >
-              <SiGooglemaps className="pointer-events-none text-2xl" />
-              <span>Open in Google Maps</span>
-            </a>
-            <a
-              className="hover:bg-content-base btn-outline btn 
-              grow gap-2
-              rounded-none rounded-b-lg normal-case 
-              sm:grow-0 sm:rounded-lg"
-              href={country.maps.openStreetMaps}
-              target="_blank"
-              rel="noreferrer"
-              title="Open in Open Street Maps"
-              onClick={(e) => e.stopPropagation()}
-              tabIndex={-1}
-            >
-              <SiOpenstreetmap className="pointer-events-none text-2xl" />
-              <span>Open in Open Street Maps</span>
-            </a>
+          <div className="flex flex-col sm:flex-row justify-end sm:gap-2">
+            {RENDER_MAP_EXTERNAL_LINK({
+              href: country.maps.googleMaps,
+              title: "Open in Google Maps",
+              icon: <SiGooglemaps className="pointer-events-none text-2xl" />,
+            })}
+            {RENDER_MAP_EXTERNAL_LINK({
+              href: country.maps.openStreetMaps,
+              title: "Open in Open Street Maps",
+              icon: <SiOpenstreetmap className="pointer-events-none text-2xl" />,
+            })}
           </div>
         </div>
       </a>
     </Link>
   );
+}
+
+function RENDER_MAP_EXTERNAL_LINK({
+  href,
+  title,
+  icon,
+}: {
+  href: string;
+  title: string;
+  icon: ReactNode;
+}) {
+  return <a
+    className="hover:bg-content-base btn-outline btn 
+    grow gap-2 rounded-none first:rounded-t-lg last:rounded-b-lg first:border-b-0 normal-case 
+    sm:grow-0 sm:rounded-lg sm:border-b-[1px]"
+    href={href}
+    target="_blank"
+    rel="noreferrer"
+    title={title}
+    onClick={(e) => e.stopPropagation()}
+    tabIndex={-1}
+  >
+    {icon}
+    <span>{title}</span>
+  </a>;
 }
 
 export default ListCountryItem;
