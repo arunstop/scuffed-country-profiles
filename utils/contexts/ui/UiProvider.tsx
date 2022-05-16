@@ -47,9 +47,15 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const userDarkMode = JSON.parse(storageFind(KEY_DARK_MODE));
-    // init user dark mode
-    if (!userDarkMode) {
+    // if not initialized in storage
+    if (userDarkMode === null) {
+      // set depends on system
       action.toggleDarkMode(!!userDarkMode);
+    }
+    // if initialized
+    else {
+      // set depends on the storage
+      action.toggleDarkMode(userDarkMode);
     }
     const userListViewType = JSON.parse(storageFind(KEY_LIST_VIEW_TYPE));
     // if not yet initialized

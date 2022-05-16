@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 import { SiGooglemaps, SiOpenstreetmap } from "react-icons/si";
 import { Country } from "../../utils/data/models/Country";
 import LoadingPlaceholderDetails from "./LoadingPlaceholderDetails";
+import SectionTitleDetails from "./SectionTitleDetails";
 // import "leaflet/dist/leaflet.css";
 
 const LazyMapDetails = dynamic(
@@ -67,15 +68,10 @@ function MapSectionDetails({ country }: { country: Country }) {
   return (
     <>
       <div className="flex flex-col items-start sm:px-8">
-        <h2
-          className="self-start rounded-t-lg border-b-2 
-          border-base-content/10 bg-base-300 p-4 text-2xl font-bold"
-        >
-          Maps of {country.name.common}
-        </h2>
+        <SectionTitleDetails title={`Maps of ${country.name.common}`} />
         <div
           className="flex min-h-[12rem] w-full flex-col gap-8 
-          overflow-hidden sm:rounded-lg rounded-tl-none bg-base-300/50 p-8"
+          overflow-hidden sm:rounded-lg !rounded-tl-none bg-base-300/50 p-4 sm:p-8"
         >
           {RENDER_MAP()}
           {RENDER_OPTIONS()}

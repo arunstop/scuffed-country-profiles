@@ -93,7 +93,7 @@ function RENDER_MAP_EXTERNAL_LINK({
   return <a
     className="hover:bg-content-base btn-outline btn 
     grow gap-2 rounded-none first:rounded-t-lg last:rounded-b-lg first:border-b-0 normal-case 
-    sm:grow-0 sm:rounded-lg sm:border-b-[1px]"
+    sm:grow-0 sm:rounded-lg sm:!border-b-[1px]"
     href={href}
     target="_blank"
     rel="noreferrer"

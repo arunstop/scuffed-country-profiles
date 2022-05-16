@@ -78,11 +78,11 @@ const yesOrNo = (value: boolean): string => (value === true ? "YES" : "NO");
 
 // render parts
 const RENDER_FLAG = (country: Country) => (
-  <div className="flex flex-col justify-center gap-4 self-center m-1">
+  <div className="m-1 flex flex-col justify-center gap-4 self-center">
     <label
       htmlFor="img-preview-modal"
       role={"button"}
-      className="sm:rounded-lg shadow-lg ring-4 ring-slate-600/30 w-full sm:max-w-sm overflow-hidden"
+      className="w-full overflow-hidden shadow-lg ring-4 ring-slate-600/30 sm:max-w-sm sm:rounded-lg"
     >
       <img className="w-full" src={country.flags.svg} />
     </label>
@@ -330,7 +330,7 @@ function RENDER_PAGINATION({
   };
 }) {
   return (
-    <div className="flex w-full flex-col justify-between gap-x-8 gap-y-4 sm:px-8 sm:flex-row">
+    <div className="flex w-full flex-col justify-between gap-x-8 gap-y-4 sm:flex-row sm:px-8">
       {RENDER_PAGING_BUTTON({ to: "prev", countryList, pagingDetails })}
       {RENDER_PAGING_BUTTON({ to: "next", countryList, pagingDetails })}
     </div>
@@ -519,12 +519,12 @@ function Details({ ok, message, data }: NetworkResponse<string>) {
       <Header />
       <div className="flex flex-col gap-8 py-8">
         <img
-          className="fixed inset-0 -z-[1] w-screen rounded-r-3xl
+          className="fixed inset-0 -z-[1] h-screen w-screen rounded-r-3xl 
           rounded-br-full opacity-40 blur-lg transition-all group-hover:scale-150"
           src={country.flags.svg}
           alt={country.name.common}
         />
-        <div className="flex flex-wrap items-start justify-start gap-8 sm:px-8 sm:flex-row">
+        <div className="flex flex-wrap items-start justify-start gap-8 sm:flex-row sm:px-8">
           {RENDER_FLAG(country)}
           {RENDER_INFO_NAMING(country)}
           {RENDER_INFO_GENERIC(country)}

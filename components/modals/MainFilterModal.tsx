@@ -26,7 +26,9 @@ function MainFilterModal() {
                 <MdClose className="text-2xl" />
               </label>
             </div>
-            <MainSectionFilter />
+            <div className="flex h-96 flex-col overflow-auto pr-4 items-start">
+              <MainSectionFilter />
+            </div>
           </div>
         </label>
       </label>
