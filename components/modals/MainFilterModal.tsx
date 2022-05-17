@@ -14,7 +14,7 @@ function MainFilterModal() {
         htmlFor="main-filter-modal"
         className="modal modal-bottom sm:modal-middle"
       >
-        <label className="modal-box cursor-auto p-0 transition-all" htmlFor="">
+        <label className="modal-box max-h-screen cursor-auto p-0 transition-all" htmlFor="">
           <div className="flex flex-col gap-4  p-4">
             <div className="inline-flex items-center justify-between">
               <h3 className="text-2xl font-semibold">Filter</h3>

@@ -57,7 +57,7 @@ function Home() {
 
       <Header />
 
-      <main className={"flex flex-col items-center justify-center"}>
+      <main className={"flex flex-col max-w-[120rem] mx-auto"}>
         <HeroSection />
         <MainSection />
       </main>

@@ -44,12 +44,12 @@ function RealMapSectionDetails({ country }: { country: Country }) {
     mapContainer?.classList.toggle("rounded-lg");
     if (value === true) {
       map?.scrollWheelZoom.enable();
-      mapContainer?.classList.remove("h-96");
+      mapContainer?.classList.remove("h-[75vh]");
       mapContainer?.classList.add("h-screen");
     } else {
       map?.scrollWheelZoom.disable();
       mapContainer?.classList.remove("h-screen");
-      mapContainer?.classList.add("h-96");
+      mapContainer?.classList.add("h-[75vh]");
     }
   }
   return (
@@ -62,7 +62,7 @@ function RealMapSectionDetails({ country }: { country: Country }) {
         <MapContainer
           id="map-container"
           key={country.cca3}
-          className={`w-full rounded-lg overflow-hidden z-0 h-96 transition-all`}
+          className={`w-full rounded-lg overflow-hidden z-0 h-[75vh] transition-all`}
           center={capitalLtLng}
           zoom={5}
           scrollWheelZoom={false}

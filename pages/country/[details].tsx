@@ -519,7 +519,7 @@ function Details({ ok, message, data }: NetworkResponse<string>) {
           .join(", ")}`,
       })}
       <Header />
-      <div className="flex flex-col gap-8 py-8">
+      <div className="flex flex-col gap-8 py-8 max-w-[120rem] mx-auto">
         <img
           className="fixed inset-0 -z-[1] h-screen w-screen rounded-r-3xl 
           rounded-br-full opacity-40 blur-lg transition-all group-hover:scale-150"

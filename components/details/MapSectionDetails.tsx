@@ -68,7 +68,7 @@ function MapSectionDetails({ country }: { country: Country }) {
   return (
     <>
       <div className="flex flex-col items-start sm:px-8">
-        <SectionTitleDetails title={`Maps of ${country.name.common}`} />
+        <SectionTitleDetails title={`Map of ${country.name.common}`} />
         <div
           className="flex min-h-[12rem] w-full flex-col gap-8 
           overflow-hidden sm:rounded-lg !rounded-tl-none bg-base-300/50 p-4 sm:p-8"
