@@ -84,7 +84,7 @@ const RENDER_FLAG = (country: Country) => (
       role={"button"}
       className="w-full overflow-hidden shadow-lg ring-4 ring-slate-600/30 sm:max-w-sm sm:rounded-lg"
     >
-      <img className="w-full" src={country.flags.svg} />
+      <img className="w-full" src={country.flags.svg} alt={country.name.common} />
     </label>
 
     <h1 className="text-4xl font-bold">{country.name.common}</h1>
