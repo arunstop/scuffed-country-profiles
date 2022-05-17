@@ -81,8 +81,9 @@ const RENDER_FLAG = (country: Country) => (
   <div className="p-1 flex flex-col gap-4 grow sm:grow-0">
     <label
       htmlFor="img-preview-modal"
-      role={"button"}
-      className="w-full overflow-hidden shadow-lg ring-4 ring-slate-600/30 sm:max-w-sm sm:rounded-lg"
+      className="cursor-pointer w-full overflow-hidden shadow-lg ring-4 ring-slate-600/30 sm:max-w-sm sm:rounded-lg"
+      aria-label="Enlarge Flag"
+
     >
       <img className="w-full" src={country.flags.svg} alt={country.name.common} />
     </label>

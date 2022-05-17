@@ -16,7 +16,7 @@ function ScrollToTopButton() {
     // <div
     //   className=" transition-all overflow-hidden"
     // >
-    <button
+    <label
       id="scroll-to-top-btn"
       className="transition-all btn btn-square btn-primary 
       fixed bottom-0 right-0 opacity-0
@@ -27,7 +27,7 @@ function ScrollToTopButton() {
       }}
     >
       <FaChevronUp className="text-3xl" />
-    </button>
+    </label>
     // </div>
   );
 }
