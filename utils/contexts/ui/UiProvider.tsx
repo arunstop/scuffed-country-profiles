@@ -50,13 +50,23 @@ export const UiProvider = ({ children }: { children: ReactNode }) => {
     // if not initialized in storage
     if (userDarkMode === null) {
       // set depends on system
-      action.toggleDarkMode(!!userDarkMode);
+      // Check to see if Media-Queries are supported
+      if (window.matchMedia) {
+        const osDarkMode = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        action.toggleDarkMode(osDarkMode);
+      } else {
+        // Default (when Media-Queries are not supported)
+        action.toggleDarkMode(!!userDarkMode);
+      }
     }
     // if initialized
     else {
       // set depends on the storage
       action.toggleDarkMode(userDarkMode);
     }
+
     const userListViewType = JSON.parse(storageFind(KEY_LIST_VIEW_TYPE));
     // if not yet initialized
     if (!userListViewType) {
