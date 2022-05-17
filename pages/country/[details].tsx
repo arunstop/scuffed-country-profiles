@@ -78,7 +78,7 @@ const yesOrNo = (value: boolean): string => (value === true ? "YES" : "NO");
 
 // render parts
 const RENDER_FLAG = (country: Country) => (
-  <div className="m-1 flex flex-col justify-center gap-4 self-center">
+  <div className="p-1 flex flex-col gap-4 grow sm:grow-0">
     <label
       htmlFor="img-preview-modal"
       role={"button"}
