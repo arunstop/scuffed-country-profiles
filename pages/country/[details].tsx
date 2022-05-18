@@ -36,6 +36,7 @@ import { toCountry } from "../../utils/helpers/Casters";
 import { APP_NAME } from "../../utils/helpers/Constants";
 import { scrollToTop } from "../../utils/helpers/UIHelpers";
 
+
 export const getServerSideProps: GetServerSideProps<
   NetworkResponse<string>
 > = async (context) => {

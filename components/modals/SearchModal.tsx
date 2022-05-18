@@ -220,4 +220,4 @@ function SearchModal() {
   );
 }
 
-export default SearchModal;
+export default React.memo(SearchModal);

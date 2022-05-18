@@ -16,7 +16,6 @@ import { searchModalOnChange } from "./modals/SearchModal";
 export default function Header() {
   const { state: uiState, action: uiAction } = useUiContext();
   const {
-    state: countryState,
     action: countryAction,
     getters: {
       list: { noData },
