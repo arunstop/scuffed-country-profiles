@@ -36,12 +36,6 @@ import { toCountry } from "../../utils/helpers/Casters";
 import { APP_NAME } from "../../utils/helpers/Constants";
 import { scrollToTop } from "../../utils/helpers/UIHelpers";
 
-// interface CountryDetailsProps {
-
-// }
-
-type RelatedCountryListProps = string | Country[];
-
 export const getServerSideProps: GetServerSideProps<
   NetworkResponse<string>
 > = async (context) => {
@@ -522,8 +516,7 @@ function Details({ ok, message, data }: NetworkResponse<string>) {
       <Header />
       <div className="flex flex-col gap-8 py-8 max-w-[120rem] mx-auto">
         <img
-          className="fixed inset-0 -z-[1] h-screen w-screen rounded-r-3xl 
-          rounded-br-full opacity-40 blur-lg transition-all group-hover:scale-150"
+          className="fixed inset-0 -z-[1] h-screen w-screen opacity-40 blur-lg transition-all group-hover:scale-150"
           src={country.flags.svg}
           alt={country.name.common}
         />
