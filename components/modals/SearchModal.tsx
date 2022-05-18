@@ -45,6 +45,11 @@ export function searchModalOnChange(value: boolean) {
   }
 }
 
+// const lastVisitedCountryList = (countryList: Country[]) => {
+//   const;
+//   return country;
+// };
+
 export const getSearchModalElement = () => {
   return document.getElementById("search-modal") as HTMLInputElement;
 };
@@ -61,8 +66,12 @@ function SearchModal() {
 
   const searchedCountryList = _.orderBy(
     countryState.list,
-    [(e) => e.name.common],
-    ["asc"],
+    [
+      // sort by date time of last visited country
+      (e) => countryState.lastVisitedList.find((lv) => lv.cca2===e.cca2)?.dateTime || 0,
+      (e) => e.name.common,
+    ],
+    ["desc", "asc"],
   ).filter((cItem) => {
     const trimmedKeyword = keyword.trim().toLowerCase();
     return trimmedKeyword.length < 2
@@ -154,7 +163,10 @@ function SearchModal() {
         htmlFor="search-modal"
         className="modal modal-bottom sm:modal-middle"
       >
-        <label className="modal-box max-h-screen cursor-auto p-0 transition-all" htmlFor="">
+        <label
+          className="modal-box max-h-screen cursor-auto p-0 transition-all"
+          htmlFor=""
+        >
           <div className="flex flex-col gap-4  p-4">
             <div className="inline-flex items-center justify-between">
               <h3 className="text-2xl font-semibold">Search countries</h3>

@@ -21,6 +21,7 @@ export interface CountryState {
     types: GroupingTypes[];
     active: GroupingTypes;
   };
+  lastVisitedList: CountryLastVisited[];
 }
 
 export interface CountryAction {
@@ -38,6 +39,7 @@ export interface CountryAction {
   clearFilter: (key: string) => void;
   setSorting: (id: string, order: SortingOrder) => void;
   setGrouping: (by: GroupingTypes) => void;
+  addLastVisited: (cca2:string)=>void;
 }
 
 export type CountryActionTypes =
@@ -68,6 +70,10 @@ export type CountryActionTypes =
   | {
       type: "SET_GROUPING";
       payload: { id: GroupingTypes };
+    }
+  | {
+      type: "ADD_LAST_VISITED";
+      payload: CountryLastVisited;
     };
 
 export type CountryContextProps = {
@@ -78,6 +84,11 @@ export type CountryContextProps = {
 export interface CountryListSortingItem {
   id: string;
   label: string;
+}
+
+export interface CountryLastVisited {
+  cca2: string;
+  dateTime: number;
 }
 
 export type SortingOrder = "ASC" | "DESC";

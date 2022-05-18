@@ -75,7 +75,7 @@ export default function Header() {
               router.pathname !== "/" ? "hidden sm:block" : ""
             } text-lg sm:text-xl font-semibold italic`}
           >
-            Country Profiles
+            {countryState.lastVisitedList.map((e) => e.cca2).toString()}
           </span>
         </a>
       </Link>

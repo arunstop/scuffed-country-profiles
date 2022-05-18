@@ -1,6 +1,5 @@
 import _ from "lodash";
-import { CountryState } from "../../data/types/CountryTypes";
-import { CountryActionTypes } from "../../data/types/CountryTypes";
+import { CountryActionTypes, CountryState } from "../../data/types/CountryTypes";
 
 export const countryReducer = (
   state: CountryState,
@@ -85,6 +84,17 @@ export const countryReducer = (
         ...state,
         grouping: { ...state.grouping, active: updatedId },
       };
+    }
+
+    case "ADD_LAST_VISITED": {
+      // add country to last visited list
+      // remove an item if it has the same cca2
+      const newData = action.payload;
+      const newList = [
+        ...state.lastVisitedList.filter((lv) => lv.cca2 !== newData.cca2),
+        newData,
+      ];
+      return { ...state, lastVisitedList: newList };
     }
     default:
       return state;

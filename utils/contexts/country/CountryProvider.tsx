@@ -54,6 +54,12 @@ export const CountryProvider = ({ children }: { children: ReactNode }) => {
         payload: { id: id },
       });
     },
+    addLastVisited: (cca2) => {
+      countryDispatch({
+        type: "ADD_LAST_VISITED",
+        payload: { cca2, dateTime: Date.now() },
+      });
+    },
   };
   const value: CountryContextProps = {
     state: countryState,

@@ -20,4 +20,5 @@ export const INIT_COUNTRY_STATE: CountryState = {
     types: ["continents", "region", "subregion", "none"],
     active: "none",
   },
+  lastVisitedList: [],
 };

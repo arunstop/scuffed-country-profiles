@@ -121,10 +121,10 @@ const RENDER_INFO_NAMING = (country: Country) => {
           lead: "Alternative Spellings :",
           desc: country.altSpellings.join(", "),
         },
-        {
-          lead: "Name in other languages :",
-          desc: country.translations.length + "",
-        },
+        // {
+        //   lead: "Name in other languages :",
+        //   desc: country.translations.length + "",
+        // },
       ]}
     />
   );
@@ -390,6 +390,7 @@ function Details({ ok, message, data }: NetworkResponse<string>) {
     scrollToTop();
     loadBorderingCountryList();
     loadMutualSubregionCountryList();
+    countryAction.addLastVisited(country.cca2);
     // countryAction.setSearchKeyword("");
     // async function loadGeoCountry() {
     //   const data = await apiGetGeoCountry(country.cca3);
