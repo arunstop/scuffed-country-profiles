@@ -64,10 +64,10 @@ const RENDER_COUNTRY_LIST = ({
   const {
     state: countryState,
     getters: {
-      list: { noData },
+      list,
     },
   } = useCountryContext();
-
+const noData = list.noData();
   const searchedCountryList = _.orderBy(
     countryState.list,
     [

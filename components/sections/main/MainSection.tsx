@@ -23,12 +23,12 @@ export default function MainSection() {
       list: {
         filteredList,
         filterProps: { getRegionList },
-        noData,
-        noResultFound,
       },
       list,
     },
   } = useCountryContext();
+  const noData = list.noData();
+  const noResultFound = list.noResultFound();
 
   const [activeGroupList, setActiveGroupList] = useState<string[]>([]);
 
@@ -117,13 +117,13 @@ export default function MainSection() {
   }
 
   function RENDER_COUNTRY_LIST_CONTAINER(countryList: Country[]) {
-    if (list.noData) {
+    if (noData) {
       return (
         <div className="">
           <NoDataPlaceHolder message="No data." />
         </div>
       );
-    } else if (list.noResultFound) {
+    } else if (noResultFound) {
       return (
         <div className="">
           <NoDataPlaceHolder message="No results were found." />

@@ -51,7 +51,7 @@ export default function Header() {
   // }
 
   async function loadCountryList() {
-    if (noData) {
+    if (noData()) {
       apiGetCountryList().then((response) => {
         if (response.ok === false) return;
         countryAction.setCountryList(response.data);

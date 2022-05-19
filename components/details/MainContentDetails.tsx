@@ -362,13 +362,14 @@ function MainContentDetails({ country }: {country:Country}) {
     getters: {
       list: {
         filterProps: { getBorderingCountryList, getSubregionCountryList },
-        noData,
       },
+      list,
       paging: { details },
     },
     action: countryAction,
   } = useCountryContext();
 
+  const noData = list.noData();
   const [borderingCountryList, setBorderingCountryList] =
     useState<NetworkData<Country[]>>(null);
   const [mutualSubregionCountryList, setMutualSubregionCountryList] =

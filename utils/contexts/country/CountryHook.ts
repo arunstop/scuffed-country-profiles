@@ -168,8 +168,8 @@ export const useCountryContext = () => {
           getSubregionCountryList: mutualSubregionCountryList,
         },
         groupedList: groupedList,
-        noResultFound: searchedList().length === 0,
-        noData: list.length === 0,
+        noResultFound: ()=>searchedList().length === 0,
+        noData: ()=>list.length === 0,
       },
       isFiltered: isFiltered,
       paging: {
