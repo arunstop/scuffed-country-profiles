@@ -49,6 +49,8 @@ function ImagePreviewModal({ country }: { country: Country }) {
                 pointer-events-auto ring-2 ring-slate-600/30 h-full min-w-[50vw]"
                 src={country.flags.svg}
                 alt={"Flag of " + country.name.common}
+                width={100}
+                height={100}
               />
             </div>
           </div>
