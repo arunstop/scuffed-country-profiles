@@ -212,7 +212,7 @@ function SearchModal() {
                 onChange={(e) => {
                   setKeyword(e.target.value);
                 }}
-                disabled={noData}
+                disabled={noData()}
               />
             </label>
             <div className="flex h-96 flex-col overflow-auto pr-4 items-start">
