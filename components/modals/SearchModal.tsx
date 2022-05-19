@@ -54,11 +54,15 @@ export const getSearchModalElement = () => {
   return document.getElementById("search-modal") as HTMLInputElement;
 };
 
-function SearchModal() {
-  const [keyword, setKeyword] = useState("");
+const RENDER_COUNTRY_LIST = ({
+  keyword,
+  setKeyword,
+}: {
+  keyword: string;
+  setKeyword: (value: string) => void;
+}) => {
   const {
     state: countryState,
-    action: countryAction,
     getters: {
       list: { noData },
     },
@@ -68,7 +72,9 @@ function SearchModal() {
     countryState.list,
     [
       // sort by date time of last visited country
-      (e) => countryState.lastVisitedList.find((lv) => lv.cca2===e.cca2)?.dateTime || 0,
+      (e) =>
+        countryState.lastVisitedList.find((lv) => lv.cca2 === e.cca2)
+          ?.dateTime || 0,
       (e) => e.name.common,
     ],
     ["desc", "asc"],
@@ -95,56 +101,60 @@ function SearchModal() {
             .toLowerCase()
             .includes(trimmedKeyword);
   });
+  if (noData) {
+    return (
+      <span className="inline-flex h-24 items-center justify-center gap-4 mx-auto text-xl font-bold">
+        <CircularProgress size={2} />
+        <span>Loading countries...</span>
+      </span>
+    );
+  }
+  // when data is loaded but empty
+  else if (searchedCountryList.length == 0) {
+    return (
+      <div className="inline-flex h-24 items-center justify-center gap-4 mx-auto text-xl font-bold">
+        No result found.
+      </div>
+    );
+  }
+  // when data is loaded and not empty
+  else {
+    return searchedCountryList.map((cItem, idx) => {
+      return (
+        <Link key={idx} href={`/country/${cItem.cca2}/`} passHref>
+          <a
+            className="flex w-full gap-4 p-4 hover:rounded-lg hover:bg-base-content/30"
+            onClick={() => {
+              // hide the modal
+              toggleSearchModal(false);
+              setKeyword("");
+            }}
+          >
+            <img
+              className="h-12 rounded-md ring-1 ring-slate-600/30"
+              src={cItem.flags.svg}
+            />
+            <div className="flex grow flex-col">
+              <span className="text-xl font-semibold">{cItem.name.common}</span>
+              <span className="inline-flex items-center gap-1 opacity-60">
+                <MdPlace className="text-lg" />
+                {cItem.capital?.join(", ") || "-"}
+              </span>
+            </div>
+          </a>
+        </Link>
+      );
+    });
+  }
+};
 
-  const RENDER_COUNTRY_LIST = () => {
-    if (noData) {
-      return (
-        <span className="inline-flex h-24 items-center justify-center gap-4 mx-auto text-xl font-bold">
-          <CircularProgress size={2} />
-          <span>Loading countries...</span>
-        </span>
-      );
-    }
-    // when data is loaded but empty
-    else if (searchedCountryList.length == 0) {
-      return (
-        <div className="inline-flex h-24 items-center justify-center gap-4 mx-auto text-xl font-bold">
-          No result found.
-        </div>
-      );
-    }
-    // when data is loaded and not empty
-    else {
-      return searchedCountryList.map((cItem, idx) => {
-        return (
-          <Link key={idx} href={`/country/${cItem.cca2}/`} passHref>
-            <a
-              className="flex w-full gap-4 p-4 hover:rounded-lg hover:bg-base-content/30"
-              onClick={() => {
-                // hide the modal
-                toggleSearchModal(false);
-                setKeyword("");
-              }}
-            >
-              <img
-                className="h-12 rounded-md ring-1 ring-slate-600/30"
-                src={cItem.flags.svg}
-              />
-              <div className="flex grow flex-col">
-                <span className="text-xl font-semibold">
-                  {cItem.name.common}
-                </span>
-                <span className="inline-flex items-center gap-1 opacity-60">
-                  <MdPlace className="text-lg" />
-                  {cItem.capital?.join(", ") || "-"}
-                </span>
-              </div>
-            </a>
-          </Link>
-        );
-      });
-    }
-  };
+function SearchModal() {
+  const [keyword, setKeyword] = useState("");
+  const {
+    getters: {
+      list: { noData },
+    },
+  } = useCountryContext();
 
   return (
     <div>
@@ -206,7 +216,7 @@ function SearchModal() {
               />
             </label>
             <div className="flex h-96 flex-col overflow-auto pr-4 items-start">
-              {RENDER_COUNTRY_LIST()}
+              {RENDER_COUNTRY_LIST({keyword,setKeyword})}
             </div>
             {/* <div className="modal-action">
             <label htmlFor="search-modal" className="btn">

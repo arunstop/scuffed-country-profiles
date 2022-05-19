@@ -312,7 +312,7 @@ const RENDER_SUBREGION = () => {
   });
 };
 
-export default function MainSectionFilter() {
+function MainSectionFilter() {
   const { state: countryState, action: countryAction } = useCountryContext();
 
   const {
@@ -342,3 +342,5 @@ export default function MainSectionFilter() {
     </div>
   );
 }
+
+export default React.memo(MainSectionFilter);
