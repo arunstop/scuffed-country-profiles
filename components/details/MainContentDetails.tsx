@@ -14,22 +14,23 @@ import RelatedSectionDetails from "../../components/details/RelatedSectionDetail
 import FetchFailedPlaceholder from "../../components/FetchFailedPlaceholder";
 import Header from "../../components/Header";
 import {
-    getSearchModalElement,
-    toggleSearchModal
+  getSearchModalElement,
+  toggleSearchModal,
 } from "../../components/modals/SearchModal";
 import {
-    apiGetBorderingCountryList, apiGetCountry, apiGetCountryList,
-    apiGetMutualSubregionCountryList
+  apiGetBorderingCountryList,
+  apiGetCountry,
+  apiGetCountryList,
+  apiGetMutualSubregionCountryList,
 } from "../../utils/apis/CountryApi";
 import { useCountryContext } from "../../utils/contexts/country/CountryHook";
 import { Country } from "../../utils/data/models/Country";
 import {
-    NetworkData,
-    NetworkResponse
+  NetworkData,
+  NetworkResponse,
 } from "../../utils/data/types/NetworkTypes";
 import { APP_NAME } from "../../utils/helpers/Constants";
 import { scrollToTop } from "../../utils/helpers/UIHelpers";
-
 
 export const getServerSideProps: GetServerSideProps<
   NetworkResponse<string>
@@ -72,9 +73,12 @@ const RENDER_FLAG = (country: Country) => (
       htmlFor="img-preview-modal"
       className="cursor-pointer w-full overflow-hidden shadow-lg ring-4 ring-slate-600/30 sm:max-w-sm sm:rounded-lg"
       aria-label="Enlarge Flag"
-
     >
-      <img className="w-full" src={country.flags.svg} alt={country.name.common} />
+      <img
+        className="w-full"
+        src={country.flags.svg}
+        alt={country.name.common}
+      />
     </label>
 
     <h1 className="text-4xl font-bold">{country.name.common}</h1>
@@ -332,7 +336,10 @@ const RENDER_HEAD = ({ title, desc }: { title: string; desc: string }) => {
     <Head>
       <title>{`${title} — ${APP_NAME}`}</title>
       <meta name="description" content={desc} />
-      <meta name="google-site-verification" content="AQqIJM0I0D8TsGfRdXOnpugvvlv2NG0IXJoWFPuWsss" />
+      <meta
+        name="google-site-verification"
+        content="AQqIJM0I0D8TsGfRdXOnpugvvlv2NG0IXJoWFPuWsss"
+      />
       <link rel="icon" href="/favicon.ico" />
       <link
         rel="stylesheet"
@@ -344,7 +351,7 @@ const RENDER_HEAD = ({ title, desc }: { title: string; desc: string }) => {
   );
 };
 
-function MainContentDetails({ country }: {country:Country}) {
+function MainContentDetails({ country }: { country: Country }) {
   //   const router = useRouter();
   //   const { country } = router.query;
   // console.log(country.name.nativeName);
@@ -502,6 +509,8 @@ function MainContentDetails({ country }: {country:Country}) {
           className="fixed inset-0 -z-[1] h-screen w-screen opacity-40 blur-lg transition-all group-hover:scale-150 aspect-auto"
           src={country.flags.svg}
           alt={country.name.common}
+          width={100}
+          height={100}
         />
         <div className="flex flex-wrap items-start justify-start gap-8 sm:flex-row sm:px-8">
           {RENDER_FLAG(country)}
