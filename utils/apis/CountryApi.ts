@@ -1,7 +1,7 @@
 import { Country } from "../data/models/Country";
 import { NetworkResponse } from "../data/types/NetworkTypes";
 import {
-  BASE_URL, REST_COUNTRIES_BASE_URL
+  BASE_URL
 } from "../helpers/Constants";
 import { toCountry } from "./../helpers/Casters";
 import { apiFetch, apiFetchNoCors } from "./../helpers/Fetchers";
@@ -16,8 +16,8 @@ export const apiGetCountryList = async (): Promise<
 > => {
   try {
     const response = await apiFetch(
-      // `${BASE_URL}/api/country/all`,
-      `${REST_COUNTRIES_BASE_URL}/all`,
+      `${BASE_URL}/api/country/all`,
+      // `${REST_COUNTRIES_BASE_URL}/all`,
     ).then((response) => response);
     return {
       ok: response.ok,
@@ -44,8 +44,8 @@ export const apiGetCountry = async (
 ): Promise<NetworkResponse<string>> => {
   try {
     const response = await apiFetch(
-      // `${BASE_URL}/api/country/${cca2}`,
-      `${REST_COUNTRIES_BASE_URL}/alpha/${cca2}`,
+      `${BASE_URL}/api/country/${cca2}`,
+      // `${REST_COUNTRIES_BASE_URL}/alpha/${cca2}`,
     ).then((response) => {
       // console.log(response);
       return response;
@@ -78,8 +78,8 @@ export const apiGetBorderingCountryList = async (
     // e.g = IDN,GBR,FRA
     const strBorderList = borderList.join(",");
     const response = await apiFetch(
-      // `${BASE_URL}/api/country?codes=${strBorderList}`,
-      `${REST_COUNTRIES_BASE_URL}/alpha?codes=${strBorderList}`,
+      `${BASE_URL}/api/country?codes=${strBorderList}`,
+      // `${REST_COUNTRIES_BASE_URL}/alpha?codes=${strBorderList}`,
     ).then((_) => _);
     return {
       ok: response.ok,
@@ -105,8 +105,8 @@ export const apiGetMutualSubregionCountryList = async (
 ): Promise<NetworkResponse<Country[]>> => {
   try {
     const response = await apiFetch(
-      // `${BASE_URL}/api/country/subregion/${subregion}`,
-      `${REST_COUNTRIES_BASE_URL}/subregion/${subregion}`,
+      `${BASE_URL}/api/country/subregion/${subregion}`,
+      // `${REST_COUNTRIES_BASE_URL}/subregion/${subregion}`,
     ).then((_) => _);
     return {
       ok: response.ok,
