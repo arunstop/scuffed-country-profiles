@@ -20,10 +20,10 @@
 ## Screenshots if you fancy :
 | - | - |
 | --- | --- |
-| <p align="center"><b>Home screen</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/1.png" alt="Home screen"></p> | <p align="center"><b>Compact Card Style</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/2.png" alt="Compact Card Style"></p> |
-| <p align="center"><b>Card style</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/3.png" alt="Card style"></p> | <p align="center"><b>Editing account</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/4.png" alt="Editing account"></p> |
-| <p align="center"><b>Getting icon via web-crawler</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/5.png" alt="Getting icon via web-crawler"></p> | <p align="center"><b>Google authorization</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/6.png" alt="Google authorization"></p> |
-| <p align="center"><b>Exporting accounts</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/7.png" alt="Exporting accounts"></p> | <p align="center"><b>Importing accounts</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/8.png" alt="Importing accounts"></p> |
+| <p align="center"><b>Home screen</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/1.png" alt="Home screen"></p> | <p align="center"><b>List View</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/2.png" alt="List View"></p> |
+| <p align="center"><b>Card View</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/3.png" alt="Card View"></p> | <p align="center"><b>Tiles View</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/4.png" alt="Tiles View"></p> |
+| <p align="center"><b>Country profile details</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/5.png" alt="Country profile details"></p> | <p align="center"><b>Map of the country</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/6.png" alt="Map of the country"></p> |
+| <p align="center"><b>Related Countries</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/7.png" alt="Related Countries"></p> | <p align="center"><b>Search modal</b><br/><img src="https://raw.githubusercontent.com/arunstop/scuffed-country-profiles/master/screenshots/8.png" alt="Search modal"></p> |
 
 ---
 
